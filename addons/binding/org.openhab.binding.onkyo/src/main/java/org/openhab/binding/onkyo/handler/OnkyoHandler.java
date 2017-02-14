@@ -38,6 +38,7 @@ import org.eclipse.smarthome.io.transport.upnp.UpnpIOService;
 import org.openhab.binding.onkyo.internal.OnkyoAlbumArt;
 import org.openhab.binding.onkyo.internal.OnkyoConnection;
 import org.openhab.binding.onkyo.internal.OnkyoEventListener;
+import org.openhab.binding.onkyo.internal.OnkyoParserHelper;
 import org.openhab.binding.onkyo.internal.ServiceType;
 import org.openhab.binding.onkyo.internal.config.OnkyoDeviceConfiguration;
 import org.openhab.binding.onkyo.internal.eiscp.EiscpCommand;
@@ -308,7 +309,18 @@ public class OnkyoHandler extends UpnpAudioSinkHandler implements OnkyoEventList
             /*
              * MISC
              */
-
+            case CHANNEL_AUDIO_IN_INFO:
+            case CHANNEL_AUDIO_OUT_INFO:
+                if (command.equals(RefreshType.REFRESH)) {
+                    sendCommand(EiscpCommand.INFO_AUDIO_QUERY);
+                }
+                break;
+            case CHANNEL_VIDEO_IN_INFO:
+            case CHANNEL_VIDEO_OUT_INFO:
+                if (command.equals(RefreshType.REFRESH)) {
+                    sendCommand(EiscpCommand.INFO_VIDEO_QUERY);
+                }
+                break;
             default:
                 logger.debug("Command received for an unknown channel: {}", channelUID.getId());
                 break;
@@ -425,11 +437,29 @@ public class OnkyoHandler extends UpnpAudioSinkHandler implements OnkyoEventList
                     break;
 
                 /*
-                 * MISC
+                 * RADIO
                  */
+
+                case RADIO_TUNING:
+                case RADIO_TUNING_MODE:
+                case RADIO_PRESET:
+                    logger.debug("Info message: '{}'", data.getValue());
+                    break;
+
+                /*
+                * MISC
+                */
 
                 case INFO:
                     logger.debug("Info message: '{}'", data.getValue());
+                    break;
+                case INFO_AUDIO:
+                    updateState(CHANNEL_AUDIO_IN_INFO, OnkyoParserHelper.infoBuilder(data.getValue(), 0, 3));
+                    updateState(CHANNEL_AUDIO_OUT_INFO, OnkyoParserHelper.infoBuilder(data.getValue(), 4, 6));
+                    break;
+                case INFO_VIDEO:
+                    updateState(CHANNEL_VIDEO_IN_INFO, OnkyoParserHelper.infoBuilder(data.getValue(), 0, 4));
+                    updateState(CHANNEL_VIDEO_OUT_INFO, OnkyoParserHelper.infoBuilder(data.getValue(), 5, 8));
                     break;
 
                 default:
@@ -707,13 +737,15 @@ public class OnkyoHandler extends UpnpAudioSinkHandler implements OnkyoEventList
      */
     private void checkStatus() {
         sendCommand(EiscpCommand.POWER_QUERY);
-
+        logger.debug("test con {}", connection.isConnected());
         if (connection != null && connection.isConnected()) {
 
             sendCommand(EiscpCommand.VOLUME_QUERY);
             sendCommand(EiscpCommand.SOURCE_QUERY);
             sendCommand(EiscpCommand.MUTE_QUERY);
             sendCommand(EiscpCommand.NETUSB_TITLE_QUERY);
+            sendCommand(EiscpCommand.INFO_AUDIO_QUERY);
+            sendCommand(EiscpCommand.INFO_VIDEO_QUERY);
             sendCommand(EiscpCommand.LISTEN_MODE_QUERY);
 
             if (isChannelAvailable(CHANNEL_POWERZONE2)) {
@@ -729,6 +761,10 @@ public class OnkyoHandler extends UpnpAudioSinkHandler implements OnkyoEventList
                 sendCommand(EiscpCommand.ZONE3_SOURCE_QUERY);
                 sendCommand(EiscpCommand.ZONE3_MUTE_QUERY);
             }
+
+            sendCommand(EiscpCommand.RADIO_TUNING_QUERY);
+            sendCommand(EiscpCommand.RADIO_TUNING_MODE_QUERY);
+            sendCommand(EiscpCommand.RADIO_PRESET_QUERY);
         } else {
             updateStatus(ThingStatus.OFFLINE);
         }

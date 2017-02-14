@@ -182,5 +182,47 @@
 		<description>Position of the currently selected menu item</description>
 		<state readOnly="true" pattern="%s"></state>
 	</channel-type>
+	<channel-type id="audioIn" advanced="true">
+		<item-type>String</item-type>
+		<label>Audio Input Info</label>
+		<description>Audio Input Stream Information</description>
+		<state readOnly="true"></state>
+	</channel-type>
+	<channel-type id="audioOut" advanced="true">
+		<item-type>String</item-type>
+		<label>Audio OutputInfo</label>
+		<description>Audio Output Stream Information</description>
+		<state readOnly="true"></state>
+	</channel-type>
+	<channel-type id="videoIn" advanced="true">
+		<item-type>String</item-type>
+		<label>Video Input Info</label>
+		<description>Video Input Stream Information</description>
+		<state readOnly="true" pattern="%s"></state>
+	</channel-type>
+	<channel-type id="videoOut" advanced="true">
+		<item-type>String</item-type>
+		<label>Video Output Output Info</label>
+		<description>Video Stream Information</description>
+		<state readOnly="true" pattern="%s"></state>
+	</channel-type>
+    <channel-type id="frequency" advanced="true">
+        <item-type>String</item-type>
+        <label>frequency</label>
+        <description>freq</description>
+        <state readOnly="true"></state>
+    </channel-type>
+    <channel-type id="tune" advanced="true">
+        <item-type>String</item-type>
+        <label>Tuning</label>
+        <description>tuning</description>
+        <state readOnly="true" pattern="%s"></state>
+    </channel-type>
+    <channel-type id="preset" advanced="true">
+        <item-type>String</item-type>
+        <label>Preset Stations</label>
+        <description>Preset</description>
+        <state readOnly="true" pattern="%s"></state>
+    </channel-type>
 
 </thing:thing-descriptions>

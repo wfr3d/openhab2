@@ -48,6 +48,10 @@ public enum EiscpCommand {
 
     INFO_QUERY("NRI", "QSTN"),
     INFO("NRI", ""),
+    INFO_AUDIO_QUERY("IFA", "QSTN"),
+    INFO_AUDIO("IFA", ""),
+    INFO_VIDEO_QUERY("IFV", "QSTN"),
+    INFO_VIDEO("IFV", ""),
 
     NETUSB_OP_PLAY("NTC", "PLAY"),
     NETUSB_OP_STOP("NTC", "STOP"),
@@ -151,7 +155,18 @@ public enum EiscpCommand {
     ZONE3_SOURCE_DOWN("SL3", "DOWN"),
     ZONE3_SOURCE_QUERY("SL3", "QSTN"),
     ZONE3_SOURCE_SET("SL3", "%02X"),
-    ZONE3_SOURCE("SL3", "");
+    ZONE3_SOURCE("SL3", ""),
+
+    /*
+     * Radio
+     */
+
+    RADIO_TUNING("TUN", ""),
+    RADIO_TUNING_QUERY("TUN", "QSTN"),
+    RADIO_TUNING_MODE("TUZ", ""),
+    RADIO_TUNING_MODE_QUERY("TUZ", "QSTN"),
+    RADIO_PRESET("PRZ", ""),
+    RADIO_PRESET_QUERY("PRZ", "QSTN");
 
     public static enum Zone {
         MAIN,

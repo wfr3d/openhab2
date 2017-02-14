@@ -50,6 +50,16 @@
 		</channels>
 	</channel-group-type>
 
+	<channel-group-type id="information">
+		<label>Info</label>
+		<channels>
+			<channel id="audioIn" typeId="audioIn" />
+			<channel id="audioOut" typeId="audioOut" />
+			<channel id="videoIn" typeId="videoIn" />
+			<channel id="videoOut" typeId="videoOut" />
+		</channels>
+	</channel-group-type>
+
 	<channel-group-type id="netMenuControls">
 		<label>Net/USB Menu</label>
 		<channels>
@@ -98,5 +108,14 @@
 			<channel id="selection" typeId="menuSelection" />
 		</channels>
 	</channel-group-type>
+
+    <channel-group-type id="radio">
+        <label>Radio</label>
+        <channels>
+            <channel id="frequency" typeId="frequency" />
+            <channel id="tune" typeId="tune" />
+            <channel id="preset" typeId="preset" />
+        </channels>
+    </channel-group-type>
 
 </thing:thing-descriptions>
