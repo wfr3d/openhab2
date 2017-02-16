@@ -25,4 +25,18 @@ public final class OnkyoParserHelper {
         return new StringType(builder.toString());
     }
 
+    public static State presetParser(String value) {
+        String presetText = "";
+        if (value.equals("00")) {
+            presetText = "No Preset";
+        } else {
+            try {
+                presetText = Integer.decode("0x" + value).toString();
+            } catch (NumberFormatException e) {
+                presetText = "Unknown";
+            }
+        }
+        return new StringType(presetText);
+    }
+
 }

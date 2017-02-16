@@ -441,14 +441,15 @@ public class OnkyoHandler extends UpnpAudioSinkHandler implements OnkyoEventList
                  */
 
                 case RADIO_TUNING:
-                case RADIO_TUNING_MODE:
+                    updateState(CHANNEL_RADIO_TUNING, new StringType(data.getValue()));
+                    break;
                 case RADIO_PRESET:
-                    logger.debug("Info message: '{}'", data.getValue());
+                    updateState(CHANNEL_RADIO_PRESET, OnkyoParserHelper.presetParser(data.getValue()));
                     break;
 
                 /*
-                * MISC
-                */
+                 * MISC
+                 */
 
                 case INFO:
                     logger.debug("Info message: '{}'", data.getValue());
@@ -737,7 +738,7 @@ public class OnkyoHandler extends UpnpAudioSinkHandler implements OnkyoEventList
      */
     private void checkStatus() {
         sendCommand(EiscpCommand.POWER_QUERY);
-        logger.debug("test con {}", connection.isConnected());
+
         if (connection != null && connection.isConnected()) {
 
             sendCommand(EiscpCommand.VOLUME_QUERY);
@@ -762,9 +763,13 @@ public class OnkyoHandler extends UpnpAudioSinkHandler implements OnkyoEventList
                 sendCommand(EiscpCommand.ZONE3_MUTE_QUERY);
             }
 
-            sendCommand(EiscpCommand.RADIO_TUNING_QUERY);
-            sendCommand(EiscpCommand.RADIO_TUNING_MODE_QUERY);
-            sendCommand(EiscpCommand.RADIO_PRESET_QUERY);
+            if (isLinked(CHANNEL_RADIO_TUNING)) {
+                sendCommand(EiscpCommand.RADIO_TUNING_QUERY);
+            }
+            // sendCommand(EiscpCommand.ZONE2_RADIO_TUNING_QUERY);
+            if (isLinked(CHANNEL_RADIO_PRESET)) {
+                sendCommand(EiscpCommand.RADIO_PRESET_QUERY);
+            }
         } else {
             updateStatus(ThingStatus.OFFLINE);
         }

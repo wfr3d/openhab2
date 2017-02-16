@@ -163,10 +163,12 @@ public enum EiscpCommand {
 
     RADIO_TUNING("TUN", ""),
     RADIO_TUNING_QUERY("TUN", "QSTN"),
-    RADIO_TUNING_MODE("TUZ", ""),
-    RADIO_TUNING_MODE_QUERY("TUZ", "QSTN"),
-    RADIO_PRESET("PRZ", ""),
-    RADIO_PRESET_QUERY("PRZ", "QSTN");
+    // ZONE2_RADIO_TUNING("TUZ", ""),
+    // ZONE2_RADIO_TUNING_QUERY("TUZ", "QSTN"),
+    // ZONE3_RADIO_TUNING("TU3", ""),
+    // ZONE3_RADIO_TUNING_QUERY("TU3", "QSTN"),
+    RADIO_PRESET("PRS", ""),
+    RADIO_PRESET_QUERY("PRS", "QSTN");
 
     public static enum Zone {
         MAIN,

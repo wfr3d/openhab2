@@ -128,9 +128,8 @@ public class OnkyoBindingConstants {
     public final static String CHANNEL_NET_MENU8 = "netmenu#item8";
     public final static String CHANNEL_NET_MENU9 = "netmenu#item9";
 
-    public final static String CHANNEL_RADIO_FREQ = "radio#frequency";
     public final static String CHANNEL_RADIO_PRESET = "radio#preset";
-    public final static String CHANNEL_RADIO_TUNING = "radio#tune";
+    public final static String CHANNEL_RADIO_TUNING = "radio#tuning";
 
     // Used for Discovery service
     public final static String MANUFACTURER = "ONKYO";

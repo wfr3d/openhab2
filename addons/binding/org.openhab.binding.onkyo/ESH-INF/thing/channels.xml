@@ -206,23 +206,17 @@
 		<description>Video Stream Information</description>
 		<state readOnly="true" pattern="%s"></state>
 	</channel-type>
-    <channel-type id="frequency" advanced="true">
-        <item-type>String</item-type>
-        <label>frequency</label>
-        <description>freq</description>
-        <state readOnly="true"></state>
-    </channel-type>
-    <channel-type id="tune" advanced="true">
-        <item-type>String</item-type>
-        <label>Tuning</label>
-        <description>tuning</description>
-        <state readOnly="true" pattern="%s"></state>
-    </channel-type>
-    <channel-type id="preset" advanced="true">
-        <item-type>String</item-type>
-        <label>Preset Stations</label>
-        <description>Preset</description>
-        <state readOnly="true" pattern="%s"></state>
-    </channel-type>
+	<channel-type id="tuning" advanced="true">
+		<item-type>String</item-type>
+		<label>Tuning</label>
+		<description>Radio Tuning</description>
+		<state pattern="%s"></state>
+	</channel-type>
+	<channel-type id="preset" advanced="true">
+		<item-type>String</item-type>
+		<label>Preset</label>
+		<description>Preset Radio Stations</description>
+		<state pattern="%s"></state>
+	</channel-type>
 
 </thing:thing-descriptions>
