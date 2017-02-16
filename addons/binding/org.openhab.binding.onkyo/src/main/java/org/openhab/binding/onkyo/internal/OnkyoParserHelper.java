@@ -18,10 +18,10 @@ import org.eclipse.smarthome.core.types.State;
  */
 public final class OnkyoParserHelper {
 
+    
     /**
-     * Format the audio/video info to a formatted string.
-     * 
-     * @param data EISCP audio/video info
+     * Format the audio/video info to a formatted string.  
+     * @param data EISCP audio/video info 
      * @param from first element to include
      * @param to last element to include
      */
@@ -47,7 +47,6 @@ public final class OnkyoParserHelper {
 
     /**
      * Format the preset message to a state string
-     * 
      * @param preset EISCP preset data
      */
     public static State presetParser(String preset) {
