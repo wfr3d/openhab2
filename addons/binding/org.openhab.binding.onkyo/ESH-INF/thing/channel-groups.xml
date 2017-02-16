@@ -109,12 +109,12 @@
 		</channels>
 	</channel-group-type>
 
-    <channel-group-type id="radio">
-        <label>Radio</label>
-        <channels>
-            <channel id="tuning" typeId="tuning" />
-            <channel id="preset" typeId="preset" />
-        </channels>
-    </channel-group-type>
+	<channel-group-type id="radio">
+		<label>Radio</label>
+		<channels>
+			<channel id="tuning" typeId="tuning" />
+			<channel id="preset" typeId="preset" />
+		</channels>
+	</channel-group-type>
 
 </thing:thing-descriptions>
