@@ -13,7 +13,7 @@
 			<channel-group typeId="playerControls" id="player" />
 			<channel-group typeId="netMenuControls" id="netmenu" />
 			<channel-group typeId="information" id="info" />
-            <channel-group typeId="radioControls" id="radio" />
+			<channel-group typeId="radioControls" id="radio" />
 		</channel-groups>
 
 		<config-description-ref uri="thing-type:onkyo:config" />
