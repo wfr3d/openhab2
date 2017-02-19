@@ -40,6 +40,7 @@ import org.openhab.binding.onkyo.internal.OnkyoConnection;
 import org.openhab.binding.onkyo.internal.OnkyoEventListener;
 import org.openhab.binding.onkyo.internal.ServiceType;
 import org.openhab.binding.onkyo.internal.config.OnkyoDeviceConfiguration;
+import org.openhab.binding.onkyo.internal.config.ReceiverInfo;
 import org.openhab.binding.onkyo.internal.eiscp.EiscpCommand;
 import org.openhab.binding.onkyo.internal.eiscp.EiscpMessage;
 import org.slf4j.Logger;
@@ -266,6 +267,7 @@ public class OnkyoHandler extends UpnpAudioSinkHandler implements OnkyoEventList
             case CHANNEL_ALBUM_ART_URL:
                 if (command.equals(RefreshType.REFRESH)) {
                     sendCommand(EiscpCommand.NETUSB_ALBUM_ART_QUERY);
+                    sendCommand(EiscpCommand.INFO_QUERY);
                 }
                 break;
             case CHANNEL_ARTIST:
@@ -430,6 +432,7 @@ public class OnkyoHandler extends UpnpAudioSinkHandler implements OnkyoEventList
 
                 case INFO:
                     logger.debug("Info message: '{}'", data.getValue());
+                    ReceiverInfo.parseNri(data.getValue());
                     break;
 
                 default:

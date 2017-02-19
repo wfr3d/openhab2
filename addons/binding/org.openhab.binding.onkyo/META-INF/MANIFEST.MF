@@ -8,6 +8,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .
 Import-Package: com.google.common.base,
  com.google.common.collect,
+ com.thoughtworks.xstream,
+ com.thoughtworks.xstream.annotations,
  org.apache.commons.io,
  org.apache.commons.lang,
  org.eclipse.smarthome.config.core,
