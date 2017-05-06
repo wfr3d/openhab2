@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.smarthome.config.core.Configuration;
@@ -443,7 +444,8 @@ public class MaxDevicesHandler extends BaseThingHandler implements DeviceStatusL
 
         if (device.getActualTempLastUpdated() == null) {
             Calendar t = Calendar.getInstance();
-            t.add(Calendar.MINUTE, REFRESH_ACTUAL_MIN_RATE * -1);
+            int randomNum = ThreadLocalRandom.current().nextInt(1, refreshActualRate);
+            t.add(Calendar.MINUTE, randomNum * -1);
             device.setActualTempLastUpdated(t.getTime());
             logger.info("Actual date reset for {} {} ({}) id: {}", device.getType(), device.getName(),
                     device.getSerialNumber(), getThing().getUID());
