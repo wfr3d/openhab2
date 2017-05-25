@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="lib" path="lib/jxmpp-core-0.5.0.jar"/>
+	<classpathentry kind="lib" path="lib/jxmpp-jid-0.5.0.jar"/>
+	<classpathentry kind="lib" path="lib/jxmpp-util-cache-0.5.0.jar"/>
+	<classpathentry kind="lib" path="lib/minidns-core-0.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/minidns-dnssec-0.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/minidns-hla-0.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/minidns-iterative-resolver-0.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/smack-core-4.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/smack-extensions-4.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/smack-im-4.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/smack-java7-4.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/smack-resolver-javax-4.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/smack-sasl-javax-4.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/smack-tcp-4.2.0.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>

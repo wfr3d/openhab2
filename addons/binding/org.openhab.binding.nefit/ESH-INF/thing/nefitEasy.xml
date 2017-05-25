@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="nefit" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="thermostat">
+		<label>Nefit Easy Thermostat</label>
+
+		<channels>
+			<channel id="settemperature" typeId="settemperature" />
+            <channel id="temperature" typeId="temperature" />
+		</channels>
+
+		<properties>
+			<property name="vendor">nefit</property>
+		</properties>
+
+		<config-description>
+			<parameter name="serialNumber" type="text" required="true">
+				<label>serialNumber</label>
+			</parameter>
+			<parameter name="accessKey" type="text" required="true">
+				<label>accessKey</label>
+			</parameter>
+			 <parameter name="password" type="text" required="true">
+                <label>password</label>
+            </parameter>
+			<parameter name="refreshInterval" type="integer" min="1" max="9999" required="false">
+				<label>Refresh Interval</label>
+				<description>Refresh Interval for refreshing the data in s</description>
+				<default>30</default>
+				<advanced>true</advanced>
+			</parameter>
+		</config-description>
+	</thing-type>
+
+	<channel-type id="settemperature">
+		<item-type>Number</item-type>
+		<label>Set Temperature</label>
+		<state pattern="%.1f C" readOnly="true" />
+	</channel-type>
+    <channel-type id="temperature">
+        <item-type>Number</item-type>
+        <label>Room Temperature</label>
+        <state pattern="%.1f C" readOnly="true" />
+    </channel-type>
+  <channel-type id="outdoortemperature">
+        <item-type>Number</item-type>
+        <label>OutDoor Temperature</label>
+        <state pattern="%.1f C" readOnly="true" />
+    </channel-type>
+
+	<channel-type id="windDirectionType">
+		<item-type>String</item-type>
+		<label>Wind Direction</label>
+		<state pattern="%s" readOnly="true" />
+	</channel-type>
+	<channel-type id="powerRelType">
+		<item-type>Number</item-type>
+		<label>Relative Power</label>
+		<category>Energy</category>
+		<state pattern="%.1f %%" readOnly="true" />
+	</channel-type>
+	<channel-type id="powerType">
+		<item-type>Number</item-type>
+		<label>Power</label>
+		<category>Energy</category>
+		<state pattern="%.1f Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="powerKType">
+		<item-type>Number</item-type>
+		<label>Power</label>
+		<category>Energy</category>
+		<state pattern="%.1f kWh" readOnly="true" />
+	</channel-type>
+	<channel-type id="energyType">
+		<item-type>Number</item-type>
+		<label>Energy</label>
+		<category>Energy</category>
+		<state pattern="%.0f kWh" readOnly="true" />
+	</channel-type>
+	<channel-type id="timestampType">
+		<item-type>DateTime</item-type>
+		<label>Last Updated</label>
+		<category>Date</category>
+		<state readOnly="true" />
+	</channel-type>
+</thing:thing-descriptions>
