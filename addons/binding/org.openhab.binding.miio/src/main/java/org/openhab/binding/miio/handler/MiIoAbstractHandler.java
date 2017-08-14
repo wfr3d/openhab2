@@ -84,7 +84,7 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
             return;
         }
         isIdentified = false;
-        scheduler.schedule(this::initializeData, 1, TimeUnit.SECONDS);
+        scheduler.schedule(this::initializeData, 0, TimeUnit.SECONDS);
         int pollingPeriod = configuration.refreshInterval;
         if (pollingPeriod > 0) {
             pollingJob = scheduler.scheduleWithFixedDelay(this::updateData, 5, pollingPeriod, TimeUnit.SECONDS);
@@ -270,9 +270,11 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
     protected void initalizeNetworkCache() {
         network = new ExpiringCache<String>(CACHE_EXPIRY, () -> {
             try {
-                // TODO: mocked data for testing
-                return "{\"result\":{\"life\":692821,\"cfg_time\":0,\"token\":\"a9523eb3880289b53c49XXXXXXXXXX\",\"mac\":\"28:6C:07:xx:xx:xx\",\"fw_ver\":\"1.2.4_59\",\"hw_ver\":\"MC200\",\"model\":\"zhimi.airpurifier.m1\",\"wifi_fw_ver\":\"SD878x-14.76.36.p79-702.1.0-WM\",\"ap\":{\"rssi\":-37,\"ssid\":\"Ssid\",\"bssid\":\"C4:04:xx:xx:xx:xx\"},\"netif\":{\"localIp\":\"192.168.1.31\",\"mask\":\"255.255.255.0\",\"gw\":\"192.168.1.1\"},\"mmfree\":27160,\"otu_stat\":[283,271,356,1,345,91],\"ott_stat\":[4, 17571, 183, 8424]},\"id\":38}";
-                // return sendCommand(MiIoCommand.MIIO_INFO);
+                // TODO: Remove mocked data for testing
+                // return
+                // "{\"result\":{\"life\":692821,\"cfg_time\":0,\"token\":\"a9523eb3880289b53c49XXXXXXXXXX\",\"mac\":\"28:6C:07:xx:xx:xx\",\"fw_ver\":\"1.2.4_59\",\"hw_ver\":\"MC200\",\"model\":\"zhimi.airpurifier.m1\",\"wifi_fw_ver\":\"SD878x-14.76.36.p79-702.1.0-WM\",\"ap\":{\"rssi\":-37,\"ssid\":\"Ssid\",\"bssid\":\"C4:04:xx:xx:xx:xx\"},\"netif\":{\"localIp\":\"192.168.1.31\",\"mask\":\"255.255.255.0\",\"gw\":\"192.168.1.1\"},\"mmfree\":27160,\"otu_stat\":[283,271,356,1,345,91],\"ott_stat\":[4,
+                // 17571, 183, 8424]},\"id\":38}";
+                return sendCommand(MiIoCommand.MIIO_INFO);
             } catch (Exception e) {
                 logger.debug("Error during network status refresh: {}", e.getMessage(), e);
             }
@@ -313,8 +315,8 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
             return false;
         }
         if (!configuration.model.equals(model)) {
-            logger.info("Mi IO Device model {} has model config: {}. Unexpected unless manual override",
-                    configuration.model, model);
+            logger.info("Mi IO Device model {} has model config: {}. Unexpected unless manual override", model,
+                    configuration.model);
         }
         if (miDevice.getThingType().equals(getThing().getThingTypeUID())) {
             logger.info("Mi IO model {} identified as: {}. Matches thingtype {}", model, miDevice.toString(),
