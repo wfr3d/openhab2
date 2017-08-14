@@ -191,10 +191,10 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
         }
         return true;
     }
-    
-    private void checkDeviceType(){
-        if (!isIdentified){
-                defineDeviceType();
+
+    private void checkDeviceType() {
+        if (!isIdentified) {
+            defineDeviceType();
         }
     }
 
@@ -225,42 +225,30 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
         }
         try {
             JsonObject deviceMapping = Utils.convertFileToJSON(fn);
+            // TODO: Change to Trace later onwards
             logger.debug("Device Mapper: {}, {}, {}", fn.getFile(), deviceMapping.toString());
 
             Gson gson = new GsonBuilder().serializeNulls().create();
             miioDevice = gson.fromJson(deviceMapping, MiIoBasicDevice.class);
-
-            actions = new HashMap<String, MiIoDeviceAction>();
-
-            // make a map of the actions
-            for (MiIoDeviceAction action : miioDevice.getDevice().getActions()) {
-                actions.put(action.getChannel(), action);
-            }
 
             for (Channel ch : getThing().getChannels()) {
                 logger.debug("Current thing channels {}, type: {}", ch.getUID(), ch.getChannelTypeUID());
             }
             ThingBuilder thingBuilder = editThing();
             int channelsAdded = 0;
+
+            // make a map of the actions
+            actions = new HashMap<String, MiIoDeviceAction>();
+            for (MiIoDeviceAction action : miioDevice.getDevice().getActions()) {
+                actions.put(action.getChannel(), action);
+                // addChannel(thingBuilder, action.getChannel(), action.getChannelType(), action.getType(),
+                // action.getFriendlyName());
+            }
+
             for (MiIoBasicProperty miProperty : miioDevice.getDevice().getProperties()) {
-
                 logger.debug("properties {}", miProperty);
-                ChannelUID channelUID = new ChannelUID(getThing().getUID(), miProperty.getChannel());
-
-                // TODO: only for testing. This should not be done finally. Channel only to be added when not there
-                // already
-                if (getThing().getChannel(miProperty.getChannel()) != null) {
-                    logger.info("Channel '{}' for thing {} already exist... removing", miProperty.getChannel(),
-                            getThing().getUID());
-                    thingBuilder.withoutChannel(new ChannelUID(getThing().getUID(), miProperty.getChannel()));
-                }
-
-                ChannelTypeUID channelTypeUID = new ChannelTypeUID(MiIoBindingConstants.BINDING_ID,
-                        miProperty.getChannelType());
-
-                Channel channel = ChannelBuilder.create(channelUID, miProperty.getType()).withType(channelTypeUID)
-                        .withLabel(miProperty.getFriendlyName()).build();
-                thingBuilder.withChannel(channel);
+                addChannel(thingBuilder, miProperty.getChannel(), miProperty.getChannelType(), miProperty.getType(),
+                        miProperty.getFriendlyName());
                 channelsAdded += 1;
             }
             // only update if channels were added/removed
@@ -279,8 +267,24 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
         } catch (Exception e) {
             logger.warn("Error creating channel structure", e);
         }
-
         return false;
+    }
 
+    private void addChannel(ThingBuilder thingBuilder, String channel, String channelType, String datatype,
+            String friendlyName) {
+        ChannelUID channelUID = new ChannelUID(getThing().getUID(), channel);
+
+        // TODO: only for testing. This should not be done finally. Channel only to be added when not there
+        // already
+        if (getThing().getChannel(channel) != null) {
+            logger.info("Channel '{}' for thing {} already exist... removing", channel, getThing().getUID());
+            thingBuilder.withoutChannel(new ChannelUID(getThing().getUID(), channel));
+        }
+
+        ChannelTypeUID channelTypeUID = new ChannelTypeUID(MiIoBindingConstants.BINDING_ID, channelType);
+
+        Channel newChannel = ChannelBuilder.create(channelUID, datatype).withType(channelTypeUID)
+                .withLabel(friendlyName).build();
+        thingBuilder.withChannel(newChannel);
     }
 }
