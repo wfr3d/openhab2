@@ -312,7 +312,6 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
             config.put(PROPERTY_MODEL, model);
             updateConfiguration(config);
             configuration = getConfigAs(MiIoBindingConfiguration.class);
-            return false;
         }
         if (!configuration.model.equals(model)) {
             logger.info("Mi IO Device model {} has model config: {}. Unexpected unless manual override", model,
@@ -334,7 +333,7 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
                 changeThingType(MiIoDevices.getType(model).getThingType(), getConfig());
             } else {
                 logger.warn(
-                        "Mi IO Device model {} identified as: {}. Does not matches thingtype {}. Unexpected, unless unless manual override.",
+                        "Mi IO Device model {} identified as: {}, thingtype {}. Does not matches thingtype {}. Unexpected, unless unless manual override.",
                         miDevice.toString(), miDevice.getThingType(), getThing().getThingTypeUID().toString(),
                         miDevice.getThingType().toString());
                 return true;
