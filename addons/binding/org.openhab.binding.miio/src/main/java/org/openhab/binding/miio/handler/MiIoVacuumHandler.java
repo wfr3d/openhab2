@@ -241,10 +241,6 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
 
     @Override
     protected boolean initializeData() {
-        this.miioCom = getConnection();
-        if (miioCom != null) {
-            updateStatus(ThingStatus.ONLINE);
-        }
         status = new ExpiringCache<String>(CACHE_EXPIRY, () -> {
             try {
                 return sendCommand(MiIoCommand.GET_STATUS);
@@ -278,6 +274,10 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
             return null;
         });
         initalizeNetworkCache();
+        this.miioCom = getConnection();
+        if (miioCom != null) {
+            updateStatus(ThingStatus.ONLINE);
+        }
         return true;
     }
 }

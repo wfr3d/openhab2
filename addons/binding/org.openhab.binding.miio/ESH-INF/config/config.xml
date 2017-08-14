@@ -19,6 +19,12 @@
 			<description>Device ID number for communication (in Hex)</description>
 			<advanced>true</advanced>
 		</parameter>
+		<parameter name="model" type="text" required="false">
+			<label>Device Model String</label>
+			<description>Device model string, used to determine the subtype.)</description>
+			<default></default>
+			<advanced>true</advanced>
+		</parameter>
 		<parameter name="refreshInterval" type="integer" min="0" max="9999" required="false">
 			<label>Refresh interval</label>
 			<description>Refresh interval for refreshing the data in seconds. (0=disabled)</description>

@@ -75,6 +75,7 @@ public final class MiIoBindingConstants {
     public static final String PROPERTY_HOST_IP = "host";
     public static final String PROPERTY_DID = "deviceId";
     public static final String PROPERTY_TOKEN = "token";
+    public static final String PROPERTY_MODEL = "model";
     public static final String PROPERTY_REFRESH_INTERVAL = "refreshInterval";
 
     public static final byte[] DISCOVER_STRING = org.openhab.binding.miio.internal.Utils
