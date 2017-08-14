@@ -64,6 +64,12 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
     }
 
     @Override
+    public void initialize() {
+        super.initialize();
+        hasChannelStructure = false;
+    }
+
+    @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
         if (command == RefreshType.REFRESH) {
             logger.debug("Refreshing {}", channelUID);
@@ -118,8 +124,7 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
                 }
             }
             if (miioDevice != null) {
-                updatesSuccess += 1;
-                refreshProperties(miioDevice);
+                updatesSuccess += refreshProperties(miioDevice) ? 1 : 0;
             }
             if (updatesSuccess > 0) {
                 updateStatus(ThingStatus.ONLINE);
@@ -179,20 +184,28 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
         this.miioCom = getConnection();
         if (miioCom != null) {
             updateStatus(ThingStatus.ONLINE);
-            defineDeviceType();
+            checkDeviceType();
             checkChannelStructure();
         } else {
             updateStatus(ThingStatus.OFFLINE);
         }
         return true;
     }
+    
+    private void checkDeviceType(){
+        if (!isIdentified){
+                defineDeviceType();
+        }
+    }
 
     /**
-     *
+     * Checks if the channel structure has been build already based on the model data. If not build it.
      */
     private void checkChannelStructure() {
         if (!hasChannelStructure) {
             if (configuration.model == null || configuration.model.isEmpty()) {
+                logger.debug("Model needs to be determined");
+            } else {
                 hasChannelStructure = buildChannelStructure(configuration.model);
             }
         }
@@ -200,10 +213,17 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
 
     private boolean buildChannelStructure(String deviceName) {
         // TODO: This still needs significant cleanup but should be functional
+        logger.debug("Building Channel Structure for {} - Model: {}", getThing().getUID().toString(), deviceName);
+        URL fn;
         try {
             Bundle bundle = bundleContext.getBundle();
-            URL fn = bundle.getEntry(MiIoBindingConstants.DATABASE_PATH + deviceName + ".json");
+            fn = bundle.getEntry(MiIoBindingConstants.DATABASE_PATH + deviceName + ".json");
             logger.debug("bundle: {}, {}, {}", bundle, fn.getFile(), fn);
+        } catch (Exception e) {
+            logger.warn("Database entry for model '{}' does cannot be found.", deviceName);
+            return false;
+        }
+        try {
             JsonObject deviceMapping = Utils.convertFileToJSON(fn);
             logger.debug("Device Mapper: {}, {}, {}", fn.getFile(), deviceMapping.toString());
 
@@ -247,17 +267,17 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
             if (channelsAdded > 0) {
                 updateThing(thingBuilder.build());
             }
-
+            return true;
         } catch (JsonIOException e) {
-            logger.debug("Error reading Json", e);
+            logger.warn("Error reading database Json", e);
         } catch (JsonSyntaxException e) {
-            logger.debug("Error reading Json", e);
+            logger.warn("Error reading database Json", e);
         } catch (IOException e) {
-            logger.debug("Error reading Json", e);
+            logger.warn("Error reading database file", e);
         } catch (NullPointerException e) {
-            logger.debug("Error crreating channel structure", e);
+            logger.warn("Error creating channel structure", e);
         } catch (Exception e) {
-            logger.debug("Error crreating channel structure", e);
+            logger.warn("Error creating channel structure", e);
         }
 
         return false;
