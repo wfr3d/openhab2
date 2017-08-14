@@ -84,15 +84,15 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
             return;
         }
         isIdentified = false;
-        scheduler.schedule(this::initializeData, 0, TimeUnit.SECONDS);
-        scheduler.schedule(this::defineDeviceType, 1, TimeUnit.SECONDS);
+        scheduler.schedule(this::initializeData, 1, TimeUnit.SECONDS);
         int pollingPeriod = configuration.refreshInterval;
         if (pollingPeriod > 0) {
-            pollingJob = scheduler.scheduleWithFixedDelay(this::updateData, 2, pollingPeriod, TimeUnit.SECONDS);
+            pollingJob = scheduler.scheduleWithFixedDelay(this::updateData, 5, pollingPeriod, TimeUnit.SECONDS);
             logger.debug("Polling job scheduled to run every {} sec. for '{}'", pollingPeriod, getThing().getUID());
         } else {
             logger.debug("Polling job disabled. for '{}'", getThing().getUID());
         }
+        updateStatus(ThingStatus.OFFLINE);
     }
 
     private boolean tolkenCheckPass(String tokenSting) {
@@ -112,7 +112,7 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
 
     @Override
     public void dispose() {
-        logger.debug("Disposing Xiaomi MiIO handler '{}'", getThing().getUID());
+        logger.debug("Disposing Xiaomi Mi IO handler '{}'", getThing().getUID());
         if (pollingJob != null) {
             pollingJob.cancel(true);
             pollingJob = null;
@@ -255,11 +255,12 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
     }
 
     protected boolean initializeData() {
+        initalizeNetworkCache();
         this.miioCom = getConnection();
         if (miioCom != null) {
             updateStatus(ThingStatus.ONLINE);
+            defineDeviceType();
         }
-        initalizeNetworkCache();
         return true;
     }
 
@@ -269,7 +270,9 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
     protected void initalizeNetworkCache() {
         network = new ExpiringCache<String>(CACHE_EXPIRY, () -> {
             try {
-                return sendCommand(MiIoCommand.MIIO_INFO);
+                // TODO: mocked data for testing
+                return "{\"result\":{\"life\":692821,\"cfg_time\":0,\"token\":\"a9523eb3880289b53c49XXXXXXXXXX\",\"mac\":\"28:6C:07:xx:xx:xx\",\"fw_ver\":\"1.2.4_59\",\"hw_ver\":\"MC200\",\"model\":\"zhimi.airpurifier.m1\",\"wifi_fw_ver\":\"SD878x-14.76.36.p79-702.1.0-WM\",\"ap\":{\"rssi\":-37,\"ssid\":\"Ssid\",\"bssid\":\"C4:04:xx:xx:xx:xx\"},\"netif\":{\"localIp\":\"192.168.1.31\",\"mask\":\"255.255.255.0\",\"gw\":\"192.168.1.1\"},\"mmfree\":27160,\"otu_stat\":[283,271,356,1,345,91],\"ott_stat\":[4, 17571, 183, 8424]},\"id\":38}";
+                // return sendCommand(MiIoCommand.MIIO_INFO);
             } catch (Exception e) {
                 logger.debug("Error during network status refresh: {}", e.getMessage(), e);
             }
@@ -281,7 +284,7 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
         JsonObject miioInfo = getJsonResultHelper(network.getValue());
         if (miioInfo != null) {
             updateProperties(miioInfo);
-            updateThingType(miioInfo);
+            isIdentified = updateThingType(miioInfo);
         }
     }
 
@@ -291,10 +294,10 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
         properties.put(Thing.PROPERTY_FIRMWARE_VERSION, miioInfo.get("fw_ver").getAsString());
         properties.put(Thing.PROPERTY_HARDWARE_VERSION, miioInfo.get("hw_ver").getAsString());
         if (miioInfo.get("wifi_fw_ver") != null) {
-            properties.put("wifi_firmware", miioInfo.get("wifi_fw_ver").getAsString());
+            properties.put("wifiFirmware", miioInfo.get("wifi_fw_ver").getAsString());
         }
         if (miioInfo.get("mcu_fw_ver") != null) {
-            properties.put("mcu_firmware", miioInfo.get("mcu_fw_ver").getAsString());
+            properties.put("mcuFirmware", miioInfo.get("mcu_fw_ver").getAsString());
         }
         updateProperties(properties);
     }
@@ -302,6 +305,17 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
     protected boolean updateThingType(JsonObject miioInfo) {
         String model = miioInfo.get("model").getAsString();
         miDevice = MiIoDevices.getType(model);
+        if (configuration.model == null || configuration.model.isEmpty()) {
+            Configuration config = editConfiguration();
+            config.put(PROPERTY_MODEL, model);
+            updateConfiguration(config);
+            configuration = getConfigAs(MiIoBindingConfiguration.class);
+            return false;
+        }
+        if (!configuration.model.equals(model)) {
+            logger.info("Mi IO Device model {} has model config: {}. Unexpected unless manual override",
+                    configuration.model, model);
+        }
         if (miDevice.getThingType().equals(getThing().getThingTypeUID())) {
             logger.info("Mi IO model {} identified as: {}. Matches thingtype {}", model, miDevice.toString(),
                     miDevice.getThingType().toString());
@@ -318,7 +332,7 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
                 changeThingType(MiIoDevices.getType(model).getThingType(), getConfig());
             } else {
                 logger.warn(
-                        "Mi IO Device model {} identified as: {}. Does not matches thingtype {}. Unexpected, unless intentionally changed.",
+                        "Mi IO Device model {} identified as: {}. Does not matches thingtype {}. Unexpected, unless unless manual override.",
                         miDevice.toString(), miDevice.getThingType(), getThing().getThingTypeUID().toString(),
                         miDevice.getThingType().toString());
                 return true;
