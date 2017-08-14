@@ -18,5 +18,6 @@ public final class MiIoBindingConfiguration {
     public String host;
     public String token;
     public String deviceId;
+    public String model;
     public int refreshInterval;
 }

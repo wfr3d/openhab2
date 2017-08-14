@@ -130,7 +130,7 @@ public class MiIoCommunication {
             byte[] response = sendPacket.getData();
             return response;
         } catch (SocketTimeoutException e) {
-            logger.debug("Communication error for vacuum at {}: {}", ip, e.getMessage());
+            logger.debug("Communication error for Mi IO device at {}: {}", ip, e.getMessage());
             clientSocket.close();
             return new byte[0];
         }
