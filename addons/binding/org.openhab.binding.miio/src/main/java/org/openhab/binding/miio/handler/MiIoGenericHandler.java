@@ -20,8 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link MiIoGenericHandler} is responsible for handling commands, which are
- * sent to one of the channels.
+ * The {@link MiIoGenericHandler} is responsible for handling commands for devices that are not yet defined.
+ * Once the device has been determined, the proper handler is loaded.
  *
  * @author Marcel Verpaalen - Initial contribution
  */
@@ -63,15 +63,4 @@ public class MiIoGenericHandler extends MiIoAbstractHandler {
             logger.debug("Error while updating '{}'", getThing().getUID().toString(), e);
         }
     }
-
-    @Override
-    protected boolean initializeData() {
-        this.miioCom = getConnection();
-        if (miioCom != null) {
-            updateStatus(ThingStatus.ONLINE);
-        }
-        initalizeNetworkCache();
-        return true;
-    }
-
 }

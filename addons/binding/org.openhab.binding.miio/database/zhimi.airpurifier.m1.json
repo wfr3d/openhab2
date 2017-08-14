@@ -51,7 +51,7 @@
         },
         {
             "property": "led",
-            "friendlyName": "LedStatus",
+            "friendlyName": "Led Status",
             "channel": "led",
             "type": "Switch",
             "refresh": true,
@@ -59,7 +59,7 @@
         },
         {
             "property": "act_det",
-            "friendlyName": "AirAutoDetect",
+            "friendlyName": "Air Aut oDetect",
             "channel": "act_det",
             "type": "Switch",
             "refresh": true,
@@ -67,7 +67,7 @@
         },
         {
             "property": "buzzer",
-            "friendlyName": "BuzzerStatus",
+            "friendlyName": "Buzzer Status",
             "channel": "buzzer",
             "type": "Switch",
             "refresh": true,

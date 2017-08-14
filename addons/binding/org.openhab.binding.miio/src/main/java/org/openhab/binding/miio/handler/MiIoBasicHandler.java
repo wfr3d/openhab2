@@ -54,6 +54,8 @@ import com.google.gson.JsonSyntaxException;
  */
 public class MiIoBasicHandler extends MiIoAbstractHandler {
     private final Logger logger = LoggerFactory.getLogger(MiIoBasicHandler.class);
+    private boolean hasChannelStructure;
+
     MiIoBasicDevice miioDevice;
     private Map<String, MiIoDeviceAction> actions;
 
@@ -79,6 +81,9 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
                 if (command instanceof OnOffType) {
                     cmd = cmd + "[\"" + command.toString().toLowerCase() + "\"]";
                 }
+                if (command instanceof StringType) {
+                    cmd = cmd + "[\"" + command.toString() + "\"]";
+                }
                 if (command instanceof DecimalType) {
                     cmd = cmd + "[" + command.toString().toLowerCase() + "]";
                 }
@@ -100,51 +105,24 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
     @Override
     protected synchronized void updateData() {
         logger.debug("Update connection '{}'", getThing().getUID().toString());
+        checkChannelStructure();
         if (!hasConnection()) {
             return;
         }
         try {
+            int updatesSuccess = 0;
             if (updateNetwork()) {
-                updateStatus(ThingStatus.ONLINE);
+                updatesSuccess += 1;
                 if (!isIdentified) {
                     isIdentified = updateThingType(getJsonResultHelper(network.getValue()));
                 }
-                // TODO: horribly inefficient refresh with each time creation of the list etc.. for testing only
-                if (miioDevice != null) {
-                    // build list of properties to be refreshed
-                    JsonArray getPropString = new JsonArray();
-                    List<MiIoBasicProperty> refreshList = new ArrayList<MiIoBasicProperty>();
-                    for (MiIoBasicProperty miProperty : miioDevice.getDevice().getProperties()) {
-                        if (miProperty.getRefresh()) {
-                            refreshList.add(miProperty);
-                            getPropString.add(miProperty.getProperty());
-                        }
-                    }
-                    // get the data based on the datatype
-                    String reply = null;
-                    reply = sendCommand(MiIoCommand.GET_PROPERTY, getPropString.toString());
-                    // mock data for testing
-                    if (reply == null) {
-                        reply = "{\"result\":[\"off\",\"idle\",59,16,10,\"on\",\"on\",\"off\",322,22],\"id\":14}";
-                        logger.debug("No Reply using for testing mocked reply: {}", reply);
-                    }
-
-                    JsonArray res = ((JsonObject) parser.parse(reply)).get("result").getAsJsonArray();
-                    // update the states
-                    for (int i = 0; i < refreshList.size(); i++) {
-                        if (refreshList.get(i).getType().equals("Number")) {
-                            updateState(refreshList.get(i).getChannel(), new DecimalType(res.get(i).getAsBigDecimal()));
-                        }
-                        if (refreshList.get(i).getType().equals("String")) {
-                            updateState(refreshList.get(i).getChannel(), new StringType(res.get(i).getAsString()));
-                        }
-                        if (refreshList.get(i).getType().equals("Switch")) {
-                            updateState(refreshList.get(i).getChannel(),
-                                    res.get(i).getAsString().equals("on") ? OnOffType.ON : OnOffType.OFF);
-                        }
-                    }
-                }
-
+            }
+            if (miioDevice != null) {
+                updatesSuccess += 1;
+                refreshProperties(miioDevice);
+            }
+            if (updatesSuccess > 0) {
+                updateStatus(ThingStatus.ONLINE);
             } else {
                 disconnectedNoResponse();
             }
@@ -154,20 +132,70 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
 
     }
 
+    private boolean refreshProperties(MiIoBasicDevice miioDevice2miioDevice) {
+        // TODO: horribly inefficient refresh with each time creation of the list etc.. for testing only
+        // build list of properties to be refreshed
+        JsonArray getPropString = new JsonArray();
+        List<MiIoBasicProperty> refreshList = new ArrayList<MiIoBasicProperty>();
+        for (MiIoBasicProperty miProperty : miioDevice.getDevice().getProperties()) {
+            if (miProperty.getRefresh()) {
+                refreshList.add(miProperty);
+                getPropString.add(miProperty.getProperty());
+            }
+        }
+        // get the data based on the datatype
+        String reply = null;
+        reply = sendCommand(MiIoCommand.GET_PROPERTY, getPropString.toString());
+        // mock data for testing
+        if (reply == null) {
+            reply = "{\"result\":[\"off\",\"idle\",59,16,10,\"on\",\"on\",\"off\",322,22],\"id\":14}";
+            logger.debug("No Reply using for testing mocked reply: {}", reply);
+        }
+
+        JsonArray res = ((JsonObject) parser.parse(reply)).get("result").getAsJsonArray();
+
+        // update the states
+        for (int i = 0; i < refreshList.size(); i++) {
+            if (refreshList.get(i).getType().equals("Number")) {
+                updateState(refreshList.get(i).getChannel(), new DecimalType(res.get(i).getAsBigDecimal()));
+            }
+            if (refreshList.get(i).getType().equals("String")) {
+                updateState(refreshList.get(i).getChannel(), new StringType(res.get(i).getAsString()));
+            }
+            if (refreshList.get(i).getType().equals("Switch")) {
+                updateState(refreshList.get(i).getChannel(),
+                        res.get(i).getAsString().equals("on") ? OnOffType.ON : OnOffType.OFF);
+            }
+        }
+        return true;
+    }
+
     @Override
     protected boolean initializeData() {
         initalizeNetworkCache();
         // For testing only.. this should load the possible properties & actions per device
         // NB, ones working properly, this action should be done once the type is known
-        buildChannelStructure("zhimi.airpurifier.m1");
-
+        checkChannelStructure();
         this.miioCom = getConnection();
         if (miioCom != null) {
             updateStatus(ThingStatus.ONLINE);
+            defineDeviceType();
+            checkChannelStructure();
         } else {
             updateStatus(ThingStatus.OFFLINE);
         }
         return true;
+    }
+
+    /**
+     *
+     */
+    private void checkChannelStructure() {
+        if (!hasChannelStructure) {
+            if (configuration.model == null || configuration.model.isEmpty()) {
+                hasChannelStructure = buildChannelStructure(configuration.model);
+            }
+        }
     }
 
     private boolean buildChannelStructure(String deviceName) {
