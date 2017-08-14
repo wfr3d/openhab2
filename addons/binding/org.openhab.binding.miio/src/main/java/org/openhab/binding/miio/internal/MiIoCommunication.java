@@ -66,13 +66,19 @@ public class MiIoCommunication {
 
     public String sendCommand(String command, String params)
             throws MiIoCryptoException, IOException, JsonSyntaxException {
-        JsonObject fullCommand = new JsonObject();
-        fullCommand.addProperty("id", id.incrementAndGet());
-        fullCommand.addProperty("method", command);
-        fullCommand.add("params", parser.parse(params).getAsJsonArray());
-        logger.debug("Send command: {} -> {} (Device: {} token: {})", fullCommand.toString(), ip,
-                Utils.getHex(deviceId), Utils.getHex(token));
-        return sendCommand(fullCommand.toString(), token, ip, deviceId);
+        try {
+            JsonObject fullCommand = new JsonObject();
+            fullCommand.addProperty("id", id.incrementAndGet());
+            fullCommand.addProperty("method", command);
+            fullCommand.add("params", parser.parse(params).getAsJsonArray());
+            logger.debug("Send command: {} -> {} (Device: {} token: {})", fullCommand.toString(), ip,
+                    Utils.getHex(deviceId), Utils.getHex(token));
+            return sendCommand(fullCommand.toString(), token, ip, deviceId);
+        } catch (JsonSyntaxException e) {
+            logger.warn("Send command '{}' with parameters {} -> {} (Device: {}) gave error {}", command, params, ip,
+                    Utils.getHex(deviceId), e.getMessage());
+            throw e;
+        }
     }
 
     private String sendCommand(String command, byte[] token, String ip, byte[] deviceId)

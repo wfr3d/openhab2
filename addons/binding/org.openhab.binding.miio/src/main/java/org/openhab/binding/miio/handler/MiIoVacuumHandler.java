@@ -79,14 +79,14 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
             return;
         }
         if (channelUID.getId().equals(CHANNEL_FAN_POWER)) {
-            sendCommand(MiIoCommand.SET_MODE, command.toString());
+            sendCommand(MiIoCommand.SET_MODE, "[" + command.toString() + "]");
             status.invalidateValue();
             updateVacuumStatus();
             return;
         }
         if (channelUID.getId().equals(CHANNEL_FAN_CONTROL)) {
             if (Integer.valueOf(command.toString()) > 0) {
-                sendCommand(MiIoCommand.SET_MODE, command.toString());
+                sendCommand(MiIoCommand.SET_MODE, "[" + command.toString() + "]");
             }
             status.invalidateValue();
             updateVacuumStatus();
