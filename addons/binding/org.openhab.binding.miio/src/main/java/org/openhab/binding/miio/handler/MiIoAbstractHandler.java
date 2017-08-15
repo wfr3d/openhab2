@@ -322,10 +322,10 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
                     miDevice.getThingType().toString());
             return true;
         } else {
-            ThingBuilder thingBuilder = editThing();
-            thingBuilder.withLabel(miDevice.getDescription());
-            updateThing(thingBuilder.build());
             if (getThing().getThingTypeUID().equals(THING_TYPE_MIIO)) {
+                ThingBuilder thingBuilder = editThing();
+                thingBuilder.withLabel(miDevice.getDescription());
+                updateThing(thingBuilder.build());
                 logger.info(
                         "Mi IO Device model {} identified as: {}. Does not matches thingtype {}. Changing thingtype to {}",
                         model, miDevice.toString(), getThing().getThingTypeUID().toString(),
