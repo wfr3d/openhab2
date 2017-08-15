@@ -32,8 +32,9 @@ import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.miio.MiIoBindingConstants;
 import org.openhab.binding.miio.internal.MiIoCommand;
 import org.openhab.binding.miio.internal.Utils;
+import org.openhab.binding.miio.internal.basic.CommandParameterType;
+import org.openhab.binding.miio.internal.basic.MiIoBasicChannel;
 import org.openhab.binding.miio.internal.basic.MiIoBasicDevice;
-import org.openhab.binding.miio.internal.basic.MiIoBasicProperty;
 import org.openhab.binding.miio.internal.basic.MiIoDeviceAction;
 import org.osgi.framework.Bundle;
 import org.slf4j.Logger;
@@ -84,8 +85,13 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
         if (actions != null) {
             if (actions.containsKey(channelUID.getId())) {
                 String cmd = actions.get(channelUID.getId()).getCommand();
+                CommandParameterType paramType = actions.get(channelUID.getId()).getparameterType();
                 if (command instanceof OnOffType) {
-                    cmd = cmd + "[\"" + command.toString().toLowerCase() + "\"]";
+                    if (paramType == CommandParameterType.ONOFF) {
+                        cmd = cmd + "[\"" + command.toString().toLowerCase() + "\"]";
+                    } else {
+                        cmd = cmd + "[]";
+                    }
                 }
                 if (command instanceof StringType) {
                     cmd = cmd + "[\"" + command.toString() + "\"]";
@@ -139,23 +145,23 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
 
     private boolean refreshProperties(MiIoBasicDevice miioDevice2miioDevice) {
         // TODO: horribly inefficient refresh with each time creation of the list etc.. for testing only
-        // build list of properties to be refreshed
+        // build list of properties to be refreshed, do not refresh for unlinked channels
         JsonArray getPropString = new JsonArray();
-        List<MiIoBasicProperty> refreshList = new ArrayList<MiIoBasicProperty>();
-        for (MiIoBasicProperty miProperty : miioDevice.getDevice().getProperties()) {
-            if (miProperty.getRefresh()) {
-                refreshList.add(miProperty);
-                getPropString.add(miProperty.getProperty());
+        List<MiIoBasicChannel> refreshList = new ArrayList<MiIoBasicChannel>();
+        for (MiIoBasicChannel miChannels : miioDevice.getDevice().getChannels()) {
+            if (miChannels.getRefresh()) {
+                refreshList.add(miChannels);
+                getPropString.add(miChannels.getProperty());
             }
         }
         // get the data based on the datatype
         String reply = null;
         reply = sendCommand(MiIoCommand.GET_PROPERTY, getPropString.toString());
         // mock data for testing
-        if (reply == null) {
-            reply = "{\"result\":[\"off\",\"idle\",59,16,10,\"on\",\"on\",\"off\",322,22],\"id\":14}";
-            logger.debug("No Reply using for testing mocked reply: {}", reply);
-        }
+        // if (reply == null) {
+        // reply = "{\"result\":[\"off\",\"idle\",59,16,10,\"on\",\"on\",\"off\",322,22],\"id\":14}";
+        // logger.debug("No Reply using for testing mocked reply: {}", reply);
+        // }
 
         JsonArray res = ((JsonObject) parser.parse(reply)).get("result").getAsJsonArray();
 
@@ -220,7 +226,7 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
             fn = bundle.getEntry(MiIoBindingConstants.DATABASE_PATH + deviceName + ".json");
             logger.debug("bundle: {}, {}, {}", bundle, fn.getFile(), fn);
         } catch (Exception e) {
-            logger.warn("Database entry for model '{}' does cannot be found.", deviceName);
+            logger.warn("Database entry for model '{}' cannot be found.", deviceName);
             return false;
         }
         try {
@@ -239,20 +245,18 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
 
             // make a map of the actions
             actions = new HashMap<String, MiIoDeviceAction>();
-            for (MiIoDeviceAction action : miioDevice.getDevice().getActions()) {
-                actions.put(action.getChannel(), action);
-                // addChannel(thingBuilder, action.getChannel(), action.getChannelType(), action.getType(),
-                // action.getFriendlyName());
-            }
 
-            for (MiIoBasicProperty miProperty : miioDevice.getDevice().getProperties()) {
-                logger.debug("properties {}", miProperty);
-                addChannel(thingBuilder, miProperty.getChannel(), miProperty.getChannelType(), miProperty.getType(),
-                        miProperty.getFriendlyName());
-                channelsAdded += 1;
+            for (MiIoBasicChannel miChannel : miioDevice.getDevice().getChannels()) {
+                logger.debug("properties {}", miChannel);
+                for (MiIoDeviceAction action : miChannel.getActions()) {
+                    actions.put(miChannel.getChannel(), action);
+                }
+                channelsAdded += addChannel(thingBuilder, miChannel.getChannel(), miChannel.getChannelType(),
+                        miChannel.getType(), miChannel.getFriendlyName()) ? 1 : 0;
             }
             // only update if channels were added/removed
             if (channelsAdded > 0) {
+                logger.debug("Current thing channels added: {}", channelsAdded);
                 updateThing(thingBuilder.build());
             }
             return true;
@@ -270,9 +274,10 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
         return false;
     }
 
-    private void addChannel(ThingBuilder thingBuilder, String channel, String channelType, String datatype,
+    private boolean addChannel(ThingBuilder thingBuilder, String channel, String channelType, String datatype,
             String friendlyName) {
         ChannelUID channelUID = new ChannelUID(getThing().getUID(), channel);
+        ChannelTypeUID channelTypeUID = new ChannelTypeUID(MiIoBindingConstants.BINDING_ID, channelType);
 
         // TODO: only for testing. This should not be done finally. Channel only to be added when not there
         // already
@@ -281,10 +286,9 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
             thingBuilder.withoutChannel(new ChannelUID(getThing().getUID(), channel));
         }
 
-        ChannelTypeUID channelTypeUID = new ChannelTypeUID(MiIoBindingConstants.BINDING_ID, channelType);
-
         Channel newChannel = ChannelBuilder.create(channelUID, datatype).withType(channelTypeUID)
                 .withLabel(friendlyName).build();
         thingBuilder.withChannel(newChannel);
+        return true;
     }
 }

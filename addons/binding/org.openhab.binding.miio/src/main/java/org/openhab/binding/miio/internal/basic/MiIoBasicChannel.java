@@ -8,6 +8,9 @@
  */
 package org.openhab.binding.miio.internal.basic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -16,7 +19,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author Marcel Verpaalen - Initial contribution
  */
-public class MiIoBasicProperty {
+public class MiIoBasicChannel {
 
     @SerializedName("property")
     @Expose
@@ -39,6 +42,9 @@ public class MiIoBasicProperty {
     @SerializedName("ChannelGroup")
     @Expose
     private String channelGroup;
+    @SerializedName("actions")
+    @Expose
+    private List<MiIoDeviceAction> miIoDeviceActions = new ArrayList<MiIoDeviceAction>();;
 
     public String getProperty() {
         return property;
@@ -97,10 +103,18 @@ public class MiIoBasicProperty {
         this.channelGroup = channelGroup;
     }
 
+    public List<MiIoDeviceAction> getActions() {
+        return miIoDeviceActions;
+    }
+
+    public void setActions(List<MiIoDeviceAction> miIoDeviceActions) {
+        this.miIoDeviceActions = miIoDeviceActions;
+    }
+
     @Override
     public String toString() {
-        return "[ Property = " + property + ", ChannelGroup = " + channelGroup + ", friendlyName = " + friendlyName
-                + ", type = " + type + ", refresh = " + refresh + ", channel = " + channel + ", channelType = "
-                + getChannelType() + "]";
+        return "[ Channel = " + channel + ", friendlyName = " + friendlyName + ", type = " + type + ", channelType = "
+                + getChannelType() + ", ChannelGroup = " + channelGroup + ", channel = " + channel + ", property = "
+                + property + ", refresh = " + refresh + "]";
     }
 }
