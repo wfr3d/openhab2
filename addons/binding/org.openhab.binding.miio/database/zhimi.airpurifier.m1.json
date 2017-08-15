@@ -1,119 +1,124 @@
 {
-    "device": {
-        "id": "zhimi.airpurifier.m1",
-        "properties": [{
-            "property": "power",
-            "friendlyName": "Power",
-            "channel": "power",
-            "type": "Switch",
-            "refresh": true,
-            "ChannelGroup": "actions"
-        },
-        {
-            "property": "mode",
-            "friendlyName": "Mode",
-            "channel": "mode",
-            "type": "String",
-            "refresh": true,
-            "ChannelGroup": "actions"
-        },
-        {
-            "property": "temperature",
-            "friendlyName": "Temperature",
-            "channel": "temperature",
-            "type": "Number",
-            "refresh": false,
-            "ChannelGroup": "Status"
-        },
-        {
-            "property": "humidity",
-            "friendlyName": "Humidity",
-            "channel": "humidity",
-            "type": "Number",
-            "refresh": true,
-            "ChannelGroup": "Status"
-        },
-        {
-            "property": "aqi",
-            "friendlyName": "Air Quality Index",
-            "channel": "aqi",
-            "type": "Number",
-            "refresh": true,
-            "ChannelGroup": "Status"
-        },
-        {
-            "property": "bright",
-            "friendlyName": "Brightness",
-            "channel": "brightness",
-            "type": "Number",
-            "refresh": true,
-            "ChannelGroup": "actions"
-        },
-        {
-            "property": "led",
-            "friendlyName": "Led Status",
-            "channel": "led",
-            "type": "Switch",
-            "refresh": true,
-            "ChannelGroup": "actions"
-        },
-        {
-            "property": "act_det",
-            "friendlyName": "Air Aut oDetect",
-            "channel": "act_det",
-            "type": "Switch",
-            "refresh": true,
-            "ChannelGroup": "actions"
-        },
-        {
-            "property": "buzzer",
-            "friendlyName": "Buzzer Status",
-            "channel": "buzzer",
-            "type": "Switch",
-            "refresh": true,
-            "ChannelGroup": "actions"
-        },
-        {
-            "property": "f1_hour",
-            "friendlyName": "Filter Max Life",
-            "channel": "filtermaxlive",
-            "type": "Number",
-            "refresh": true,
-            "ChannelGroup": "Status"
-        },
-        {
-            "property": "filter1_life",
-            "friendlyName": "Filter Life",
-            "channel": "filterlive",
-            "type": "Number",
-            "refresh": true,
-            "ChannelGroup": "Status"
-        }],
-        "actions": [{
+  "deviceMapping": {
+    "id": [
+      "zhimi.airpurifier.m1"
+    ],
+    "channels": [
+      {
+        "property": "power",
+        "friendlyName": "Power",
+        "channel": "power",
+        "type": "OnOffType",
+        "refresh": true,
+        "channelGroup": "actions",
+        "actions": [
+          {
             "command": "set_power",
-            "channel": "power",
-            "type": "Switch"
-        },
-        {
+            "parameterType": "ONOFF"
+          }
+        ]
+      },
+      {
+        "property": "mode",
+        "friendlyName": "Mode",
+        "channel": "mode",
+        "type": "String",
+        "refresh": true,
+        "ChannelGroup": "actions",
+        "actions": [
+          {
             "command": "set_mode",
-            "channel": "mode",
-            "type": "String"
-        },
-        {
+            "parameterType": "STRING"
+          }
+        ]
+      },
+      {
+        "property": "humidity",
+        "friendlyName": "Humidity",
+        "channel": "humidity",
+        "type": "Number",
+        "refresh": true,
+        "ChannelGroup": "Status",
+        "actions": []
+      },
+      {
+        "property": "aqi",
+        "friendlyName": "Air Quality Index",
+        "channel": "aqi",
+        "type": "Number",
+        "refresh": true,
+        "ChannelGroup": "Status",
+        "actions": []
+      },
+      {
+        "property": "bright",
+        "friendlyName": "Brightness",
+        "channel": "brightness",
+        "type": "Number",
+        "refresh": true,
+        "ChannelGroup": "actions",
+        "actions": [
+          {
             "command": "set_led_b",
-            "channel": "brightness",
-            "type": "Number"
-        },
-        {
+            "parameterType": "NUMBER"
+          }
+        ]
+      },
+      {
+        "property": "led",
+        "friendlyName": "Led Status",
+        "channel": "led",
+        "type": "Switch",
+        "refresh": true,
+        "ChannelGroup": "actions",
+        "actions": [
+          {
             "command": "set_led",
-            "channel": "led",
-            "type": "Switch"
-        },
-        {
+            "parameterType": "ONOFF"
+          }
+        ]
+      },
+      {
+        "property": "act_det",
+        "friendlyName": "Air AutoDetect",
+        "channel": "act_det",
+        "type": "Switch",
+        "refresh": true,
+        "ChannelGroup": "actions",
+        "actions": []
+      },
+      {
+        "property": "buzzer",
+        "friendlyName": "Buzzer Status",
+        "channel": "buzzer",
+        "type": "Switch",
+        "refresh": true,
+        "ChannelGroup": "actions",
+        "actions": [
+          {
             "command": "set_buzzer",
-            "channel": "buzzer",
-            "type": "Switch"
-        }]
-    }
+            "parameterType": "ONOFF"
+          }
+        ]
+      },
+      {
+        "property": "f1_hour",
+        "friendlyName": "Filter Max Life",
+        "channel": "filtermaxlive",
+        "type": "Number",
+        "refresh": true,
+        "ChannelGroup": "Status",
+        "actions": []
+      },
+      {
+        "property": "filter1_life",
+        "friendlyName": "Filter Life",
+        "channel": "filterlive",
+        "type": "Number",
+        "refresh": true,
+        "ChannelGroup": "Status",
+        "actions": []
+      }
+    ]
+  }
 }
-

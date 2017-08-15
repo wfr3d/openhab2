@@ -1,7 +1,7 @@
 {
   "deviceMapping": {
     "id": [
-      "yeelink.light.ceiling1"
+      "philips.light.ceiling"
     ],
     "channels": [
       {
@@ -13,36 +13,8 @@
         "ChannelGroup": "",
         "actions": [
           {
-            "command": "set_mode",
+            "command": "set_power",
             "parameterType": "ONOFF"
-          }
-        ]
-      },
-      {
-        "property": "color_mode",
-        "friendlyName": "Color Mode",
-        "channel": "colorMode",
-        "type": "String",
-        "refresh": true,
-        "ChannelGroup": "actions",
-        "actions": [
-          {
-            "command": "set_scene",
-            "parameterType": "STRING"
-          }
-        ]
-      },
-      {
-        "property": "ct",
-        "friendlyName": "Color Temperature",
-        "channel": "colorTemperature",
-        "type": "Number",
-        "refresh": true,
-        "ChannelGroup": "actions",
-        "actions": [
-          {
-            "command": "set_ct_abx",
-            "parameterType": "NUMBER"
           }
         ]
       },
@@ -50,7 +22,7 @@
         "property": "bright",
         "friendlyName": "Brightness",
         "channel": "brightness",
-        "type": "Dimmer",
+        "type": "Number",
         "refresh": true,
         "ChannelGroup": "actions",
         "actions": [
@@ -61,15 +33,57 @@
         ]
       },
       {
+        "property": "cct",
+        "friendlyName": "Correlated Color Temperature",
+        "channel": "cct",
+        "type": "Number",
+        "refresh": true,
+        "ChannelGroup": "actions",
+        "actions": [
+          {
+            "command": "set_cct",
+            "parameterType": "NUMBER"
+          }
+        ]
+      },
+      {
+        "property": "snm",
+        "friendlyName": "Scene",
+        "channel": "scene",
+        "type": "Number",
+        "refresh": true,
+        "ChannelGroup": "actions",
+        "actions": [
+          {
+            "command": "apply_fixed_scene",
+            "parameterType": "NUMBER"
+          }
+        ]
+      },
+            {
         "property": "",
-        "friendlyName": "Save Current State",
-        "channel": "saveCurrentState",
+        "friendlyName": "Switch Scene",
+        "channel": "switchscene",
         "type": "Switch",
         "refresh": false,
         "ChannelGroup": "actions",
         "actions": [
           {
-            "command": "set_default",
+            "command": "switch_the_scene",
+            "parameterType": "EMPTY"
+          }
+        ]
+      },
+      {
+        "property": "",
+        "friendlyName": "Toggle",
+        "channel": "toggle",
+        "type": "Switch",
+        "refresh": false,
+        "ChannelGroup": "actions",
+        "actions": [
+          {
+            "command": "set_mode[toggle]",
             "parameterType": "NONE"
           }
         ]

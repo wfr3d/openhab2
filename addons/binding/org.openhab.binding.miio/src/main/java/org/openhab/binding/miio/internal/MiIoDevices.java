@@ -40,7 +40,7 @@ public enum MiIoDevices {
     WIFISPEAKER("xiaomi.wifispeaker.v1", "Mi Internet Speaker", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     PHILIPSBULB("philips.light.bulb", "Xiaomi Philips Bulb", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     PHILIPS("philips.light.sread1", "Xiaomi Philips Eyecare Smart Lamp 2", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
-    PHILIPS2("philips.light.ceiling", "Xiaomi Philips LED Ceiling Lamp", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
+    PHILIPS2("philips.light.ceiling", "Xiaomi Philips LED Ceiling Lamp", MiIoBindingConstants.THING_TYPE_BASIC),
     UNKNOWN("unknown", "Unknown Mi IO Device", MiIoBindingConstants.THING_TYPE_UNSUPPORTED);
 
     private final String model;
