@@ -18,7 +18,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class MiIoBasicDevice {
 
-    @SerializedName("device")
+    @SerializedName("deviceMapping")
     @Expose
     private DeviceMapping deviceMapping;
 

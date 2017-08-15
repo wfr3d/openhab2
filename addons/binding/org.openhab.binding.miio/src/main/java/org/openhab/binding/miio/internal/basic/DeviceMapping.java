@@ -8,6 +8,7 @@
  */
 package org.openhab.binding.miio.internal.basic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
@@ -22,35 +23,25 @@ public class DeviceMapping {
 
     @SerializedName("id")
     @Expose
-    private String id;
-    @SerializedName("properties")
+    private List<String> id = new ArrayList<String>();
+    @SerializedName("channels")
     @Expose
-    private List<MiIoBasicProperty> miIoBasicProperties = null;
-    @SerializedName("actions")
-    @Expose
-    private List<MiIoDeviceAction> miIoDeviceActions = null;
+    private List<MiIoBasicChannel> miIoBasicChannels = new ArrayList<MiIoBasicChannel>();
 
-    public String getId() {
+    public List<String> getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(List<String> id) {
         this.id = id;
     }
 
-    public List<MiIoBasicProperty> getProperties() {
-        return miIoBasicProperties;
+    public List<MiIoBasicChannel> getChannels() {
+        return miIoBasicChannels;
     }
 
-    public void setProperties(List<MiIoBasicProperty> miIoBasicProperties) {
-        this.miIoBasicProperties = miIoBasicProperties;
+    public void setChannels(List<MiIoBasicChannel> miIoBasicChannels) {
+        this.miIoBasicChannels = miIoBasicChannels;
     }
 
-    public List<MiIoDeviceAction> getActions() {
-        return miIoDeviceActions;
-    }
-
-    public void setActions(List<MiIoDeviceAction> miIoDeviceActions) {
-        this.miIoDeviceActions = miIoDeviceActions;
-    }
 }
