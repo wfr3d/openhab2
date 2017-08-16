@@ -143,15 +143,15 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
 
     }
 
-    private boolean refreshProperties(MiIoBasicDevice miioDevice2miioDevice) {
+    private boolean refreshProperties(MiIoBasicDevice device) {
         // TODO: horribly inefficient refresh with each time creation of the list etc.. for testing only
         // build list of properties to be refreshed, do not refresh for unlinked channels
         JsonArray getPropString = new JsonArray();
         List<MiIoBasicChannel> refreshList = new ArrayList<MiIoBasicChannel>();
-        for (MiIoBasicChannel miChannels : miioDevice.getDevice().getChannels()) {
-            if (miChannels.getRefresh()) {
-                refreshList.add(miChannels);
-                getPropString.add(miChannels.getProperty());
+        for (MiIoBasicChannel miChannel : device.getDevice().getChannels()) {
+            if (miChannel.getRefresh()) {
+                refreshList.add(miChannel);
+                getPropString.add(miChannel.getProperty());
             }
         }
         // get the data based on the datatype
@@ -160,6 +160,7 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
         // mock data for testing
         // if (reply == null) {
         // reply = "{\"result\":[\"off\",\"idle\",59,16,10,\"on\",\"on\",\"off\",322,22],\"id\":14}";
+        // logger.debug("Requested properties: {}", getPropString.toString());
         // logger.debug("No Reply using for testing mocked reply: {}", reply);
         // }
 
@@ -167,15 +168,20 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
 
         // update the states
         for (int i = 0; i < refreshList.size(); i++) {
-            if (refreshList.get(i).getType().equals("Number")) {
-                updateState(refreshList.get(i).getChannel(), new DecimalType(res.get(i).getAsBigDecimal()));
-            }
-            if (refreshList.get(i).getType().equals("String")) {
-                updateState(refreshList.get(i).getChannel(), new StringType(res.get(i).getAsString()));
-            }
-            if (refreshList.get(i).getType().equals("Switch")) {
-                updateState(refreshList.get(i).getChannel(),
-                        res.get(i).getAsString().equals("on") ? OnOffType.ON : OnOffType.OFF);
+            try {
+                if (refreshList.get(i).getType().equals("Number")) {
+                    updateState(refreshList.get(i).getChannel(), new DecimalType(res.get(i).getAsBigDecimal()));
+                }
+                if (refreshList.get(i).getType().equals("String")) {
+                    updateState(refreshList.get(i).getChannel(), new StringType(res.get(i).getAsString()));
+                }
+                if (refreshList.get(i).getType().equals("Switch")) {
+                    updateState(refreshList.get(i).getChannel(),
+                            res.get(i).getAsString().equals("on") ? OnOffType.ON : OnOffType.OFF);
+                }
+            } catch (Exception e) {
+                logger.debug("Error updating propery {} with '{}' : {}", refreshList.get(i).getChannel(),
+                        res.get(i).getAsString(), e.getMessage());
             }
         }
         return true;
@@ -218,13 +224,19 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
     }
 
     private boolean buildChannelStructure(String deviceName) {
-        // TODO: This still needs significant cleanup but should be functional
+        // TODO: This still needs significant cleanup but should be functional.
+        // TODO: If the model can't be found by the filename, load the other files and check for the id's
         logger.debug("Building Channel Structure for {} - Model: {}", getThing().getUID().toString(), deviceName);
         URL fn;
         try {
             Bundle bundle = bundleContext.getBundle();
             fn = bundle.getEntry(MiIoBindingConstants.DATABASE_PATH + deviceName + ".json");
-            logger.debug("bundle: {}, {}, {}", bundle, fn.getFile(), fn);
+            if (fn == null) {
+                logger.warn("Database entry for model '{}' cannot be found.", deviceName);
+                return false;
+            } else {
+                logger.debug("bundle: {}, {}, {}", bundle, fn.getFile());
+            }
         } catch (Exception e) {
             logger.warn("Database entry for model '{}' cannot be found.", deviceName);
             return false;
