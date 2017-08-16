@@ -158,6 +158,7 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
             command = command.trim();
             String param = "";
             int loc = command.indexOf("[");
+            loc = (loc > 0 ? loc : command.indexOf("{"));
             if (loc > 0) {
                 param = command.substring(loc).trim();
                 command = command.substring(0, loc).trim();
@@ -268,12 +269,8 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
      * Prepares the ExpiringCache for network data
      */
     protected void initalizeNetworkCache() {
-        network = new ExpiringCache<String>(CACHE_EXPIRY, () -> {
+        network = new ExpiringCache<String>(CACHE_EXPIRY * 120, () -> {
             try {
-                // TODO: Remove mocked data for testing
-                // return
-                // "{\"result\":{\"life\":692821,\"cfg_time\":0,\"token\":\"a9523eb3880289b53c49XXXXXXXXXX\",\"mac\":\"28:6C:07:xx:xx:xx\",\"fw_ver\":\"1.2.4_59\",\"hw_ver\":\"MC200\",\"model\":\"zhimi.airpurifier.m1\",\"wifi_fw_ver\":\"SD878x-14.76.36.p79-702.1.0-WM\",\"ap\":{\"rssi\":-37,\"ssid\":\"Ssid\",\"bssid\":\"C4:04:xx:xx:xx:xx\"},\"netif\":{\"localIp\":\"192.168.1.31\",\"mask\":\"255.255.255.0\",\"gw\":\"192.168.1.1\"},\"mmfree\":27160,\"otu_stat\":[283,271,356,1,345,91],\"ott_stat\":[4,
-                // 17571, 183, 8424]},\"id\":38}";
                 return sendCommand(MiIoCommand.MIIO_INFO);
             } catch (Exception e) {
                 logger.debug("Error during network status refresh: {}", e.getMessage(), e);
