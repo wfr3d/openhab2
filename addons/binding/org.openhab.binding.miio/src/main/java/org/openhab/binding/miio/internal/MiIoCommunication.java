@@ -70,7 +70,7 @@ public class MiIoCommunication {
             JsonObject fullCommand = new JsonObject();
             fullCommand.addProperty("id", id.incrementAndGet());
             fullCommand.addProperty("method", command);
-            fullCommand.add("params", parser.parse(params).getAsJsonArray());
+            fullCommand.add("params", parser.parse(params));
             logger.debug("Send command: {} -> {} (Device: {} token: {})", fullCommand.toString(), ip,
                     Utils.getHex(deviceId), Utils.getHex(token));
             return sendCommand(fullCommand.toString(), token, ip, deviceId);
