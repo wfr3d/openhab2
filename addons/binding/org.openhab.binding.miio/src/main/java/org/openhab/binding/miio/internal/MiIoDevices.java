@@ -32,7 +32,7 @@ public enum MiIoDevices {
     GATEWAY1("lumi.gateway.v1", "Mi Smart Home Gateway 1", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     GATEWAY2("lumi.gateway.v2", "Mi Smart Home Gateway 2", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     GATEWAY3("lumi.gateway.v3", "Mi Smart Home Gateway 3", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
-    YEELIGHT_L1("yeelink.light.lamp1", "Yeelight", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
+    YEELIGHT_L1("yeelink.light.lamp1", "Yeelight", MiIoBindingConstants.THING_TYPE_BASIC),
     YEELIGHT_M1("yeelink.light.mono1", "Yeelight White Bulb", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     YEELIGHT_C1("yeelink.light.color1", "Yeelight Color Bulb", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     YEELIGHT_CEIL1("yeelink.light.ceiling1", "Yeelight LED Ceiling Lamp", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
