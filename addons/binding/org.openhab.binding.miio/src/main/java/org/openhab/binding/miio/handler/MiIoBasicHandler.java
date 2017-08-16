@@ -163,7 +163,10 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
         // logger.debug("Requested properties: {}", getPropString.toString());
         // logger.debug("No Reply using for testing mocked reply: {}", reply);
         // }
-
+        if (reply == null) {
+            logger.debug("Empty Response for command: {}", getPropString.toString());
+            return false;
+        }
         JsonArray res = ((JsonObject) parser.parse(reply)).get("result").getAsJsonArray();
 
         // update the states
