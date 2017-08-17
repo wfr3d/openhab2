@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.config.core.Configuration;
 import org.eclipse.smarthome.core.cache.ExpiringCache;
 import org.eclipse.smarthome.core.library.types.DecimalType;
@@ -66,6 +67,7 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
 
     protected final long CACHE_EXPIRY = TimeUnit.SECONDS.toMillis(5);
 
+    @NonNullByDefault
     public MiIoAbstractHandler(Thing thing) {
         super(thing);
         parser = new JsonParser();
@@ -231,18 +233,15 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
                 logger.debug("No device ID defined. Retrieving MiIO device ID");
                 MiIoCommunication idCom = new MiIoCommunication(configuration.host, token, new byte[0], lastId);
                 Message miIoResponse = idCom.sendPing(configuration.host);
-                updateProperty(Thing.PROPERTY_SERIAL_NUMBER, Utils.getSpacedHex(miIoResponse.getDeviceId()));
-                Configuration config = editConfiguration();
-                config.put(PROPERTY_DID, Utils.getHex(miIoResponse.getDeviceId()));
-                updateConfiguration(config);
-                logger.debug("Using retrieved MiIO device ID {}", Utils.getHex(miIoResponse.getDeviceId()));
-                lastId = idCom.getId();
-                idCom.close();
-                configuration = getConfigAs(MiIoBindingConfiguration.class);
-                if (tolkenCheckPass(configuration.token)) {
-                    miioCom = new MiIoCommunication(configuration.host, token, miIoResponse.getDeviceId(), lastId);
-                    miioCom.sendPing(configuration.host);
-                    return miioCom;
+                if (miIoResponse != null) {
+                    deviceId = Utils.getHex(miIoResponse.getDeviceId());
+                    logger.debug("Ping response from device {} at {}. Time stamp: {}, OH time {}, delta {}", deviceId,
+                            configuration.host, miIoResponse.getTimestamp(), LocalDateTime.now(),
+                            miioCom.getTimeDelta());
+                    idCom.setDeviceId(miIoResponse.getDeviceId());
+                    logger.debug("Using retrieved MiIO device ID: {}", deviceId);
+                    updateDeviceIdConfig(deviceId);
+                    return idCom;
                 }
             }
             logger.debug("Ping response from device {} at {} FAILED", configuration.deviceId, configuration.host);
@@ -252,6 +251,19 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
             logger.debug("Could not connect to {} at {}", getThing().getUID().toString(), configuration.host);
             disconnected(e.getMessage());
             return null;
+        }
+    }
+
+    @SuppressWarnings("null")
+    private void updateDeviceIdConfig(String deviceId) {
+        if (deviceId != null) {
+            updateProperty(Thing.PROPERTY_SERIAL_NUMBER, deviceId);
+            Configuration config = editConfiguration();
+            config.put(PROPERTY_DID, deviceId);
+            updateConfiguration(config);
+            configuration = getConfigAs(MiIoBindingConfiguration.class);
+        } else {
+            logger.debug("Could not update config with device ID: {}", deviceId);
         }
     }
 

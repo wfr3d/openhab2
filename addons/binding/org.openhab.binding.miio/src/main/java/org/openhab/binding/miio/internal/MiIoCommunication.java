@@ -15,6 +15,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -41,7 +42,7 @@ public class MiIoCommunication {
 
     private final String ip;
     private final byte[] token;
-    private final byte[] deviceId;
+    private byte[] deviceId;
     private DatagramSocket socket;
     private AtomicInteger id = new AtomicInteger();
     private int timeDelta;
@@ -133,7 +134,9 @@ public class MiIoCommunication {
             clientSocket.send(sendPacket);
             sendPacket.setData(new byte[MSG_BUFFER_SIZE]);
             clientSocket.receive(sendPacket);
-            byte[] response = sendPacket.getData();
+            byte[] response = Arrays.copyOfRange(sendPacket.getData(), sendPacket.getOffset(),
+                    sendPacket.getOffset() + sendPacket.getLength());
+
             return response;
         } catch (SocketTimeoutException e) {
             logger.debug("Communication error for Mi IO device at {}: {}", ip, e.getMessage());
@@ -177,5 +180,13 @@ public class MiIoCommunication {
      */
     public int getTimeDelta() {
         return timeDelta;
+    }
+
+    public byte[] getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(byte[] deviceId) {
+        this.deviceId = deviceId;
     }
 }
