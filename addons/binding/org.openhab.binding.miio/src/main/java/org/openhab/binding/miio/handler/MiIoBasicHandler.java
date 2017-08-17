@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.StringType;
@@ -60,6 +61,7 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
     MiIoBasicDevice miioDevice;
     private Map<String, MiIoDeviceAction> actions;
 
+    @NonNullByDefault
     public MiIoBasicHandler(Thing thing) {
         super(thing);
     }
@@ -266,8 +268,10 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
                 for (MiIoDeviceAction action : miChannel.getActions()) {
                     actions.put(miChannel.getChannel(), action);
                 }
-                channelsAdded += addChannel(thingBuilder, miChannel.getChannel(), miChannel.getChannelType(),
-                        miChannel.getType(), miChannel.getFriendlyName()) ? 1 : 0;
+                if (miChannel.getType() != null) {
+                    channelsAdded += addChannel(thingBuilder, miChannel.getChannel(), miChannel.getChannelType(),
+                            miChannel.getType(), miChannel.getFriendlyName()) ? 1 : 0;
+                }
             }
             // only update if channels were added/removed
             if (channelsAdded > 0) {
@@ -291,6 +295,10 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
 
     private boolean addChannel(ThingBuilder thingBuilder, String channel, String channelType, String datatype,
             String friendlyName) {
+        if (channel == null || channel.isEmpty() || datatype == null || datatype.isEmpty()) {
+            logger.info("Channel '{}' cannot be added incorrectly configured database. ", channel, getThing().getUID());
+            return false;
+        }
         ChannelUID channelUID = new ChannelUID(getThing().getUID(), channel);
         ChannelTypeUID channelTypeUID = new ChannelTypeUID(MiIoBindingConstants.BINDING_ID, channelType);
 
