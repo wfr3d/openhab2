@@ -234,6 +234,9 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
                 MiIoCommunication idCom = new MiIoCommunication(configuration.host, token, new byte[0], lastId);
                 Message miIoResponse = idCom.sendPing(configuration.host);
                 if (miIoResponse != null) {
+                    logger.debug("Ping response from device {} at {}. Time stamp: {}, OH time {}, delta {}",
+                            Utils.getHex(miIoResponse.getDeviceId()), configuration.host, miIoResponse.getTimestamp(),
+                            LocalDateTime.now(), miioCom.getTimeDelta());
                     deviceId = Utils.getHex(miIoResponse.getDeviceId());
                     logger.debug("Ping response from device {} at {}. Time stamp: {}, OH time {}, delta {}", deviceId,
                             configuration.host, miIoResponse.getTimestamp(), LocalDateTime.now(),

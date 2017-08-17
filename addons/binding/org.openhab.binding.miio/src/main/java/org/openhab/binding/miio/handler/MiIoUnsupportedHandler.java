@@ -10,6 +10,7 @@ package org.openhab.binding.miio.handler;
 
 import static org.openhab.binding.miio.MiIoBindingConstants.*;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
@@ -29,6 +30,7 @@ import org.slf4j.LoggerFactory;
 public class MiIoUnsupportedHandler extends MiIoAbstractHandler {
     private final Logger logger = LoggerFactory.getLogger(MiIoUnsupportedHandler.class);
 
+    @NonNullByDefault
     public MiIoUnsupportedHandler(Thing thing) {
         super(thing);
     }
