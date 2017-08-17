@@ -93,12 +93,13 @@ public class MiIoDiscovery extends AbstractDiscoveryService {
                         "No token discovered for device {}. To discover token reset your device & connect to it's wireless network and re-run discovery. Read readme for other options.",
                         id);
                 thingDiscovered(DiscoveryResultBuilder.create(uid).withProperty(PROPERTY_HOST_IP, i.getKey())
-                        .withRepresentationProperty(id).withLabel("Discovered Xiaomi Mi IO Device").build());
+                        .withProperty(PROPERTY_DID, i.getKey()).withRepresentationProperty(id)
+                        .withLabel("Discovered Xiaomi Mi IO Device").build());
             } else {
                 logger.debug("Discovered token for device {}: {} ('{}')", id, token, new String(msg.getChecksum()));
                 thingDiscovered(DiscoveryResultBuilder.create(uid).withProperty(PROPERTY_HOST_IP, i.getKey())
-                        .withProperty(PROPERTY_TOKEN, token).withRepresentationProperty(id)
-                        .withLabel("Discovered Xiaomi Mi IO Device").build());
+                        .withProperty(PROPERTY_DID, i.getKey()).withProperty(PROPERTY_TOKEN, token)
+                        .withRepresentationProperty(id).withLabel("Discovered Xiaomi Mi IO Device").build());
             }
         }
     }

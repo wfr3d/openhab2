@@ -55,7 +55,7 @@ public class MiIoBasicChannel {
     }
 
     public String getFriendlyName() {
-        return friendlyName;
+        return channelType == null || friendlyName.isEmpty() ? channel : friendlyName;
     }
 
     public void setFriendlyName(String friendlyName) {
@@ -71,8 +71,7 @@ public class MiIoBasicChannel {
     }
 
     public String getChannelType() {
-        channelType = channelType == null ? channel : channelType;
-        return channelType.isEmpty() ? channel : channelType;
+        return channelType == null || channelType.isEmpty() ? channel : channelType;
     }
 
     public void setChannelType(String channelType) {
@@ -80,7 +79,7 @@ public class MiIoBasicChannel {
     }
 
     public String getType() {
-        return type;
+        return type == null ? "" : type;
     }
 
     public void setType(String type) {
