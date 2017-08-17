@@ -12,6 +12,7 @@ import static org.openhab.binding.miio.MiIoBindingConstants.*;
 
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.cache.ExpiringCache;
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.StringType;
@@ -46,6 +47,7 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
     private ExpiringCache<String> dnd;
     private ExpiringCache<String> history;
 
+    @NonNullByDefault
     public MiIoVacuumHandler(Thing thing) {
         super(thing);
     }
