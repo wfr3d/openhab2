@@ -8,6 +8,11 @@
  */
 package org.openhab.binding.miio.internal.basic;
 
+/**
+ * Various types of parameters to be send
+ *
+ * @author Marcel Verpaalen - Initial contribution
+ */
 public enum CommandParameterType {
     NONE("none"),
     EMPTY("empty"),
