@@ -17,6 +17,7 @@ import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.RefreshType;
+import org.openhab.binding.miio.internal.MiIoSendCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,5 +65,10 @@ public class MiIoGenericHandler extends MiIoAbstractHandler {
         } catch (Exception e) {
             logger.debug("Error while updating '{}'", getThing().getUID().toString(), e);
         }
+    }
+
+    @Override
+    public void onMessageReceived(MiIoSendCommand response) {
+        // TODO ignore until async is enabled
     }
 }
