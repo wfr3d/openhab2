@@ -72,6 +72,19 @@
             "parameterType": "EMPTY"
           }
         ]
+      },{
+        "property": "name",
+        "friendlyName": "Name",
+        "channel": "name",
+        "type": "String",
+        "refresh": true,
+        "ChannelGroup": "actions",
+        "actions": [
+          {
+            "command": "set_name",
+            "parameterType": "STRING"
+          }
+        ]
       }
     ]
   }

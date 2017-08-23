@@ -35,8 +35,8 @@ import com.google.gson.JsonSyntaxException;
  */
 public class MiIoCommunication {
 
-    private static final int MSG_BUFFER_SIZE = 1024;
-    private static final int TIMEOUT = 10000;
+    private static final int MSG_BUFFER_SIZE = 2048;
+    private static final int TIMEOUT = 4000;
 
     private final Logger logger = LoggerFactory.getLogger(MiIoCommunication.class);
 
@@ -112,7 +112,9 @@ public class MiIoCommunication {
         if (resp == null) {
             logger.debug("Ping failed.. 2nd try");
             resp = sendData(
-                    Utils.hexStringToByteArray("31210020FFFFFFFFFFFFFFFF0000000000000000000000000000000000000001"), ip);
+                    // Utils.hexStringToByteArray("31210020FFFFFFFFFFFFFFFF0000000000000000000000000000000000000001"),
+                    // ip);
+                    Utils.hexStringToByteArray("3121002000000000000000000000000000000000000000000000000000000000"), ip);
         }
         return resp;
     }

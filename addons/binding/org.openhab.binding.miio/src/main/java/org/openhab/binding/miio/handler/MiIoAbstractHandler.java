@@ -34,6 +34,7 @@ import org.openhab.binding.miio.internal.MiIoCommand;
 import org.openhab.binding.miio.internal.MiIoCommunication;
 import org.openhab.binding.miio.internal.MiIoCryptoException;
 import org.openhab.binding.miio.internal.MiIoDevices;
+import org.openhab.binding.miio.internal.MiIoMessageListener;
 import org.openhab.binding.miio.internal.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +50,7 @@ import com.google.gson.JsonSyntaxException;
  *
  * @author Marcel Verpaalen - Initial contribution
  */
-public abstract class MiIoAbstractHandler extends BaseThingHandler {
+public abstract class MiIoAbstractHandler extends BaseThingHandler implements MiIoMessageListener {
     private final Logger logger = LoggerFactory.getLogger(MiIoAbstractHandler.class);
 
     protected ScheduledFuture<?> pollingJob;
@@ -192,6 +193,19 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
         return false;
     }
 
+    protected boolean updateNetwork(JsonObject networkData) {
+        try {
+            updateState(CHANNEL_SSID, new StringType(networkData.getAsJsonObject("ap").get("ssid").getAsString()));
+            updateState(CHANNEL_BSSID, new StringType(networkData.getAsJsonObject("ap").get("bssid").getAsString()));
+            updateState(CHANNEL_RSSI, new DecimalType(networkData.getAsJsonObject("ap").get("rssi").getAsLong()));
+            updateState(CHANNEL_LIFE, new DecimalType(networkData.get("life").getAsLong()));
+            return true;
+        } catch (Exception e) {
+            logger.debug("Could not parse network response: {}", networkData);
+        }
+        return false;
+    }
+
     protected boolean hasConnection() {
         return getConnection() != null;
     }
@@ -208,7 +222,7 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
         } catch (Exception e) {
             // Ignore
         }
-        miioCom = null;
+        // miioCom = null;
     }
 
     protected synchronized MiIoCommunication getConnection() {
@@ -227,12 +241,13 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
                     logger.debug("Ping response from device {} at {}. Time stamp: {}, OH time {}, delta {}",
                             Utils.getHex(miIoResponse.getDeviceId()), configuration.host, miIoResponse.getTimestamp(),
                             LocalDateTime.now(), miioCom.getTimeDelta());
+                    // miioCom.registerListener(this);
                     return miioCom;
                 }
             } else {
                 logger.debug("No device ID defined. Retrieving MiIO device ID");
-                MiIoCommunication idCom = new MiIoCommunication(configuration.host, token, new byte[0], lastId);
-                Message miIoResponse = idCom.sendPing(configuration.host);
+                MiIoCommunication miioCom = new MiIoCommunication(configuration.host, token, new byte[0], lastId);
+                Message miIoResponse = miioCom.sendPing(configuration.host);
                 if (miIoResponse != null) {
                     logger.debug("Ping response from device {} at {}. Time stamp: {}, OH time {}, delta {}",
                             Utils.getHex(miIoResponse.getDeviceId()), configuration.host, miIoResponse.getTimestamp(),
@@ -241,10 +256,11 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
                     logger.debug("Ping response from device {} at {}. Time stamp: {}, OH time {}, delta {}", deviceId,
                             configuration.host, miIoResponse.getTimestamp(), LocalDateTime.now(),
                             miioCom.getTimeDelta());
-                    idCom.setDeviceId(miIoResponse.getDeviceId());
+                    miioCom.setDeviceId(miIoResponse.getDeviceId());
                     logger.debug("Using retrieved MiIO device ID: {}", deviceId);
                     updateDeviceIdConfig(deviceId);
-                    return idCom;
+                    // miioCom.registerListener(this);
+                    return miioCom;
                 }
             }
             logger.debug("Ping response from device {} at {} FAILED", configuration.deviceId, configuration.host);
@@ -294,12 +310,18 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
         });
     }
 
+    // TODO: for removal once transitioned
     protected void defineDeviceType() {
         JsonObject miioInfo = getJsonResultHelper(network.getValue());
         if (miioInfo != null) {
             updateProperties(miioInfo);
             isIdentified = updateThingType(miioInfo);
         }
+    }
+
+    protected void defineDeviceType(JsonObject miioInfo) {
+        updateProperties(miioInfo);
+        isIdentified = updateThingType(miioInfo);
     }
 
     private void updateProperties(JsonObject miioInfo) {
@@ -335,14 +357,7 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
             return true;
         } else {
             if (getThing().getThingTypeUID().equals(THING_TYPE_MIIO)) {
-                ThingBuilder thingBuilder = editThing();
-                thingBuilder.withLabel(miDevice.getDescription());
-                updateThing(thingBuilder.build());
-                logger.info(
-                        "Mi IO Device model {} identified as: {}. Does not matches thingtype {}. Changing thingtype to {}",
-                        model, miDevice.toString(), getThing().getThingTypeUID().toString(),
-                        miDevice.getThingType().toString());
-                changeThingType(MiIoDevices.getType(model).getThingType(), getConfig());
+                changeType(model);
             } else {
                 logger.warn(
                         "Mi IO Device model {} identified as: {}, thingtype {}. Does not matches thingtype {}. Unexpected, unless unless manual override.",
@@ -352,6 +367,22 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
             }
         }
         return false;
+    }
+
+    /**
+     * @param model
+     */
+    private void changeType(final String modelId) {
+        scheduler.schedule(() -> {
+            ThingBuilder thingBuilder = editThing();
+            thingBuilder.withLabel(miDevice.getDescription());
+            updateThing(thingBuilder.build());
+            logger.info(
+                    "Mi IO Device model {} identified as: {}. Does not matches thingtype {}. Changing thingtype to {}",
+                    modelId, miDevice.toString(), getThing().getThingTypeUID().toString(),
+                    miDevice.getThingType().toString());
+            changeThingType(MiIoDevices.getType(modelId).getThingType(), getConfig());
+        }, 10, TimeUnit.SECONDS);
     }
 
     protected JsonObject getJsonResultHelper(String response) {
@@ -368,5 +399,10 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler {
             logger.trace("Empty response received.");
         }
         return null;
+    }
+
+    @Override
+    public void onStatusUpdated(ThingStatus status) {
+        // TODO this should control ON/OFFLINE
     }
 }
