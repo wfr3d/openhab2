@@ -23,6 +23,7 @@ import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.RefreshType;
 import org.eclipse.smarthome.core.types.UnDefType;
 import org.openhab.binding.miio.internal.MiIoCommand;
+import org.openhab.binding.miio.internal.MiIoSendCommand;
 import org.openhab.binding.miio.internal.robot.ConsumablesType;
 import org.openhab.binding.miio.internal.robot.FanModeType;
 import org.openhab.binding.miio.internal.robot.StatusType;
@@ -60,7 +61,7 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
         }
         if (command == RefreshType.REFRESH) {
             logger.debug("Refreshing {}", channelUID);
-            updateData();
+            // updateData();
             return;
         }
         if (channelUID.getId().equals(CHANNEL_CONTROL)) {
@@ -77,13 +78,13 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
                 logger.info("Command {} not recognised", command.toString());
             }
             status.invalidateValue();
-            updateVacuumStatus();
+            // updateVacuumStatus();
             return;
         }
         if (channelUID.getId().equals(CHANNEL_FAN_POWER)) {
             sendCommand(MiIoCommand.SET_MODE, "[" + command.toString() + "]");
             status.invalidateValue();
-            updateVacuumStatus();
+            // updateVacuumStatus();
             return;
         }
         if (channelUID.getId().equals(CHANNEL_FAN_CONTROL)) {
@@ -91,7 +92,8 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
                 sendCommand(MiIoCommand.SET_MODE, "[" + command.toString() + "]");
             }
             status.invalidateValue();
-            updateVacuumStatus();
+            // updateVacuumStatus();
+            status.getValue();
             return;
         }
         if (channelUID.getId().equals(CHANNEL_COMMAND)) {
@@ -99,12 +101,12 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
         }
     }
 
-    private boolean updateVacuumStatus() {
+    private boolean getStatusData() {
         JsonObject statusData = getJsonResultHelper(status.getValue());
-        if (statusData == null) {
-            disconnectedNoResponse();
-            return false;
-        }
+        return updateVacuumStatus(statusData);
+    }
+
+    private boolean updateVacuumStatus(JsonObject statusData) {
         updateState(CHANNEL_BATTERY, new DecimalType(statusData.get("battery").getAsBigDecimal()));
         updateState(CHANNEL_CLEAN_AREA, new DecimalType(statusData.get("clean_area").getAsDouble() / 1000000.0));
         updateState(CHANNEL_CLEAN_TIME,
@@ -230,7 +232,9 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
             return;
         }
         try {
-            if ((0 + (updateNetwork() ? 1 : 0) + (updateVacuumStatus() ? 1 : 0) + (updateConsumables() ? 1 : 0)
+            sendCommand(MiIoCommand.GET_STATUS);
+
+            if ((0 + (updateNetwork() ? 1 : 0) + +(getStatusData() ? 1 : 0) + (updateConsumables() ? 1 : 0)
                     + (updateDnD() ? 1 : 0) + (updateHistory() ? 1 : 0)) > 0) {
                 updateStatus(ThingStatus.ONLINE);
             } else {
@@ -282,4 +286,20 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
         }
         return true;
     }
+
+    @Override
+    public void onMessageReceived(MiIoSendCommand response) {
+
+        switch (response.getCommand()) {
+            case GET_STATUS:
+                if (response.getResult().isJsonArray()) {
+                    updateVacuumStatus(response.getResult().getAsJsonArray().get(0).getAsJsonObject());
+                }
+                break;
+            default:
+                break;
+
+        }
+    }
+
 }
