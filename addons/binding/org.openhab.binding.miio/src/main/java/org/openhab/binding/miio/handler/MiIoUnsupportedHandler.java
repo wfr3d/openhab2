@@ -18,6 +18,7 @@ import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.RefreshType;
+import org.openhab.binding.miio.internal.MiIoSendCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -127,6 +128,12 @@ public class MiIoUnsupportedHandler extends MiIoAbstractHandler {
             updateStatus(ThingStatus.ONLINE);
         }
         return true;
+    }
+
+    @Override
+    public void onMessageReceived(MiIoSendCommand response) {
+        // TODO Auto-generated method stub
+
     }
 
 }

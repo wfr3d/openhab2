@@ -57,7 +57,9 @@ public enum MiIoCommand {
 
     REMOTE_START("app_rc_start"),
     REMOTE_END("app_rc_end"),
-    REMOTE_MOVE("app_rc_move");
+    REMOTE_MOVE("app_rc_move"),
+
+    UNKNOWN("");
 
     private final String command;
 
@@ -67,6 +69,15 @@ public enum MiIoCommand {
 
     public String getCommand() {
         return command;
+    }
+
+    public static MiIoCommand getCommand(String commandString) {
+        for (MiIoCommand mioCmd : MiIoCommand.values()) {
+            if (mioCmd.getCommand().equals(commandString)) {
+                return mioCmd;
+            }
+        }
+        return UNKNOWN;
     }
 
 }

@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.openhab.binding.miio.discovery;
+package org.openhab.binding.miio.internal.discovery;
 
 import static org.openhab.binding.miio.MiIoBindingConstants.*;
 
@@ -144,10 +144,10 @@ public class MiIoDiscovery extends AbstractDiscoveryService {
             byte[] sendData = DISCOVER_STRING;
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ipAddress),
                     PORT);
-            for (int i = 1; i <= 2; i++) {
+            for (int i = 1; i <= 3; i++) {
                 clientSocket.send(sendPacket);
             }
-            sendPacket.setData(new byte[256]);
+            sendPacket.setData(new byte[512]);
             while (true) {
                 clientSocket.receive(sendPacket);
                 byte[] messageBuf = Arrays.copyOfRange(sendPacket.getData(), sendPacket.getOffset(),
