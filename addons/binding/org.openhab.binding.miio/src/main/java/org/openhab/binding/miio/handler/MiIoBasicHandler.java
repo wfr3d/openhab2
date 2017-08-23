@@ -32,11 +32,14 @@ import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.miio.MiIoBindingConstants;
 import org.openhab.binding.miio.internal.MiIoCommand;
+import org.openhab.binding.miio.internal.MiIoCryptoException;
+import org.openhab.binding.miio.internal.MiIoSendCommand;
 import org.openhab.binding.miio.internal.Utils;
 import org.openhab.binding.miio.internal.basic.CommandParameterType;
 import org.openhab.binding.miio.internal.basic.MiIoBasicChannel;
 import org.openhab.binding.miio.internal.basic.MiIoBasicDevice;
 import org.openhab.binding.miio.internal.basic.MiIoDeviceAction;
+import org.openhab.binding.miio.internal.socket.MiIoAsyncCommunication;
 import org.osgi.framework.Bundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +60,9 @@ import com.google.gson.JsonSyntaxException;
 public class MiIoBasicHandler extends MiIoAbstractHandler {
     private final Logger logger = LoggerFactory.getLogger(MiIoBasicHandler.class);
     private boolean hasChannelStructure;
+    MiIoAsyncCommunication miioAsyncCom;
+
+    List<MiIoBasicChannel> refreshList = new ArrayList<MiIoBasicChannel>();
 
     MiIoBasicDevice miioDevice;
     private Map<String, MiIoDeviceAction> actions;
@@ -76,7 +82,7 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
     public void handleCommand(ChannelUID channelUID, Command command) {
         if (command == RefreshType.REFRESH) {
             logger.debug("Refreshing {}", channelUID);
-            updateData();
+            // updateData();
             return;
         }
         if (channelUID.getId().equals(CHANNEL_COMMAND)) {
@@ -102,7 +108,7 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
                     cmd = cmd + "[" + command.toString().toLowerCase() + "]";
                 }
                 logger.debug(" sending command {}", cmd);
-                sendCommand(cmd);
+                sendAsyncCommand(cmd);
             } else {
                 logger.debug("Channel Id {} not in mapping. Available:", channelUID.getId());
                 for (String a : actions.keySet()) {
@@ -112,7 +118,7 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
             }
 
         } else {
-            logger.debug("Actions not leaded yet");
+            logger.debug("Actions not loaded yet");
         }
     }
 
@@ -120,24 +126,20 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
     protected synchronized void updateData() {
         logger.debug("Update connection '{}'", getThing().getUID().toString());
         checkChannelStructure();
-        if (!hasConnection()) {
-            return;
+        try {
+            miioAsyncCom.sendPing(configuration.host);
+            Thread.sleep(2000L);
+            updateStatus(ThingStatus.ONLINE);
+        } catch (Exception e) {
+            updateStatus(ThingStatus.OFFLINE);
         }
         try {
-            int updatesSuccess = 0;
-            if (updateNetwork()) {
-                updatesSuccess += 1;
-                if (!isIdentified) {
-                    isIdentified = updateThingType(getJsonResultHelper(network.getValue()));
-                }
+            if (!isIdentified) {
+                miioAsyncCom.sendCommand(MiIoCommand.MIIO_INFO);
+                Thread.sleep(5000L);
             }
             if (miioDevice != null) {
-                updatesSuccess += refreshProperties(miioDevice) ? 1 : 0;
-            }
-            if (updatesSuccess > 0) {
-                updateStatus(ThingStatus.ONLINE);
-            } else {
-                disconnectedNoResponse();
+                refreshProperties(miioDevice);
             }
         } catch (Exception e) {
             logger.debug("Error while updating '{}'", getThing().getUID().toString(), e);
@@ -149,61 +151,34 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
         // TODO: horribly inefficient refresh with each time creation of the list etc.. for testing only
         // build list of properties to be refreshed, do not refresh for unlinked channels
         JsonArray getPropString = new JsonArray();
-        List<MiIoBasicChannel> refreshList = new ArrayList<MiIoBasicChannel>();
+        refreshList = new ArrayList<MiIoBasicChannel>();
         for (MiIoBasicChannel miChannel : device.getDevice().getChannels()) {
             if (miChannel.getRefresh()) {
                 refreshList.add(miChannel);
                 getPropString.add(miChannel.getProperty());
             }
         }
-        // get the data based on the datatype
-        String reply = null;
-        reply = sendCommand(MiIoCommand.GET_PROPERTY, getPropString.toString());
-        // mock data for testing
-        // if (reply == null) {
-        // reply = "{\"result\":[\"off\",\"idle\",59,16,10,\"on\",\"on\",\"off\",322,22],\"id\":14}";
-        // logger.debug("Requested properties: {}", getPropString.toString());
-        // logger.debug("No Reply using for testing mocked reply: {}", reply);
-        // }
-        if (reply == null) {
-            logger.debug("Empty Response for command: {}", getPropString.toString());
-            return false;
-        }
-        JsonArray res = ((JsonObject) parser.parse(reply)).get("result").getAsJsonArray();
 
-        // update the states
-        for (int i = 0; i < refreshList.size(); i++) {
-            try {
-                if (refreshList.get(i).getType().equals("Number")) {
-                    updateState(refreshList.get(i).getChannel(), new DecimalType(res.get(i).getAsBigDecimal()));
-                }
-                if (refreshList.get(i).getType().equals("String")) {
-                    updateState(refreshList.get(i).getChannel(), new StringType(res.get(i).getAsString()));
-                }
-                if (refreshList.get(i).getType().equals("Switch")) {
-                    updateState(refreshList.get(i).getChannel(),
-                            res.get(i).getAsString().equals("on") ? OnOffType.ON : OnOffType.OFF);
-                }
-            } catch (Exception e) {
-                logger.debug("Error updating propery {} with '{}' : {}", refreshList.get(i).getChannel(),
-                        res.get(i).getAsString(), e.getMessage());
-            }
+        miioAsyncCom.registerListener(this); // this should not be needed
+
+        // get the data based on the datatype
+        try {
+            miioAsyncCom.sendCommand(MiIoCommand.GET_PROPERTY, getPropString.toString());
+        } catch (MiIoCryptoException | IOException e) {
+            logger.debug("Send refresh failed {}", e.getMessage(), e);
         }
         return true;
     }
 
     @Override
     protected boolean initializeData() {
-        initalizeNetworkCache();
-        // For testing only.. this should load the possible properties & actions per device
-        // NB, ones working properly, this action should be done once the type is known
-        checkChannelStructure();
-        this.miioCom = getConnection();
-        if (miioCom != null) {
+        miioAsyncCom = new MiIoAsyncCommunication(configuration.host, token,
+                Utils.hexStringToByteArray(configuration.deviceId), lastId);
+        miioAsyncCom.registerListener(this);
+        try {
+            miioAsyncCom.sendPing(configuration.host);
             updateStatus(ThingStatus.ONLINE);
-            checkDeviceType();
-            checkChannelStructure();
-        } else {
+        } catch (Exception e) {
             updateStatus(ThingStatus.OFFLINE);
         }
         return true;
@@ -225,6 +200,23 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
             } else {
                 hasChannelStructure = buildChannelStructure(configuration.model);
             }
+        }
+    }
+
+    private void sendAsyncCommand(String command) {
+
+        try {
+            command = command.trim();
+            String param = "";
+            int loc = command.indexOf("[");
+            loc = (loc > 0 ? loc : command.indexOf("{"));
+            if (loc > 0) {
+                param = command.substring(loc).trim();
+                command = command.substring(0, loc).trim();
+            }
+            miioAsyncCom.sendCommand(command, param);
+        } catch (MiIoCryptoException | IOException e) {
+            disconnected(e.getMessage());
         }
     }
 
@@ -313,5 +305,54 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
                 .withLabel(friendlyName).build();
         thingBuilder.withChannel(newChannel);
         return true;
+    }
+
+    @Override
+    public void onMessageReceived(MiIoSendCommand response) {
+        logger.info("Handler received response {},{},{},{}", response.getId(), response.getCommand(),
+                response.getResult(), response.getResponse());
+        try {
+            switch (response.getCommand()) {
+                case MIIO_INFO:
+                    if (!isIdentified) {
+                        defineDeviceType(getJsonResultHelper(response.getResponse().toString()));
+                    }
+                    updateNetwork(response.getResponse());
+                    break;
+                case GET_PROPERTY:
+
+                    if (response.getResult().isJsonArray()) {
+                        JsonArray res = response.getResult().getAsJsonArray();
+
+                        // update the states
+                        for (int i = 0; i < refreshList.size(); i++) {
+                            try {
+                                if (refreshList.get(i).getType().equals("Number")) {
+                                    updateState(refreshList.get(i).getChannel(),
+                                            new DecimalType(res.get(i).getAsBigDecimal()));
+                                }
+                                if (refreshList.get(i).getType().equals("String")) {
+                                    updateState(refreshList.get(i).getChannel(),
+                                            new StringType(res.get(i).getAsString()));
+                                }
+                                if (refreshList.get(i).getType().equals("Switch")) {
+                                    updateState(refreshList.get(i).getChannel(),
+                                            res.get(i).getAsString().toLowerCase().equals("on") ? OnOffType.ON
+                                                    : OnOffType.OFF);
+                                }
+                            } catch (Exception e) {
+                                logger.debug("Error updating propery {} with '{}' : {}",
+                                        refreshList.get(i).getChannel(), res.get(i).getAsString(), e.getMessage());
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    break;
+
+            }
+        } catch (Exception e) {
+            logger.debug("Error while handing message {}", response.getResponse(), e);
+        }
     }
 }
