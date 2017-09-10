@@ -24,7 +24,6 @@ import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.binding.builder.ChannelBuilder;
 import org.eclipse.smarthome.core.thing.binding.builder.ThingBuilder;
 import org.eclipse.smarthome.core.thing.type.ChannelTypeUID;
@@ -79,6 +78,26 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
     }
 
     @Override
+    public void dispose() {
+        logger.debug("Disposing Xiaomi Mi IO Basic handler '{}'", getThing().getUID());
+        if (pollingJob != null) {
+            pollingJob.cancel(true);
+            pollingJob = null;
+        }
+        if (miioCom != null) {
+            lastId = miioCom.getId();
+            miioCom.close();
+            miioCom = null;
+        }
+        try {
+            miioAsyncCom.close();
+            miioAsyncCom = null;
+        } catch (Exception e) {
+            // ignore
+        }
+    }
+
+    @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
         if (command == RefreshType.REFRESH) {
             logger.debug("Refreshing {}", channelUID);
@@ -86,7 +105,8 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
             return;
         }
         if (channelUID.getId().equals(CHANNEL_COMMAND)) {
-            updateState(CHANNEL_COMMAND, new StringType(sendCommand(command.toString())));
+            sendAsyncCommand(command.toString());
+            // updateState(CHANNEL_COMMAND, new StringType(sendCommand(command.toString())));
         }
         // TODO: cleanup debug stuff & add handling types
         logger.debug("Locating action for channel {}:{}", channelUID.getId(), command);
@@ -124,19 +144,23 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
 
     @Override
     protected synchronized void updateData() {
-        logger.debug("Update connection '{}'", getThing().getUID().toString());
+        if (miioAsyncCom.getQueueLenght() > 5) {
+            logger.debug("No periodic update for '{}'. {} elements in queue ", getThing().getUID().toString(),
+                    miioAsyncCom.getQueueLenght());
+            return;
+        } else {
+            logger.debug("Periodic update for '{}'", getThing().getUID().toString());
+        }
+
         checkChannelStructure();
         try {
             miioAsyncCom.sendPing(configuration.host);
-            Thread.sleep(2000L);
-            updateStatus(ThingStatus.ONLINE);
         } catch (Exception e) {
-            updateStatus(ThingStatus.OFFLINE);
+            // ignore
         }
         try {
             if (!isIdentified) {
-                miioAsyncCom.sendCommand(MiIoCommand.MIIO_INFO);
-                Thread.sleep(5000L);
+                miioAsyncCom.queueCommand(MiIoCommand.MIIO_INFO);
             }
             if (miioDevice != null) {
                 refreshProperties(miioDevice);
@@ -163,7 +187,7 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
 
         // get the data based on the datatype
         try {
-            miioAsyncCom.sendCommand(MiIoCommand.GET_PROPERTY, getPropString.toString());
+            miioAsyncCom.queueCommand(MiIoCommand.GET_PROPERTY, getPropString.toString());
         } catch (MiIoCryptoException | IOException e) {
             logger.debug("Send refresh failed {}", e.getMessage(), e);
         }
@@ -177,9 +201,8 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
         miioAsyncCom.registerListener(this);
         try {
             miioAsyncCom.sendPing(configuration.host);
-            updateStatus(ThingStatus.ONLINE);
         } catch (Exception e) {
-            updateStatus(ThingStatus.OFFLINE);
+            logger.debug("ping {} failed", configuration.host);
         }
         return true;
     }
@@ -214,7 +237,7 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
                 param = command.substring(loc).trim();
                 command = command.substring(0, loc).trim();
             }
-            miioAsyncCom.sendCommand(command, param);
+            miioAsyncCom.queueCommand(command, param);
         } catch (MiIoCryptoException | IOException e) {
             disconnected(e.getMessage());
         }
@@ -309,15 +332,19 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
 
     @Override
     public void onMessageReceived(MiIoSendCommand response) {
-        logger.info("Handler received response {},{},{},{}", response.getId(), response.getCommand(),
+        logger.debug("Handler received response type: {}, result: {}, fullresponse: {}", response.getCommand(),
                 response.getResult(), response.getResponse());
+        if (response.isError()) {
+            logger.debug("Error received: {}", response.getResponse().get("error"));
+            return;
+        }
         try {
             switch (response.getCommand()) {
                 case MIIO_INFO:
                     if (!isIdentified) {
                         defineDeviceType(getJsonResultHelper(response.getResponse().toString()));
                     }
-                    updateNetwork(response.getResponse());
+                    updateNetwork(response.getResult().getAsJsonObject());
                     break;
                 case GET_PROPERTY:
 
