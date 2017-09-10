@@ -10,15 +10,22 @@
 package org.openhab.binding.miio.internal.socket;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.eclipse.smarthome.core.thing.ThingStatus;
+import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.openhab.binding.miio.MiIoBindingConstants;
 import org.openhab.binding.miio.internal.Message;
 import org.openhab.binding.miio.internal.MiIoCommand;
@@ -42,25 +49,30 @@ import com.google.gson.JsonSyntaxException;
  *
  * @author Marcel Verpaalen - Initial contribution
  */
-public class MiIoAsyncCommunication implements XiaomiSocketListener {
+public class MiIoAsyncCommunication extends Thread {
 
     private static final int MSG_BUFFER_SIZE = 2048;
-    private static final int TIMEOUT = 4000;
+    private static final int TIMEOUT = 10000;
 
     private final Logger logger = LoggerFactory.getLogger(MiIoAsyncCommunication.class);
 
     private final String ip;
     private final byte[] token;
     private byte[] deviceId;
-    private XiaomiMiIoSocket ssocket;
+    private DatagramSocket socket;
+
     private List<MiIoMessageListener> listeners = new CopyOnWriteArrayList<>();
 
     private AtomicInteger id = new AtomicInteger();
     private int timeDelta;
     private int timeStamp;
-    JsonParser parser;
+    private final JsonParser parser;
+    private MessageSenderThread senderThread;
+    private boolean connected;
+    private ThingStatusDetail status;
+    private int errorCounter;
+    private final static int MAX_ERRORS = 3;
 
-    private ConcurrentHashMap<Integer, MiIoSendCommand> commandsSend = new ConcurrentHashMap<Integer, MiIoSendCommand>();
     private ConcurrentLinkedQueue<MiIoSendCommand> concurrentLinkedQueue = new ConcurrentLinkedQueue<MiIoSendCommand>();
 
     public MiIoAsyncCommunication(String ip, byte[] token, byte[] did, int id) {
@@ -70,9 +82,8 @@ public class MiIoAsyncCommunication implements XiaomiSocketListener {
         this.deviceId = did;
         setId(id);
         parser = new JsonParser();
-        ssocket = new XiaomiMiIoSocket(ip);
-        ssocket.intialize();
-        ssocket.registerListener(this);
+        senderThread = new MessageSenderThread();
+        senderThread.start();
     }
 
     protected List<MiIoMessageListener> getListeners() {
@@ -86,6 +97,7 @@ public class MiIoAsyncCommunication implements XiaomiSocketListener {
      * @param listener - {@link XiaomiSocketListener} to be called back
      */
     public synchronized void registerListener(MiIoMessageListener listener) {
+        startReceiver();
         if (!getListeners().contains(listener)) {
             logger.trace("Adding socket listener {}", listener);
             getListeners().add(listener);
@@ -103,15 +115,15 @@ public class MiIoAsyncCommunication implements XiaomiSocketListener {
         getListeners().remove(listener);
     }
 
-    public String sendCommand(MiIoCommand command) throws MiIoCryptoException, IOException {
-        return sendCommand(command, "[]");
+    public String queueCommand(MiIoCommand command) throws MiIoCryptoException, IOException {
+        return queueCommand(command, "[]");
     }
 
-    public String sendCommand(MiIoCommand command, String params) throws MiIoCryptoException, IOException {
-        return sendCommand(command.getCommand(), params);
+    public String queueCommand(MiIoCommand command, String params) throws MiIoCryptoException, IOException {
+        return queueCommand(command.getCommand(), params);
     }
 
-    public String sendCommand(String command, String params)
+    public String queueCommand(String command, String params)
             throws MiIoCryptoException, IOException, JsonSyntaxException {
         try {
             JsonObject fullCommand = new JsonObject();
@@ -119,30 +131,92 @@ public class MiIoAsyncCommunication implements XiaomiSocketListener {
             fullCommand.addProperty("id", cmdId);
             fullCommand.addProperty("method", command);
             fullCommand.add("params", parser.parse(params));
-            logger.debug("Send command: {} -> {} (Device: {} token: {})", fullCommand.toString(), ip,
-                    Utils.getHex(deviceId), Utils.getHex(token));
             MiIoSendCommand sendCmd = new MiIoSendCommand(cmdId, MiIoCommand.getCommand(command),
                     fullCommand.toString());
-            commandsSend.put(Integer.valueOf(cmdId), sendCmd);
             concurrentLinkedQueue.add(sendCmd);
-            return sendCommand(fullCommand.toString(), token, ip, deviceId);
-            // return "id#" + Integer.toString(cmdId);
+            logger.debug("Command added to Queue {} -> {} (Device: {} token: {} Queue: {})", fullCommand.toString(), ip,
+                    Utils.getHex(deviceId), Utils.getHex(token), concurrentLinkedQueue.size());
         } catch (JsonSyntaxException e) {
             logger.warn("Send command '{}' with parameters {} -> {} (Device: {}) gave error {}", command, params, ip,
                     Utils.getHex(deviceId), e.getMessage());
             throw e;
         }
+        return null;
     }
 
-    private void startSend() {
-        MiIoSendCommand cmd = concurrentLinkedQueue.poll();
+    MiIoSendCommand sendMiIoSendCommand(MiIoSendCommand miIoSendCommand) {
+        String errorMsg = "Unknown Error while sending command";
         try {
-            sendCommand(cmd.getCommandString(), token, ip, deviceId);
+            String decryptedResponse = sendCommand(miIoSendCommand.getCommandString(), token, ip, deviceId);
+
+            JsonElement response = parser.parse(decryptedResponse);
+
+            if (response.isJsonObject()) {
+                logger.trace("Received  JSON message {}", response.toString());
+                miIoSendCommand.setResponse(response.getAsJsonObject());
+                return miIoSendCommand;
+            } else {
+                errorMsg = "Received message is invalid JSON";
+                logger.info("{}: {}", errorMsg, decryptedResponse);
+            }
         } catch (MiIoCryptoException | IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.warn("Send command '{}'  -> {} (Device: {}) gave error {}", miIoSendCommand.getCommandString(), ip,
+                    Utils.getHex(deviceId), e.getMessage());
+            errorMsg = e.getMessage();
+        }
+        JsonObject erroResp = new JsonObject();
+        erroResp.addProperty("error", errorMsg);
+        miIoSendCommand.setResponse(erroResp);
+        return miIoSendCommand;
+    }
+
+    private synchronized void startReceiver() {
+        if (senderThread == null) {
+            senderThread = new MessageSenderThread();
+        }
+        if (!senderThread.isAlive()) {
+            senderThread.start();
+        }
+    }
+
+    private class MessageSenderThread extends Thread {
+
+        public MessageSenderThread() {
+            super("Mi IO MessageSenderThread");
+            setDaemon(true);
         }
 
+        @Override
+        public void run() {
+            logger.debug("Starting Mi IO MessageSenderThread");
+
+            while (!interrupted()) {
+                try {
+                    if (concurrentLinkedQueue.isEmpty()) {
+                        Thread.sleep(100);
+                        continue;
+                    }
+                    MiIoSendCommand queuedMessage = concurrentLinkedQueue.remove();
+                    MiIoSendCommand miIoSendCommand = sendMiIoSendCommand(queuedMessage);
+                    for (MiIoMessageListener listener : listeners) {
+                        logger.trace("inform listener {}, data {} from {}", listener);
+                        try {
+                            listener.onMessageReceived(miIoSendCommand);
+                        } catch (Exception e) {
+                            logger.debug("Could not inform listener {}: {}: ", listener, e.getMessage(), e);
+                        }
+                    }
+                } catch (NoSuchElementException e) {
+                    // ignore
+                } catch (InterruptedException e) {
+                    // That's our signal to stop
+                    break;
+                } catch (Exception e) {
+                    logger.warn("Error while polling/sending message", e);
+                }
+            }
+            logger.debug("Finished Mi IO MessageSenderThread");
+        }
     }
 
     private String sendCommand(String command, byte[] token, String ip, byte[] deviceId)
@@ -152,36 +226,132 @@ public class MiIoAsyncCommunication implements XiaomiSocketListener {
         timeStamp = (int) TimeUnit.MILLISECONDS.toSeconds(Calendar.getInstance().getTime().getTime());
         byte[] sendMsg = Message.createMsgData(encr, token, deviceId, timeStamp + timeDelta);
         Message miIoResponseMsg = sendData(sendMsg, ip);
+        if (miIoResponseMsg == null) {
+            if (logger.isTraceEnabled()) {
+                logger.trace("No response from device {} at {} for command {}.\r\n{}", Utils.getHex(deviceId), ip,
+                        command, (new Message(sendMsg)).toSting());
+            } else {
+                logger.debug("No response from device {} at {} for command {}.", Utils.getHex(deviceId), ip, command);
+            }
+            errorCounter++;
+            if (errorCounter > MAX_ERRORS) {
+                status = ThingStatusDetail.CONFIGURATION_ERROR;
+                sendPing(ip);
+            }
+            return "{\"error\":\"No Response\"}";
+        }
+        errorCounter = 0;
+        if (!connected) {
+            pingSuccess();
+        }
+        String decryptedResponse = new String(MiIoCrypto.decrypt(miIoResponseMsg.getData(), token)).trim();
+        // TODO: Change this to trace level later onwards
+        logger.debug("Received response from {}: {}", ip, decryptedResponse);
+        return decryptedResponse;
+    }
 
-// if (miIoResponseMsg == null) {
-// if (logger.isTraceEnabled()) {
-// logger.trace("No response from device {} at {} for command {}.\r\n{}", Utils.getHex(deviceId), ip,
-// command, (new Message(sendMsg)).toSting());
-// } else {
-// logger.debug("No response from device {} at {} for command {}.", Utils.getHex(deviceId), ip, command);
-// }
-//
+    public Message sendPing(String ip) throws IOException {
+        for (int i = 0; i < 3; i++) {
+            Message resp = sendData(MiIoBindingConstants.DISCOVER_STRING, ip);
+            if (resp != null) {
+                pingSuccess();
+                return resp;
+            }
+        }
+        pingFail();
         return null;
     }
 
-    public void sendPing(String ip) throws IOException {
-        timeStamp = (int) TimeUnit.MILLISECONDS.toSeconds(Calendar.getInstance().getTime().getTime()) - 5;
-        sendData(MiIoBindingConstants.DISCOVER_STRING, ip);
+    private void pingFail() {
+        connected = false;
+        status = ThingStatusDetail.COMMUNICATION_ERROR;
+        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
+    }
+
+    private void pingSuccess() {
+        if (!connected) {
+            connected = true;
+            status = ThingStatusDetail.NONE;
+            updateStatus(ThingStatus.ONLINE, ThingStatusDetail.NONE);
+        } else {
+            if (ThingStatusDetail.CONFIGURATION_ERROR.equals(status)) {
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
+            } else {
+                status = ThingStatusDetail.NONE;
+                updateStatus(ThingStatus.ONLINE, status);
+            }
+        }
+    }
+
+    private void updateStatus(ThingStatus status, ThingStatusDetail statusDetail) {
+        for (MiIoMessageListener listener : listeners) {
+            logger.trace("inform listener {}, data {} from {}", listener);
+            try {
+                listener.onStatusUpdated(status, statusDetail);
+            } catch (Exception e) {
+                logger.debug("Could not inform listener {}: {}", listener, e.getMessage(), e);
+            }
+        }
     }
 
     private Message sendData(byte[] sendMsg, String ip) throws IOException {
-        ssocket.sendMessage(sendMsg, InetAddress.getByName(ip), MiIoBindingConstants.PORT);
-        return null;
+        byte[] response = comms(sendMsg, ip);
+        if (response.length >= 32) {
+            Message miIoResponse = new Message(response);
+            timeDelta = miIoResponse.getTimestampAsInt() - timeStamp;
+            logger.trace("Message Details:{} ", miIoResponse.toSting());
+            return miIoResponse;
+        } else {
+            logger.trace("Reponse length <32 : {}", response.length);
+            return null;
+        }
+    }
+
+    private synchronized byte[] comms(byte[] message, String ip) throws IOException {
+        InetAddress ipAddress = InetAddress.getByName(ip);
+        DatagramSocket clientSocket = getSocket();
+        DatagramPacket receivePacket = new DatagramPacket(new byte[MSG_BUFFER_SIZE], MSG_BUFFER_SIZE);
+        try {
+            logger.trace("Connection {}:{}", ip, clientSocket.getLocalPort());
+            byte[] sendData = new byte[MSG_BUFFER_SIZE];
+            sendData = message;
+            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ipAddress,
+                    MiIoBindingConstants.PORT);
+            clientSocket.send(sendPacket);
+            sendPacket.setData(new byte[MSG_BUFFER_SIZE]);
+            clientSocket.receive(receivePacket);
+            byte[] response = Arrays.copyOfRange(receivePacket.getData(), receivePacket.getOffset(),
+                    receivePacket.getOffset() + receivePacket.getLength());
+            return response;
+        } catch (SocketTimeoutException e) {
+            logger.debug("Communication error for Mi IO device at {}: {}", ip, e.getMessage());
+            // clientSocket.close();
+            return new byte[0];
+        }
+    }
+
+    private DatagramSocket getSocket() throws SocketException {
+        if (socket == null || socket.isClosed()) {
+            socket = new DatagramSocket();
+            socket.setSoTimeout(TIMEOUT);
+            return socket;
+        } else {
+            return socket;
+        }
     }
 
     public void close() {
-        ssocket.unregisterListener(this);
+        if (socket != null) {
+            socket.close();
+        }
+        senderThread.interrupt();
     }
 
     /**
      * @return the id
      */
-    public int getId() {
+    @Override
+    public long getId() {
         return id.incrementAndGet();
     }
 
@@ -207,55 +377,8 @@ public class MiIoAsyncCommunication implements XiaomiSocketListener {
         this.deviceId = deviceId;
     }
 
-    @Override
-    public void onDataReceived(byte[] message) {
-        if (message.length >= 32) {
-            Message miIoResponse = new Message(message);
-            timeDelta = miIoResponse.getTimestampAsInt() - timeStamp;
-            if (message.length == 32) {
-                if (logger.isTraceEnabled()) {
-                    logger.trace("Received ping response from {}:{}", ip, new Message(message).toSting());
-                } else {
-                    logger.debug("Received ping response from {}", ip, new Message(message).toSting());
-                }
-            } else {
-                try {
-                    if (logger.isTraceEnabled()) {
-                        logger.trace("Received msg response from {}:{}", ip, new Message(message).toSting());
-                    }
-
-                    String decryptedResponse = new String(MiIoCrypto.decrypt(miIoResponse.getData(), token)).trim();
-                    JsonElement response = parser.parse(decryptedResponse);
-                    if (response.isJsonObject()) {
-                        logger.info("Received  message {}", response.toString());
-
-                        if (response.getAsJsonObject().get("id").isJsonPrimitive()) {
-                            Integer id = response.getAsJsonObject().get("id").getAsInt();
-                            if (commandsSend.containsKey(id)) {
-                                logger.trace("Key found {}", commandsSend.containsKey(id));
-                                MiIoSendCommand cmd = commandsSend.remove(id);
-                                cmd.setResponse(response.getAsJsonObject());
-                                for (MiIoMessageListener listener : listeners) {
-                                    logger.trace("inform listener {}, data {} from {}", listener);
-                                    try {
-                                        listener.onMessageReceived(cmd);
-                                    } catch (Exception e) {
-                                        logger.debug("Could not inform listener {}, data {} from {}: ", listener,
-                                                e.getMessage(), e);
-                                    }
-                                }
-
-                            }
-                        }
-                    } else {
-                        logger.info("Received message is invalid JSON: {}", decryptedResponse);
-                    }
-
-                } catch (MiIoCryptoException e) {
-                    logger.info("could not decrypt message {}", new Message(message).toSting());
-                }
-            }
-            logger.trace("Message Details: {}", miIoResponse.toSting());
-        }
+    public int getQueueLenght() {
+        return concurrentLinkedQueue.size();
     }
+
 }

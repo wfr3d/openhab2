@@ -9,6 +9,7 @@
 package org.openhab.binding.miio.internal;
 
 import org.eclipse.smarthome.core.thing.ThingStatus;
+import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 
 /**
  * Interface for a listener on the {@link MiIoCommunication}.
@@ -29,6 +30,6 @@ public interface MiIoMessageListener {
      *
      * @param status - Status online/offline
      */
-    void onStatusUpdated(ThingStatus status);
+    void onStatusUpdated(ThingStatus status, ThingStatusDetail statusDetail);
 
 }

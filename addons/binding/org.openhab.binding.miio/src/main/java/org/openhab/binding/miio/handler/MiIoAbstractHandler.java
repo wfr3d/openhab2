@@ -201,7 +201,7 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
             updateState(CHANNEL_LIFE, new DecimalType(networkData.get("life").getAsLong()));
             return true;
         } catch (Exception e) {
-            logger.debug("Could not parse network response: {}", networkData);
+            logger.debug("Could not parse network response: {}", networkData, e);
         }
         return false;
     }
@@ -402,7 +402,7 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
     }
 
     @Override
-    public void onStatusUpdated(ThingStatus status) {
-        // TODO this should control ON/OFFLINE
+    public void onStatusUpdated(ThingStatus status, ThingStatusDetail statusDetail) {
+        updateStatus(status, statusDetail);
     }
 }

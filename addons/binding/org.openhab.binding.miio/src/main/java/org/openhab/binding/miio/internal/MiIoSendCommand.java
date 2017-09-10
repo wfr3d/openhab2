@@ -23,8 +23,8 @@ public class MiIoSendCommand {
     private final String commandString;
     private JsonObject response;
 
-    public void setResponse(JsonObject jsonObject) {
-        this.response = jsonObject;
+    public void setResponse(JsonObject response) {
+        this.response = response;
     }
 
     public MiIoSendCommand(int id, MiIoCommand command, String commandString) {
@@ -47,6 +47,10 @@ public class MiIoSendCommand {
 
     public JsonObject getResponse() {
         return response;
+    }
+
+    public boolean isError() {
+        return response.get("error") != null;
     }
 
     public JsonElement getResult() {
