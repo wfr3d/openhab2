@@ -11,7 +11,6 @@ package org.openhab.binding.miio.internal.discovery;
 import static org.openhab.binding.miio.MiIoBindingConstants.*;
 
 import java.net.InetAddress;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -39,8 +38,7 @@ public class MiIoDiscoveryParticipant implements MDNSDiscoveryParticipant {
 
     @Override
     public Set<ThingTypeUID> getSupportedThingTypeUIDs() {
-        // return (SUPPORTED_THING_TYPES_UIDS);
-        return Collections.singleton(THING_TYPE_VACUUM);
+        return (NONGENERIC_THING_TYPES_UIDS);
     }
 
     @Override
@@ -63,10 +61,11 @@ public class MiIoDiscoveryParticipant implements MDNSDiscoveryParticipant {
                 return null;
             }
             ThingTypeUID thingType = MiIoDevices.getType(id[0].replaceAll("-", ".")).getThingType();
-            logger.trace("mDNS {} identified as thingtype {}", id[0], thingType);
-            String uidName = Integer.toHexString(did).toUpperCase();
-            return new ThingUID(thingType, uidName);
+            logger.debug("mDNS {} identified as thingtype {}", id[0], thingType);
+            String uidName = String.format("%08X", did);
+            logger.debug("mDNS {} identified as thingtype {}", id[0], uidName);
 
+            return new ThingUID(thingType, uidName);
         }
         return null;
     }
