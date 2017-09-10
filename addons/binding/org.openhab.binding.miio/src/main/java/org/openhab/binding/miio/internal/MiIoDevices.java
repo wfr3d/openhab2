@@ -40,7 +40,7 @@ public enum MiIoDevices {
     YEELIGHT_CEIL1("yeelink.light.ceiling1", "Yeelight LED Ceiling Lamp", MiIoBindingConstants.THING_TYPE_BASIC),
     TOOTHBRUSH("soocare.toothbrush.x3", "Mi Toothbrush", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     WIFISPEAKER("xiaomi.wifispeaker.v1", "Mi Internet Speaker", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
-    PHILIPSBULB("philips.light.bulb", "Xiaomi Philips Bulb", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
+    PHILIPSBULB("philips.light.bulb", "Xiaomi Philips Bulb", MiIoBindingConstants.THING_TYPE_BASIC),
     PHILIPS("philips.light.sread1", "Xiaomi Philips Eyecare Smart Lamp 2", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     PHILIPS2("philips.light.ceiling", "Xiaomi Philips LED Ceiling Lamp", MiIoBindingConstants.THING_TYPE_BASIC),
     CHUANGMIIR2("chuangmi.ir.v2", "Mi Remote v2", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),

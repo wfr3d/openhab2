@@ -33,6 +33,9 @@ public final class MiIoBindingConstants {
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_MIIO,
             THING_TYPE_BASIC, THING_TYPE_VACUUM, THING_TYPE_UNSUPPORTED);
 
+    public static final Set<ThingTypeUID> NONGENERIC_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_BASIC,
+            THING_TYPE_VACUUM, THING_TYPE_UNSUPPORTED);
+
     // List of all Channel IDs
     public static final String CHANNEL_BATTERY = "status#battery";
     public static final String CHANNEL_CLEAN_AREA = "status#clean_area";
