@@ -57,6 +57,7 @@ import com.google.gson.JsonSyntaxException;
  * @author Marcel Verpaalen - Initial contribution
  */
 public class MiIoBasicHandler extends MiIoAbstractHandler {
+    private static final int MAX_QUEUE = 5;
     private final Logger logger = LoggerFactory.getLogger(MiIoBasicHandler.class);
     private boolean hasChannelStructure;
     MiIoAsyncCommunication miioAsyncCom;
@@ -144,7 +145,7 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
 
     @Override
     protected synchronized void updateData() {
-        if (miioAsyncCom.getQueueLenght() > 5) {
+        if (miioAsyncCom.getQueueLenght() > MAX_QUEUE) {
             logger.debug("No periodic update for '{}'. {} elements in queue ", getThing().getUID().toString(),
                     miioAsyncCom.getQueueLenght());
             return;
