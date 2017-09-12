@@ -32,6 +32,7 @@ import org.openhab.binding.miio.MiIoBindingConfiguration;
 import org.openhab.binding.miio.internal.Message;
 import org.openhab.binding.miio.internal.MiIoCommand;
 import org.openhab.binding.miio.internal.MiIoCommunication;
+import org.openhab.binding.miio.internal.MiIoCrypto;
 import org.openhab.binding.miio.internal.MiIoCryptoException;
 import org.openhab.binding.miio.internal.MiIoDevices;
 import org.openhab.binding.miio.internal.MiIoMessageListener;
@@ -107,7 +108,16 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
                 if (!IGNORED_TOLKENS.contains(tokenSting)) {
                     token = Utils.hexStringToByteArray(tokenSting);
                     return true;
+
                 }
+            case 96:
+                try {
+                    token = Utils
+                            .hexStringToByteArray(MiIoCrypto.decryptTolken(Utils.hexStringToByteArray(tokenSting)));
+                } catch (MiIoCryptoException e) {
+                    logger.debug("Could not decrypt token {}", tokenSting, e.getMessage());
+                }
+                return true;
             default:
                 return false;
         }
