@@ -9,7 +9,7 @@
 			<context>network-address</context>
 			<label>IP address Vacuum</label>
 		</parameter>
-		<parameter name="token" type="text" pattern="^([A-Fa-f0-9]{32}|.{16})$" required="true">
+		<parameter name="token" type="text" pattern="^([A-Fa-f0-9]{96}|[A-Fa-f0-9]{32}|.{16})$" required="true">
 			<label>Token</label>
 			<description>Token for communication (in Hex)</description>
 			<default>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</default>
