@@ -38,6 +38,7 @@ For iPhone, use an un-encrypted iTunes-Backup and unpack it and use a sqlite too
 Then search in "RAW, com.xiaomi.home," for "USERID_mihome.sqlite" and look for the 32-digit-token.
 
 ## Binding Configuration
+
 No binding configuration is required.
 
 ## Thing Configuration
