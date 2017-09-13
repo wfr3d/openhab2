@@ -36,6 +36,7 @@ import org.openhab.binding.miio.internal.MiIoCrypto;
 import org.openhab.binding.miio.internal.MiIoCryptoException;
 import org.openhab.binding.miio.internal.MiIoDevices;
 import org.openhab.binding.miio.internal.MiIoMessageListener;
+import org.openhab.binding.miio.internal.MiIoSendCommand;
 import org.openhab.binding.miio.internal.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,7 +109,6 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
                 if (!IGNORED_TOLKENS.contains(tokenSting)) {
                     token = Utils.hexStringToByteArray(tokenSting);
                     return true;
-
                 }
             case 96:
                 try {
@@ -320,7 +320,7 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
         });
     }
 
-    // TODO: for removal once transitioned
+    // TODO for removal once transitioned
     protected void defineDeviceType() {
         JsonObject miioInfo = getJsonResultHelper(network.getValue());
         if (miioInfo != null) {
@@ -414,5 +414,29 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
     @Override
     public void onStatusUpdated(ThingStatus status, ThingStatusDetail statusDetail) {
         updateStatus(status, statusDetail);
+    }
+
+    @Override
+    public void onMessageReceived(MiIoSendCommand response) {
+        logger.debug("Handler received response type: {}, result: {}, fullresponse: {}", response.getCommand(),
+                response.getResult(), response.getResponse());
+        if (response.isError()) {
+            logger.debug("Error received: {}", response.getResponse().get("error"));
+            return;
+        }
+        try {
+            switch (response.getCommand()) {
+                case MIIO_INFO:
+                    if (!isIdentified) {
+                        defineDeviceType(getJsonResultHelper(response.getResponse().toString()));
+                    }
+                    updateNetwork(response.getResult().getAsJsonObject());
+                    break;
+                default:
+                    break;
+            }
+        } catch (Exception e) {
+            logger.debug("Error while handing message {}", response.getResponse(), e);
+        }
     }
 }

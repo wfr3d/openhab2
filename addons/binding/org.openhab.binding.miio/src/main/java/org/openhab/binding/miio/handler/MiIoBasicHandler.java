@@ -38,7 +38,7 @@ import org.openhab.binding.miio.internal.basic.CommandParameterType;
 import org.openhab.binding.miio.internal.basic.MiIoBasicChannel;
 import org.openhab.binding.miio.internal.basic.MiIoBasicDevice;
 import org.openhab.binding.miio.internal.basic.MiIoDeviceAction;
-import org.openhab.binding.miio.internal.socket.MiIoAsyncCommunication;
+import org.openhab.binding.miio.internal.transport.MiIoAsyncCommunication;
 import org.osgi.framework.Bundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,7 +109,7 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
             sendAsyncCommand(command.toString());
             // updateState(CHANNEL_COMMAND, new StringType(sendCommand(command.toString())));
         }
-        // TODO: cleanup debug stuff & add handling types
+        // TODO cleanup debug stuff & add handling types
         logger.debug("Locating action for channel {}:{}", channelUID.getId(), command);
         if (actions != null) {
             if (actions.containsKey(channelUID.getId())) {
@@ -135,9 +135,7 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
                 for (String a : actions.keySet()) {
                     logger.debug("entries: {} : {}", a, actions.get(a));
                 }
-
             }
-
         } else {
             logger.debug("Actions not loaded yet");
         }
@@ -169,11 +167,10 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
         } catch (Exception e) {
             logger.debug("Error while updating '{}'", getThing().getUID().toString(), e);
         }
-
     }
 
     private boolean refreshProperties(MiIoBasicDevice device) {
-        // TODO: horribly inefficient refresh with each time creation of the list etc.. for testing only
+        // TODO horribly inefficient refresh with each time creation of the list etc.. for testing only
         // build list of properties to be refreshed, do not refresh for unlinked channels
         JsonArray getPropString = new JsonArray();
         refreshList = new ArrayList<MiIoBasicChannel>();
@@ -245,8 +242,8 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
     }
 
     private boolean buildChannelStructure(String deviceName) {
-        // TODO: This still needs significant cleanup but should be functional.
-        // TODO: If the model can't be found by the filename, load the other files and check for the id's
+        // TODO This still needs significant cleanup but should be functional.
+        // TODO If the model can't be found by the filename, load the other files and check for the id's
         logger.debug("Building Channel Structure for {} - Model: {}", getThing().getUID().toString(), deviceName);
         URL fn;
         try {
@@ -264,7 +261,7 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
         }
         try {
             JsonObject deviceMapping = Utils.convertFileToJSON(fn);
-            // TODO: Change to Trace later onwards
+            // TODO Change to Trace later onwards
             logger.debug("Device Mapper: {}, {}, {}", fn.getFile(), deviceMapping.toString());
 
             Gson gson = new GsonBuilder().serializeNulls().create();
@@ -318,7 +315,7 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
         ChannelUID channelUID = new ChannelUID(getThing().getUID(), channel);
         ChannelTypeUID channelTypeUID = new ChannelTypeUID(MiIoBindingConstants.BINDING_ID, channelType);
 
-        // TODO: only for testing. This should not be done finally. Channel only to be added when not there
+        // TODO only for testing. This should not be done finally. Channel only to be added when not there
         // already
         if (getThing().getChannel(channel) != null) {
             logger.info("Channel '{}' for thing {} already exist... removing", channel, getThing().getUID());
@@ -333,25 +330,24 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
 
     @Override
     public void onMessageReceived(MiIoSendCommand response) {
-        logger.debug("Handler received response type: {}, result: {}, fullresponse: {}", response.getCommand(),
-                response.getResult(), response.getResponse());
-        if (response.isError()) {
-            logger.debug("Error received: {}", response.getResponse().get("error"));
-            return;
-        }
+        super.onMessageReceived(response);
+        // logger.debug("Handler received response type: {}, result: {}, fullresponse: {}", response.getCommand(),
+        // response.getResult(), response.getResponse());
+        // if (response.isError()) {
+        // logger.debug("Error received: {}", response.getResponse().get("error"));
+        // return;
+        // }
         try {
             switch (response.getCommand()) {
                 case MIIO_INFO:
-                    if (!isIdentified) {
-                        defineDeviceType(getJsonResultHelper(response.getResponse().toString()));
-                    }
-                    updateNetwork(response.getResult().getAsJsonObject());
+                    // if (!isIdentified) {
+                    // defineDeviceType(getJsonResultHelper(response.getResponse().toString()));
+                    // }
+                    // updateNetwork(response.getResult().getAsJsonObject());
                     break;
                 case GET_PROPERTY:
-
                     if (response.getResult().isJsonArray()) {
                         JsonArray res = response.getResult().getAsJsonArray();
-
                         // update the states
                         for (int i = 0; i < refreshList.size(); i++) {
                             try {
@@ -377,7 +373,6 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
                     break;
                 default:
                     break;
-
             }
         } catch (Exception e) {
             logger.debug("Error while handing message {}", response.getResponse(), e);

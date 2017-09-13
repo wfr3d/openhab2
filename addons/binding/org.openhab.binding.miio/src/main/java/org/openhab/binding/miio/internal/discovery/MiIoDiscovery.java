@@ -128,7 +128,7 @@ public class MiIoDiscovery extends AbstractDiscoveryService implements ExtendedD
                 uid = thingUID;
                 break;
             }
-            // TODO: Double check why ExistingDiscoveryResult not working. This seems to be a bug.
+            // TODO Double check why ExistingDiscoveryResult not working. This seems to be a bug.
             // logger.debug("Test {} Existing result {}", thingUID,
             // discoveryServiceCallback.getExistingDiscoveryResult(thingUID));
             // if (discoveryServiceCallback.getExistingDiscoveryResult(thingUID).getThingTypeUID().equals(typeU)) {
@@ -241,9 +241,7 @@ public class MiIoDiscovery extends AbstractDiscoveryService implements ExtendedD
          * @param socket - The multicast socket to (re)use
          */
         private void receiveData(DatagramSocket socket) {
-
             DatagramPacket receivePacket = new DatagramPacket(new byte[BUFFER_LENGTH], BUFFER_LENGTH);
-
             try {
                 while (true) {
                     logger.trace("Thread {} waiting for data on port {}", this, socket.getLocalPort());
