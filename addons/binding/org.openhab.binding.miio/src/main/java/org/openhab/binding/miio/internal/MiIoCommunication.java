@@ -100,7 +100,7 @@ public class MiIoCommunication {
         }
 
         String decryptedResponse = new String(MiIoCrypto.decrypt(miIoResponseMsg.getData(), token)).trim();
-        // TODO: Change this to trace level later onwards
+        // TODO Change this to trace level later onwards
         logger.debug("Received response from {}: {}", ip, decryptedResponse);
         return decryptedResponse;
     }

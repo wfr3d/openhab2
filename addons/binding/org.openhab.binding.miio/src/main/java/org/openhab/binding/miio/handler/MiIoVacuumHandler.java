@@ -166,11 +166,15 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
         return true;
     }
 
-    private boolean updateConsumables() {
+    private boolean getConsumables() {
         JsonObject consumablesData = getJsonResultHelper(consumables.getValue());
         if (consumablesData == null) {
             return false;
         }
+        return updateConsumables(consumablesData);
+    }
+
+    private boolean updateConsumables(JsonObject consumablesData) {
         int mainBrush = consumablesData.get("main_brush_work_time").getAsInt();
         int sideBrush = consumablesData.get("side_brush_work_time").getAsInt();
         int filter = consumablesData.get("filter_work_time").getAsInt();
@@ -234,7 +238,7 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
         try {
             sendCommand(MiIoCommand.GET_STATUS);
 
-            if ((0 + (updateNetwork() ? 1 : 0) + +(getStatusData() ? 1 : 0) + (updateConsumables() ? 1 : 0)
+            if ((0 + (updateNetwork() ? 1 : 0) + +(getStatusData() ? 1 : 0) + (getConsumables() ? 1 : 0)
                     + (updateDnD() ? 1 : 0) + (updateHistory() ? 1 : 0)) > 0) {
                 updateStatus(ThingStatus.ONLINE);
             } else {
@@ -289,16 +293,20 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
 
     @Override
     public void onMessageReceived(MiIoSendCommand response) {
-
+        super.onMessageReceived(response);
         switch (response.getCommand()) {
             case GET_STATUS:
                 if (response.getResult().isJsonArray()) {
                     updateVacuumStatus(response.getResult().getAsJsonArray().get(0).getAsJsonObject());
                 }
                 break;
+            case CONSUMABLES_GET:
+                if (response.getResult().isJsonArray()) {
+                    updateConsumables(response.getResult().getAsJsonArray().get(0).getAsJsonObject());
+                }
+                break;
             default:
                 break;
-
         }
     }
 
