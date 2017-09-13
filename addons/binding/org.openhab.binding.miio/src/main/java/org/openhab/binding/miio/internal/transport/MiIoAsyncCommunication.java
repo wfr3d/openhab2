@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.openhab.binding.miio.internal.socket;
+package org.openhab.binding.miio.internal.transport;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -71,12 +71,11 @@ public class MiIoAsyncCommunication extends Thread {
     private boolean connected;
     private ThingStatusDetail status;
     private int errorCounter;
-    private final static int MAX_ERRORS = 3;
+    private static final int MAX_ERRORS = 3;
 
     private ConcurrentLinkedQueue<MiIoSendCommand> concurrentLinkedQueue = new ConcurrentLinkedQueue<MiIoSendCommand>();
 
     public MiIoAsyncCommunication(String ip, byte[] token, byte[] did, int id) {
-
         this.ip = ip;
         this.token = token;
         this.deviceId = did;
@@ -102,7 +101,6 @@ public class MiIoAsyncCommunication extends Thread {
             logger.trace("Adding socket listener {}", listener);
             getListeners().add(listener);
         }
-
     }
 
     /**
@@ -245,8 +243,7 @@ public class MiIoAsyncCommunication extends Thread {
             pingSuccess();
         }
         String decryptedResponse = new String(MiIoCrypto.decrypt(miIoResponseMsg.getData(), token)).trim();
-        // TODO: Change this to trace level later onwards
-        logger.debug("Received response from {}: {}", ip, decryptedResponse);
+        logger.trace("Received response from {}: {}", ip, decryptedResponse);
         return decryptedResponse;
     }
 

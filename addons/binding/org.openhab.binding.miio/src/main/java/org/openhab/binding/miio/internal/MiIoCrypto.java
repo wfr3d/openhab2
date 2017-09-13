@@ -20,9 +20,6 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.BaseEncoding;
-
 /**
  * The {@link MiIoCrypto} is responsible for creating Xiaomi messages.
  *
@@ -63,7 +60,6 @@ public class MiIoCrypto {
                 | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException e) {
             throw new MiIoCryptoException(e.getMessage());
         }
-
     }
 
     public static byte[] encrypt(byte[] text, byte[] token) throws MiIoCryptoException {
@@ -91,16 +87,13 @@ public class MiIoCrypto {
     public static String decryptTolken(byte[] cipherText) throws MiIoCryptoException {
         try {
             Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
-            SecretKeySpec keySpec = new SecretKeySpec(Utils.hexStringToByteArray("00000000000000000000000000000000"),
-                    "AES");
+            SecretKeySpec keySpec = new SecretKeySpec(new byte[32], "AES");
             cipher.init(Cipher.DECRYPT_MODE, keySpec);
             byte[] decrypted = cipher.doFinal(cipherText);
-            return new String(BaseEncoding.base16().lowerCase().decode(Utils.getHex(decrypted)), Charsets.US_ASCII)
-                    .substring(0, 32);
+            return new String(decrypted).trim();
         } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException
                 | BadPaddingException e) {
             throw new MiIoCryptoException(e.getMessage());
         }
     }
-
 }
