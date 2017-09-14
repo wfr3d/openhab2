@@ -57,10 +57,8 @@ import com.google.gson.JsonSyntaxException;
  * @author Marcel Verpaalen - Initial contribution
  */
 public class MiIoBasicHandler extends MiIoAbstractHandler {
-    private static final int MAX_QUEUE = 5;
     private final Logger logger = LoggerFactory.getLogger(MiIoBasicHandler.class);
     private boolean hasChannelStructure;
-    MiIoAsyncCommunication miioAsyncCom;
 
     List<MiIoBasicChannel> refreshList = new ArrayList<MiIoBasicChannel>();
 
@@ -90,12 +88,6 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
             miioCom.close();
             miioCom = null;
         }
-        try {
-            miioAsyncCom.close();
-            miioAsyncCom = null;
-        } catch (Exception e) {
-            // ignore
-        }
     }
 
     @Override
@@ -106,7 +98,7 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
             return;
         }
         if (channelUID.getId().equals(CHANNEL_COMMAND)) {
-            sendAsyncCommand(command.toString());
+            sendCommand(command.toString());
             // updateState(CHANNEL_COMMAND, new StringType(sendCommand(command.toString())));
         }
         // TODO cleanup debug stuff & add handling types
@@ -129,7 +121,7 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
                     cmd = cmd + "[" + command.toString().toLowerCase() + "]";
                 }
                 logger.debug(" sending command {}", cmd);
-                sendAsyncCommand(cmd);
+                sendCommand(cmd);
             } else {
                 logger.debug("Channel Id {} not in mapping. Available:", channelUID.getId());
                 for (String a : actions.keySet()) {
@@ -143,23 +135,20 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
 
     @Override
     protected synchronized void updateData() {
-        if (miioAsyncCom.getQueueLenght() > MAX_QUEUE) {
-            logger.debug("No periodic update for '{}'. {} elements in queue ", getThing().getUID().toString(),
-                    miioAsyncCom.getQueueLenght());
+        if (skipUpdate()) {
             return;
-        } else {
-            logger.debug("Periodic update for '{}'", getThing().getUID().toString());
         }
+        logger.debug("Periodic update for '{}' ({})", getThing().getUID().toString(), getThing().getThingTypeUID());
 
         checkChannelStructure();
         try {
-            miioAsyncCom.sendPing(configuration.host);
+            miioCom.sendPing(configuration.host);
         } catch (Exception e) {
             // ignore
         }
         try {
             if (!isIdentified) {
-                miioAsyncCom.queueCommand(MiIoCommand.MIIO_INFO);
+                miioCom.queueCommand(MiIoCommand.MIIO_INFO);
             }
             if (miioDevice != null) {
                 refreshProperties(miioDevice);
@@ -181,11 +170,11 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
             }
         }
 
-        miioAsyncCom.registerListener(this); // this should not be needed
+        miioCom.registerListener(this); // this should not be needed
 
         // get the data based on the datatype
         try {
-            miioAsyncCom.queueCommand(MiIoCommand.GET_PROPERTY, getPropString.toString());
+            miioCom.queueCommand(MiIoCommand.GET_PROPERTY, getPropString.toString());
         } catch (MiIoCryptoException | IOException e) {
             logger.debug("Send refresh failed {}", e.getMessage(), e);
         }
@@ -194,11 +183,11 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
 
     @Override
     protected boolean initializeData() {
-        miioAsyncCom = new MiIoAsyncCommunication(configuration.host, token,
+        miioCom = new MiIoAsyncCommunication(configuration.host, token,
                 Utils.hexStringToByteArray(configuration.deviceId), lastId);
-        miioAsyncCom.registerListener(this);
+        miioCom.registerListener(this);
         try {
-            miioAsyncCom.sendPing(configuration.host);
+            miioCom.sendPing(configuration.host);
         } catch (Exception e) {
             logger.debug("ping {} failed", configuration.host);
         }
@@ -221,23 +210,6 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
             } else {
                 hasChannelStructure = buildChannelStructure(configuration.model);
             }
-        }
-    }
-
-    private void sendAsyncCommand(String command) {
-
-        try {
-            command = command.trim();
-            String param = "";
-            int loc = command.indexOf("[");
-            loc = (loc > 0 ? loc : command.indexOf("{"));
-            if (loc > 0) {
-                param = command.substring(loc).trim();
-                command = command.substring(0, loc).trim();
-            }
-            miioAsyncCom.queueCommand(command, param);
-        } catch (MiIoCryptoException | IOException e) {
-            disconnected(e.getMessage());
         }
     }
 
@@ -331,12 +303,9 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
     @Override
     public void onMessageReceived(MiIoSendCommand response) {
         super.onMessageReceived(response);
-        // logger.debug("Handler received response type: {}, result: {}, fullresponse: {}", response.getCommand(),
-        // response.getResult(), response.getResponse());
-        // if (response.isError()) {
-        // logger.debug("Error received: {}", response.getResponse().get("error"));
-        // return;
-        // }
+        if (response.isError()) {
+            return;
+        }
         try {
             switch (response.getCommand()) {
                 case MIIO_INFO:
@@ -370,6 +339,9 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
                             }
                         }
                     }
+                    break;
+                case UNKNOWN:
+                    updateState(CHANNEL_COMMAND, new StringType(response.getResponse().toString()));
                     break;
                 default:
                     break;

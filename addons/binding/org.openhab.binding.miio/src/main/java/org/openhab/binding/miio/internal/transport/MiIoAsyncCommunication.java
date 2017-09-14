@@ -49,7 +49,7 @@ import com.google.gson.JsonSyntaxException;
  *
  * @author Marcel Verpaalen - Initial contribution
  */
-public class MiIoAsyncCommunication extends Thread {
+public class MiIoAsyncCommunication {
 
     private static final int MSG_BUFFER_SIZE = 2048;
     private static final int TIMEOUT = 10000;
@@ -71,6 +71,7 @@ public class MiIoAsyncCommunication extends Thread {
     private boolean connected;
     private ThingStatusDetail status;
     private int errorCounter;
+    private boolean needPing = true;
     private static final int MAX_ERRORS = 3;
 
     private ConcurrentLinkedQueue<MiIoSendCommand> concurrentLinkedQueue = new ConcurrentLinkedQueue<MiIoSendCommand>();
@@ -134,21 +135,24 @@ public class MiIoAsyncCommunication extends Thread {
             concurrentLinkedQueue.add(sendCmd);
             logger.debug("Command added to Queue {} -> {} (Device: {} token: {} Queue: {})", fullCommand.toString(), ip,
                     Utils.getHex(deviceId), Utils.getHex(token), concurrentLinkedQueue.size());
+            if (needPing) {
+                sendPing(ip);
+            }
+            return fullCommand.toString();
         } catch (JsonSyntaxException e) {
             logger.warn("Send command '{}' with parameters {} -> {} (Device: {}) gave error {}", command, params, ip,
                     Utils.getHex(deviceId), e.getMessage());
             throw e;
         }
-        return null;
     }
 
     MiIoSendCommand sendMiIoSendCommand(MiIoSendCommand miIoSendCommand) {
         String errorMsg = "Unknown Error while sending command";
+        String decryptedResponse = "";
         try {
-            String decryptedResponse = sendCommand(miIoSendCommand.getCommandString(), token, ip, deviceId);
-
-            JsonElement response = parser.parse(decryptedResponse);
-
+            decryptedResponse = sendCommand(miIoSendCommand.getCommandString(), token, ip, deviceId);
+            JsonElement response;
+            response = parser.parse(decryptedResponse);
             if (response.isJsonObject()) {
                 logger.trace("Received  JSON message {}", response.toString());
                 miIoSendCommand.setResponse(response.getAsJsonObject());
@@ -161,6 +165,10 @@ public class MiIoAsyncCommunication extends Thread {
             logger.warn("Send command '{}'  -> {} (Device: {}) gave error {}", miIoSendCommand.getCommandString(), ip,
                     Utils.getHex(deviceId), e.getMessage());
             errorMsg = e.getMessage();
+        } catch (JsonSyntaxException e) {
+            logger.warn("Could not parse '{}'  -> {} (Device: {}) gave error {}", decryptedResponse,
+                    miIoSendCommand.getCommandString(), Utils.getHex(deviceId), e.getMessage());
+            errorMsg = "Received message is invalid JSON";
         }
         JsonObject erroResp = new JsonObject();
         erroResp.addProperty("error", errorMsg);
@@ -169,6 +177,7 @@ public class MiIoAsyncCommunication extends Thread {
     }
 
     private synchronized void startReceiver() {
+        needPing = true;
         if (senderThread == null) {
             senderThread = new MessageSenderThread();
         }
@@ -178,7 +187,6 @@ public class MiIoAsyncCommunication extends Thread {
     }
 
     private class MessageSenderThread extends Thread {
-
         public MessageSenderThread() {
             super("Mi IO MessageSenderThread");
             setDaemon(true);
@@ -187,7 +195,6 @@ public class MiIoAsyncCommunication extends Thread {
         @Override
         public void run() {
             logger.debug("Starting Mi IO MessageSenderThread");
-
             while (!interrupted()) {
                 try {
                     if (concurrentLinkedQueue.isEmpty()) {
@@ -322,7 +329,7 @@ public class MiIoAsyncCommunication extends Thread {
             return response;
         } catch (SocketTimeoutException e) {
             logger.debug("Communication error for Mi IO device at {}: {}", ip, e.getMessage());
-            // clientSocket.close();
+            needPing = true;
             return new byte[0];
         }
     }
@@ -347,8 +354,7 @@ public class MiIoAsyncCommunication extends Thread {
     /**
      * @return the id
      */
-    @Override
-    public long getId() {
+    public int getId() {
         return id.incrementAndGet();
     }
 

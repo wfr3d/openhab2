@@ -14,7 +14,6 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.RefreshType;
 import org.slf4j.Logger;
@@ -48,19 +47,12 @@ public class MiIoGenericHandler extends MiIoAbstractHandler {
 
     @Override
     protected synchronized void updateData() {
-        logger.debug("Update connection '{}'", getThing().getUID().toString());
-        if (!hasConnection()) {
+        if (skipUpdate()) {
             return;
         }
+        logger.debug("Periodic update for '{}' ({})", getThing().getUID().toString(), getThing().getThingTypeUID());
         try {
-            if (updateNetwork()) {
-                updateStatus(ThingStatus.ONLINE);
-                if (!isIdentified) {
-                    isIdentified = updateThingType(getJsonResultHelper(network.getValue()));
-                }
-            } else {
-                disconnectedNoResponse();
-            }
+            network.getValue();
         } catch (Exception e) {
             logger.debug("Error while updating '{}'", getThing().getUID().toString(), e);
         }
