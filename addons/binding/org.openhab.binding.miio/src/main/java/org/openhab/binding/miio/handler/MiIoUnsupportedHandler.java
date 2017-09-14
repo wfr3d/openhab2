@@ -15,9 +15,9 @@ import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.RefreshType;
+import org.openhab.binding.miio.internal.MiIoSendCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,31 +101,34 @@ public class MiIoUnsupportedHandler extends MiIoAbstractHandler {
 
     @Override
     protected synchronized void updateData() {
-        logger.debug("Update connection '{}'", getThing().getUID().toString());
-        if (!hasConnection()) {
+        if (skipUpdate()) {
             return;
         }
+        logger.debug("Periodic update for '{}' ({})", getThing().getUID().toString(), getThing().getThingTypeUID());
         try {
-            if (updateNetwork()) {
-                updateStatus(ThingStatus.ONLINE);
-                if (!isIdentified) {
-                    isIdentified = updateThingType(getJsonResultHelper(network.getValue()));
-                }
-            } else {
-                disconnectedNoResponse();
-            }
+            network.getValue();
         } catch (Exception e) {
-            logger.debug("Error while updating '{}'", getThing().getUID().toString(), e);
+            logger.debug("Error while updating '{}' ({})", getThing().getUID().toString(), getThing().getThingTypeUID(),
+                    e);
         }
     }
 
     @Override
-    protected boolean initializeData() {
-        initalizeNetworkCache();
-        this.miioCom = getConnection();
-        if (miioCom != null) {
-            updateStatus(ThingStatus.ONLINE);
+    public void onMessageReceived(MiIoSendCommand response) {
+        super.onMessageReceived(response);
+        if (response.isError()) {
+            return;
         }
-        return true;
+        try {
+            switch (response.getCommand()) {
+                case UNKNOWN:
+                    updateState(CHANNEL_COMMAND, new StringType(response.getResponse().toString()));
+                    break;
+                default:
+                    break;
+            }
+        } catch (Exception e) {
+            logger.debug("Error while handing message {}", response.getResponse(), e);
+        }
     }
 }
