@@ -18,7 +18,7 @@ import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.ThingStatus;
+import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.RefreshType;
 import org.eclipse.smarthome.core.types.UnDefType;
@@ -61,7 +61,7 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
         }
         if (command == RefreshType.REFRESH) {
             logger.debug("Refreshing {}", channelUID);
-            // updateData();
+            updateData();
             return;
         }
         if (channelUID.getId().equals(CHANNEL_CONTROL)) {
@@ -78,13 +78,13 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
                 logger.info("Command {} not recognised", command.toString());
             }
             status.invalidateValue();
-            // updateVacuumStatus();
+            status.getValue();
             return;
         }
         if (channelUID.getId().equals(CHANNEL_FAN_POWER)) {
             sendCommand(MiIoCommand.SET_MODE, "[" + command.toString() + "]");
             status.invalidateValue();
-            // updateVacuumStatus();
+            status.getValue();
             return;
         }
         if (channelUID.getId().equals(CHANNEL_FAN_CONTROL)) {
@@ -92,18 +92,12 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
                 sendCommand(MiIoCommand.SET_MODE, "[" + command.toString() + "]");
             }
             status.invalidateValue();
-            // updateVacuumStatus();
             status.getValue();
             return;
         }
         if (channelUID.getId().equals(CHANNEL_COMMAND)) {
             updateState(CHANNEL_COMMAND, new StringType(sendCommand(command.toString())));
         }
-    }
-
-    private boolean getStatusData() {
-        JsonObject statusData = getJsonResultHelper(status.getValue());
-        return updateVacuumStatus(statusData);
     }
 
     private boolean updateVacuumStatus(JsonObject statusData) {
@@ -166,14 +160,6 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
         return true;
     }
 
-    private boolean getConsumables() {
-        JsonObject consumablesData = getJsonResultHelper(consumables.getValue());
-        if (consumablesData == null) {
-            return false;
-        }
-        return updateConsumables(consumablesData);
-    }
-
     private boolean updateConsumables(JsonObject consumablesData) {
         int mainBrush = consumablesData.get("main_brush_work_time").getAsInt();
         int sideBrush = consumablesData.get("side_brush_work_time").getAsInt();
@@ -198,12 +184,8 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
         return true;
     }
 
-    private boolean updateDnD() {
-        JsonObject dndData = getJsonResultHelper(dnd.getValue());
-        if (dndData == null) {
-            return false;
-        }
-        logger.debug("Do not disturb data: {}", dndData.toString());
+    private boolean updateDnD(JsonObject dndData) {
+        logger.trace("Do not disturb data: {}", dndData.toString());
         updateState(CHANNEL_DND_FUNCTION, new DecimalType(dndData.get("enabled").getAsBigDecimal()));
         updateState(CHANNEL_DND_START, new StringType(String.format("%02d:%02d", dndData.get("start_hour").getAsInt(),
                 dndData.get("start_minute").getAsInt())));
@@ -212,16 +194,8 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
         return true;
     }
 
-    private boolean updateHistory() {
-        String historyString = history.getValue();
-        if (historyString == null) {
-            return false;
-        }
-        JsonArray historyData = ((JsonObject) parser.parse(historyString)).getAsJsonArray("result");
-        if (historyData == null) {
-            return false;
-        }
-        logger.trace("Cleaning history data: {},{}", historyData.toString());
+    private boolean updateHistory(JsonArray historyData) {
+        logger.trace("Cleaning history data: {}", historyData.toString());
         updateState(CHANNEL_HISTORY_TOTALTIME,
                 new DecimalType(TimeUnit.SECONDS.toMinutes(historyData.get(0).getAsLong())));
         updateState(CHANNEL_HISTORY_TOTALAREA, new DecimalType(historyData.get(1).getAsDouble() / 1000000D));
@@ -230,20 +204,37 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
     }
 
     @Override
-    protected synchronized void updateData() {
-        logger.debug("Update vacuum status '{}'", getThing().getUID().toString());
+    protected boolean skipUpdate() {
         if (!hasConnection()) {
+            logger.debug("Skipping periodic update for '{}'. No Connection", getThing().getUID().toString());
+            return true;
+        }
+        if (getThing().getStatusInfo().getStatusDetail().equals(ThingStatusDetail.CONFIGURATION_ERROR)) {
+            logger.debug("Skipping periodic update for '{}'. Thing Status", getThing().getUID().toString(),
+                    getThing().getStatusInfo().getStatusDetail());
+            network.getValue();
+            return true;
+        }
+        if (miioCom.getQueueLenght() > MAX_QUEUE) {
+            logger.debug("Skipping periodic update for '{}'. {} elements in queue.", getThing().getUID().toString(),
+                    miioCom.getQueueLenght());
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected synchronized void updateData() {
+        if (skipUpdate()) {
             return;
         }
+        logger.debug("Periodic update for '{}' ({})", getThing().getUID().toString(), getThing().getThingTypeUID());
         try {
-            sendCommand(MiIoCommand.GET_STATUS);
-
-            if ((0 + (updateNetwork() ? 1 : 0) + +(getStatusData() ? 1 : 0) + (getConsumables() ? 1 : 0)
-                    + (updateDnD() ? 1 : 0) + (updateHistory() ? 1 : 0)) > 0) {
-                updateStatus(ThingStatus.ONLINE);
-            } else {
-                disconnectedNoResponse();
-            }
+            dnd.getValue();
+            history.getValue();
+            status.getValue();
+            network.getValue();
+            consumables.getValue();
         } catch (Exception e) {
             logger.debug("Error while updating '{}': ", getThing().getUID().toString(), e.getLocalizedMessage(), e);
         }
@@ -285,15 +276,15 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
         });
         initalizeNetworkCache();
         this.miioCom = getConnection();
-        if (miioCom != null) {
-            updateStatus(ThingStatus.ONLINE);
-        }
         return true;
     }
 
     @Override
     public void onMessageReceived(MiIoSendCommand response) {
         super.onMessageReceived(response);
+        if (response.isError()) {
+            return;
+        }
         switch (response.getCommand()) {
             case GET_STATUS:
                 if (response.getResult().isJsonArray()) {
@@ -304,6 +295,19 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
                 if (response.getResult().isJsonArray()) {
                     updateConsumables(response.getResult().getAsJsonArray().get(0).getAsJsonObject());
                 }
+                break;
+            case DND_GET:
+                if (response.getResult().isJsonArray()) {
+                    updateDnD(response.getResult().getAsJsonArray().get(0).getAsJsonObject());
+                }
+                break;
+            case CLEAN_SUMMARY_GET:
+                if (response.getResult().isJsonArray()) {
+                    updateHistory(response.getResult().getAsJsonArray());
+                }
+                break;
+            case UNKNOWN:
+                updateState(CHANNEL_COMMAND, new StringType(response.getResponse().toString()));
                 break;
             default:
                 break;
