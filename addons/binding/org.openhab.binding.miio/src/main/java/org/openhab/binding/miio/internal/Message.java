@@ -202,4 +202,8 @@ public class Message {
     public void setChecksum(byte[] checksum) {
         this.checksum = checksum;
     }
+
+    public boolean isChecksumValid() {
+        return getChecksum().equals(checksum);
+    }
 }
