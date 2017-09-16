@@ -96,7 +96,7 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
             return;
         }
         if (channelUID.getId().equals(CHANNEL_COMMAND)) {
-            updateState(CHANNEL_COMMAND, new StringType(sendCommand(command.toString())));
+            cmds.put(sendCommand(command.toString()), command.toString());
         }
     }
 
@@ -244,7 +244,10 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
     protected boolean initializeData() {
         status = new ExpiringCache<String>(CACHE_EXPIRY, () -> {
             try {
-                return sendCommand(MiIoCommand.GET_STATUS);
+                int ret = sendCommand(MiIoCommand.GET_STATUS);
+                if (ret != 0) {
+                    return "id:" + ret;
+                }
             } catch (Exception e) {
                 logger.debug("Error during status refresh: {}", e.getMessage(), e);
             }
@@ -252,7 +255,10 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
         });
         consumables = new ExpiringCache<String>(CACHE_EXPIRY, () -> {
             try {
-                return sendCommand(MiIoCommand.CONSUMABLES_GET);
+                int ret = sendCommand(MiIoCommand.CONSUMABLES_GET);
+                if (ret != 0) {
+                    return "id:" + ret;
+                }
             } catch (Exception e) {
                 logger.debug("Error during consumables refresh: {}", e.getMessage(), e);
             }
@@ -260,7 +266,10 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
         });
         dnd = new ExpiringCache<String>(CACHE_EXPIRY, () -> {
             try {
-                return sendCommand(MiIoCommand.DND_GET);
+                int ret = sendCommand(MiIoCommand.DND_GET);
+                if (ret != 0) {
+                    return "id:" + ret;
+                }
             } catch (Exception e) {
                 logger.debug("Error during dnd refresh: {}", e.getMessage(), e);
             }
@@ -268,7 +277,10 @@ public class MiIoVacuumHandler extends MiIoAbstractHandler {
         });
         history = new ExpiringCache<String>(CACHE_EXPIRY, () -> {
             try {
-                return sendCommand(MiIoCommand.CLEAN_SUMMARY_GET);
+                int ret = sendCommand(MiIoCommand.CLEAN_SUMMARY_GET);
+                if (ret != 0) {
+                    return "id:" + ret;
+                }
             } catch (Exception e) {
                 logger.debug("Error during cleaning data refresh: {}", e.getMessage(), e);
             }

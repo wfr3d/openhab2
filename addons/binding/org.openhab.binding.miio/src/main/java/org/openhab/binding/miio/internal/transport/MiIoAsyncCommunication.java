@@ -114,15 +114,15 @@ public class MiIoAsyncCommunication {
         getListeners().remove(listener);
     }
 
-    public String queueCommand(MiIoCommand command) throws MiIoCryptoException, IOException {
+    public int queueCommand(MiIoCommand command) throws MiIoCryptoException, IOException {
         return queueCommand(command, "[]");
     }
 
-    public String queueCommand(MiIoCommand command, String params) throws MiIoCryptoException, IOException {
+    public int queueCommand(MiIoCommand command, String params) throws MiIoCryptoException, IOException {
         return queueCommand(command.getCommand(), params);
     }
 
-    public String queueCommand(String command, String params)
+    public int queueCommand(String command, String params)
             throws MiIoCryptoException, IOException, JsonSyntaxException {
         try {
             JsonObject fullCommand = new JsonObject();
@@ -138,7 +138,7 @@ public class MiIoAsyncCommunication {
             if (needPing) {
                 sendPing(ip);
             }
-            return fullCommand.toString();
+            return cmdId;
         } catch (JsonSyntaxException e) {
             logger.warn("Send command '{}' with parameters {} -> {} (Device: {}) gave error {}", command, params, ip,
                     Utils.getHex(deviceId), e.getMessage());
@@ -166,7 +166,7 @@ public class MiIoAsyncCommunication {
                     Utils.getHex(deviceId), e.getMessage());
             errorMsg = e.getMessage();
         } catch (JsonSyntaxException e) {
-            logger.warn("Could not parse '{}'  -> {} (Device: {}) gave error {}", decryptedResponse,
+            logger.warn("Could not parse '{}' <- {} (Device: {}) gave error {}", decryptedResponse,
                     miIoSendCommand.getCommandString(), Utils.getHex(deviceId), e.getMessage());
             errorMsg = "Received message is invalid JSON";
         }
@@ -244,6 +244,9 @@ public class MiIoAsyncCommunication {
                 sendPing(ip);
             }
             return "{\"error\":\"No Response\"}";
+        }
+        if (!miIoResponseMsg.isChecksumValid()) {
+            return "{\"error\":\"Message has invalid checksum\"}";
         }
         errorCounter = 0;
         if (!connected) {
@@ -383,5 +386,4 @@ public class MiIoAsyncCommunication {
     public int getQueueLenght() {
         return concurrentLinkedQueue.size();
     }
-
 }

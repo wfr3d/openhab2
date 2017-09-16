@@ -13,6 +13,7 @@ import static org.openhab.binding.miio.MiIoBindingConstants.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -66,6 +67,7 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
     protected MiIoAsyncCommunication miioCom;
     protected int lastId;
 
+    protected Map<Integer, String> cmds = new ConcurrentHashMap<Integer, String>();
     protected ExpiringCache<String> network;
     protected final long CACHE_EXPIRY = TimeUnit.SECONDS.toMillis(5);
     private final Logger logger = LoggerFactory.getLogger(MiIoAbstractHandler.class);
@@ -138,13 +140,13 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
         }
     }
 
-    protected String sendCommand(MiIoCommand command) {
+    protected int sendCommand(MiIoCommand command) {
         return sendCommand(command, "[]");
     }
 
-    protected String sendCommand(MiIoCommand command, String params) {
+    protected int sendCommand(MiIoCommand command, String params) {
         if (!hasConnection()) {
-            return null;
+            return 0;
         }
         try {
             return getConnection().queueCommand(command, params);
@@ -152,7 +154,7 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
             logger.debug("Command {} for {} failed (type: {}): {}", command.toString(), getThing().getUID(),
                     getThing().getThingTypeUID(), e.getLocalizedMessage());
         }
-        return null;
+        return 0;
     }
 
     /**
@@ -164,9 +166,9 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
      * @param command to be executed
      * @return vacuum response
      */
-    protected String sendCommand(String command) {
+    protected int sendCommand(String command) {
         if (!hasConnection()) {
-            return null;
+            return 0;
         }
         try {
             command = command.trim();
@@ -181,7 +183,7 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
         } catch (MiIoCryptoException | IOException e) {
             disconnected(e.getMessage());
         }
-        return null;
+        return 0;
     }
 
     protected boolean skipUpdate() {
@@ -315,7 +317,10 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
     protected void initalizeNetworkCache() {
         network = new ExpiringCache<String>(CACHE_EXPIRY * 120, () -> {
             try {
-                return sendCommand(MiIoCommand.MIIO_INFO);
+                int ret = sendCommand(MiIoCommand.MIIO_INFO);
+                if (ret != 0) {
+                    return "id:" + ret;
+                }
             } catch (Exception e) {
                 logger.debug("Error during network status refresh: {}", e.getMessage(), e);
             }
@@ -425,7 +430,7 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
                 response.getCommand(), response.getResult(), response.getResponse());
         if (response.isError()) {
             logger.debug("Error received: {}", response.getResponse().get("error"));
-            if (MiIoCommand.MIIO_INFO.equals(response.getCommand())) {
+            if (MiIoCommand.MIIO_INFO.equals(response.getCommand()) && network != null) {
                 network.invalidateValue();
             }
             return;
@@ -440,6 +445,10 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
                     break;
                 default:
                     break;
+            }
+            if (cmds.containsKey(response.getId())) {
+                updateState(CHANNEL_COMMAND, new StringType(response.getResponse().toString()));
+                cmds.remove(response.getId());
             }
         } catch (Exception e) {
             logger.debug("Error while handing message {}", response.getResponse(), e);
