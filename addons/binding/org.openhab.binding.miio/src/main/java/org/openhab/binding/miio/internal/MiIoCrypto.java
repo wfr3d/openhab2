@@ -8,6 +8,7 @@
  */
 package org.openhab.binding.miio.internal;
 
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
@@ -72,8 +73,8 @@ public class MiIoCrypto {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
             cipher.init(Cipher.DECRYPT_MODE, keySpec, vector);
-            byte[] encrypted = cipher.doFinal(cipherText);
-            return (encrypted);
+            byte[] crypted = cipher.doFinal(cipherText);
+            return (crypted);
         } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException
                 | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException e) {
             throw new MiIoCryptoException(e.getMessage());
@@ -90,7 +91,11 @@ public class MiIoCrypto {
             SecretKeySpec keySpec = new SecretKeySpec(new byte[32], "AES");
             cipher.init(Cipher.DECRYPT_MODE, keySpec);
             byte[] decrypted = cipher.doFinal(cipherText);
-            return new String(decrypted).trim();
+            try {
+                return new String(decrypted, "UTF-8").trim();
+            } catch (UnsupportedEncodingException e) {
+                return new String(decrypted).trim();
+            }
         } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException
                 | BadPaddingException e) {
             throw new MiIoCryptoException(e.getMessage());

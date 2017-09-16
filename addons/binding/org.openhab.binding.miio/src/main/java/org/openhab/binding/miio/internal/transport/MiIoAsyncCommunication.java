@@ -252,7 +252,7 @@ public class MiIoAsyncCommunication {
         if (!connected) {
             pingSuccess();
         }
-        String decryptedResponse = new String(MiIoCrypto.decrypt(miIoResponseMsg.getData(), token)).trim();
+        String decryptedResponse = new String(MiIoCrypto.decrypt(miIoResponseMsg.getData(), token), "UTF-8").trim();
         logger.trace("Received response from {}: {}", ip, decryptedResponse);
         return decryptedResponse;
     }
