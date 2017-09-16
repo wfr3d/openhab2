@@ -57,6 +57,7 @@ import com.google.gson.JsonSyntaxException;
  * @author Marcel Verpaalen - Initial contribution
  */
 public class MiIoBasicHandler extends MiIoAbstractHandler {
+    private static final int MAX_PROPERTIES = 5;
     private final Logger logger = LoggerFactory.getLogger(MiIoBasicHandler.class);
     private boolean hasChannelStructure;
 
@@ -158,24 +159,18 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
     }
 
     private boolean refreshProperties(MiIoBasicDevice device) {
-        // TODO horribly inefficient refresh with each time creation of the list etc.. for testing only
-        // build list of properties to be refreshed, do not refresh for unlinked channels
+        // TODO do not refresh for unlinked channels
         JsonArray getPropString = new JsonArray();
-        refreshList = new ArrayList<MiIoBasicChannel>();
-        for (MiIoBasicChannel miChannel : device.getDevice().getChannels()) {
-            if (miChannel.getRefresh()) {
-                refreshList.add(miChannel);
-                getPropString.add(miChannel.getProperty());
+        for (MiIoBasicChannel miChannel : refreshList) {
+            getPropString.add(miChannel.getProperty());
+            if (getPropString.size() >= MAX_PROPERTIES) {
+                try {
+                    miioCom.queueCommand(MiIoCommand.GET_PROPERTY, getPropString.toString());
+                } catch (MiIoCryptoException | IOException e) {
+                    logger.debug("Send refresh failed {}", e.getMessage(), e);
+                }
+                getPropString = new JsonArray();
             }
-        }
-
-        miioCom.registerListener(this); // this should not be needed
-
-        // get the data based on the datatype
-        try {
-            miioCom.queueCommand(MiIoCommand.GET_PROPERTY, getPropString.toString());
-        } catch (MiIoCryptoException | IOException e) {
-            logger.debug("Send refresh failed {}", e.getMessage(), e);
         }
         return true;
     }
@@ -203,6 +198,16 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
             } else {
                 hasChannelStructure = buildChannelStructure(configuration.model);
             }
+        }
+        if (hasChannelStructure) {
+            refreshList = new ArrayList<MiIoBasicChannel>();
+            for (MiIoBasicChannel miChannel : miioDevice.getDevice().getChannels()) {
+                if (miChannel.getRefresh()) {
+                    refreshList.add(miChannel);
+                }
+
+            }
+
         }
     }
 
@@ -293,6 +298,43 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
         return true;
     }
 
+    private MiIoBasicChannel getChannel(String parameter) {
+        for (MiIoBasicChannel refreshEntry : refreshList) {
+            if (refreshEntry.getProperty().equals(parameter)) {
+                return refreshEntry;
+            }
+        }
+        logger.trace("Did not find channel for {} in {}", parameter, refreshList);
+        return null;
+    }
+
+    void updateProperties(MiIoSendCommand response) {
+        JsonArray res = response.getResult().getAsJsonArray();
+        JsonArray para = parser.parse(response.getCommandString()).getAsJsonObject().get("params").getAsJsonArray();
+        for (int i = 0; i < para.size(); i++) {
+            MiIoBasicChannel basicChannel = getChannel(para.get(i).getAsString());
+            if (basicChannel != null) {
+                logger.debug("Update {} to {}", para.get(i).getAsString(), res.get(i));
+                // TODO add mapping to JSON database and apply here
+                try {
+                    if (basicChannel.getType().equals("Number")) {
+                        updateState(basicChannel.getChannel(), new DecimalType(res.get(i).getAsBigDecimal()));
+                    }
+                    if (basicChannel.getType().equals("String")) {
+                        updateState(basicChannel.getChannel(), new StringType(res.get(i).getAsString()));
+                    }
+                    if (basicChannel.getType().equals("Switch")) {
+                        updateState(basicChannel.getChannel(),
+                                res.get(i).getAsString().toLowerCase().equals("on") ? OnOffType.ON : OnOffType.OFF);
+                    }
+                } catch (Exception e) {
+                    logger.debug("Error updating propery {} with '{}' : {}", basicChannel.getChannel(),
+                            res.get(i).getAsString(), e.getMessage());
+                }
+            }
+        }
+    }
+
     @Override
     public void onMessageReceived(MiIoSendCommand response) {
         super.onMessageReceived(response);
@@ -305,28 +347,7 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
                     break;
                 case GET_PROPERTY:
                     if (response.getResult().isJsonArray()) {
-                        JsonArray res = response.getResult().getAsJsonArray();
-                        // update the states
-                        for (int i = 0; i < refreshList.size(); i++) {
-                            try {
-                                if (refreshList.get(i).getType().equals("Number")) {
-                                    updateState(refreshList.get(i).getChannel(),
-                                            new DecimalType(res.get(i).getAsBigDecimal()));
-                                }
-                                if (refreshList.get(i).getType().equals("String")) {
-                                    updateState(refreshList.get(i).getChannel(),
-                                            new StringType(res.get(i).getAsString()));
-                                }
-                                if (refreshList.get(i).getType().equals("Switch")) {
-                                    updateState(refreshList.get(i).getChannel(),
-                                            res.get(i).getAsString().toLowerCase().equals("on") ? OnOffType.ON
-                                                    : OnOffType.OFF);
-                                }
-                            } catch (Exception e) {
-                                logger.debug("Error updating propery {} with '{}' : {}",
-                                        refreshList.get(i).getChannel(), res.get(i).getAsString(), e.getMessage());
-                            }
-                        }
+                        updateProperties(response);
                     }
                     break;
                 case UNKNOWN:
