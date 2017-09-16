@@ -192,7 +192,7 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
             return true;
         }
         if (getThing().getStatusInfo().getStatusDetail().equals(ThingStatusDetail.CONFIGURATION_ERROR)) {
-            logger.debug("Skipping periodic update for '{}'. Thing Status", getThing().getUID().toString(),
+            logger.debug("Skipping periodic update for '{}'. Thing Status {}", getThing().getUID().toString(),
                     getThing().getStatusInfo().getStatusDetail());
             try {
                 miioCom.queueCommand(MiIoCommand.MIIO_INFO);
