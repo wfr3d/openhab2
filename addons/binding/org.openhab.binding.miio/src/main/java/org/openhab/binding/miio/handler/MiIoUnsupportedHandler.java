@@ -12,12 +12,10 @@ import static org.openhab.binding.miio.MiIoBindingConstants.*;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.library.types.OnOffType;
-import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.RefreshType;
-import org.openhab.binding.miio.internal.MiIoSendCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +48,7 @@ public class MiIoUnsupportedHandler extends MiIoAbstractHandler {
             }
         }
         if (channelUID.getId().equals(CHANNEL_COMMAND)) {
-            updateState(CHANNEL_COMMAND, new StringType(sendCommand(command.toString())));
+            cmds.put(sendCommand(command.toString()), command.toString());
         }
         if (channelUID.getId().equals(CHANNEL_TESTCOMMANDS)) {
             executeExperimentalCommands();
@@ -110,25 +108,6 @@ public class MiIoUnsupportedHandler extends MiIoAbstractHandler {
         } catch (Exception e) {
             logger.debug("Error while updating '{}' ({})", getThing().getUID().toString(), getThing().getThingTypeUID(),
                     e);
-        }
-    }
-
-    @Override
-    public void onMessageReceived(MiIoSendCommand response) {
-        super.onMessageReceived(response);
-        if (response.isError()) {
-            return;
-        }
-        try {
-            switch (response.getCommand()) {
-                case UNKNOWN:
-                    updateState(CHANNEL_COMMAND, new StringType(response.getResponse().toString()));
-                    break;
-                default:
-                    break;
-            }
-        } catch (Exception e) {
-            logger.debug("Error while handing message {}", response.getResponse(), e);
         }
     }
 }

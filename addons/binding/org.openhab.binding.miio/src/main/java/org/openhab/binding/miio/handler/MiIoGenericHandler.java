@@ -11,7 +11,6 @@ package org.openhab.binding.miio.handler;
 import static org.openhab.binding.miio.MiIoBindingConstants.CHANNEL_COMMAND;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.types.Command;
@@ -41,7 +40,7 @@ public class MiIoGenericHandler extends MiIoAbstractHandler {
             return;
         }
         if (channelUID.getId().equals(CHANNEL_COMMAND)) {
-            updateState(CHANNEL_COMMAND, new StringType(sendCommand(command.toString())));
+            cmds.put(sendCommand(command.toString()), command.toString());
         }
     }
 

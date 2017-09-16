@@ -98,8 +98,7 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
             return;
         }
         if (channelUID.getId().equals(CHANNEL_COMMAND)) {
-            sendCommand(command.toString());
-            // updateState(CHANNEL_COMMAND, new StringType(sendCommand(command.toString())));
+            cmds.put(sendCommand(command.toString()), command.toString());
         }
         // TODO cleanup debug stuff & add handling types
         logger.debug("Locating action for channel {}:{}", channelUID.getId(), command);
@@ -192,12 +191,6 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
             logger.debug("ping {} failed", configuration.host);
         }
         return true;
-    }
-
-    private void checkDeviceType() {
-        if (!isIdentified) {
-            defineDeviceType();
-        }
     }
 
     /**
@@ -309,10 +302,6 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
         try {
             switch (response.getCommand()) {
                 case MIIO_INFO:
-                    // if (!isIdentified) {
-                    // defineDeviceType(getJsonResultHelper(response.getResponse().toString()));
-                    // }
-                    // updateNetwork(response.getResult().getAsJsonObject());
                     break;
                 case GET_PROPERTY:
                     if (response.getResult().isJsonArray()) {
