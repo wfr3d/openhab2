@@ -118,15 +118,6 @@
         "refresh": true,
         "ChannelGroup": "Status",
         "actions": []
-      },
-      {
-        "property": "temp_dec",
-        "friendlyName": "Temperature",
-        "channel": "temperature",
-        "type": "Number",
-        "refresh": true,
-        "ChannelGroup": "Status",
-        "actions": []
       }
     ]
   }
