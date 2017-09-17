@@ -314,7 +314,6 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
         for (int i = 0; i < para.size(); i++) {
             MiIoBasicChannel basicChannel = getChannel(para.get(i).getAsString());
             if (basicChannel != null) {
-                logger.debug("Update {} to {}", para.get(i).getAsString(), res.get(i));
                 // TODO add mapping to JSON database and apply here
                 try {
                     if (basicChannel.getType().equals("Number")) {
