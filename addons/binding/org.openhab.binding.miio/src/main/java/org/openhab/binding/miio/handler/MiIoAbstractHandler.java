@@ -94,7 +94,13 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
         scheduler.schedule(this::initializeData, 0, TimeUnit.SECONDS);
         int pollingPeriod = configuration.refreshInterval;
         if (pollingPeriod > 0) {
-            pollingJob = scheduler.scheduleWithFixedDelay(this::updateData, 5, pollingPeriod, TimeUnit.SECONDS);
+            pollingJob = scheduler.scheduleWithFixedDelay(() -> {
+                try {
+                    updateData();
+                } catch (Exception e) {
+                    logger.debug("Unexpected error during refresh.", e);
+                }
+            }, 5, pollingPeriod, TimeUnit.SECONDS);
             logger.debug("Polling job scheduled to run every {} sec. for '{}'", pollingPeriod, getThing().getUID());
         } else {
             logger.debug("Polling job disabled. for '{}'", getThing().getUID());
