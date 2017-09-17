@@ -312,7 +312,15 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
     void updateProperties(MiIoSendCommand response) {
         JsonArray res = response.getResult().getAsJsonArray();
         JsonArray para = parser.parse(response.getCommandString()).getAsJsonObject().get("params").getAsJsonArray();
+        if (res.size() != para.size()) {
+            logger.debug("Unexpected size different. Request size {},  response size {}. (Req: {}, Resp:{})",
+                    para.size(), res.size(), para.toString(), res.toString());
+        }
         for (int i = 0; i < para.size(); i++) {
+            if (res.get(i).isJsonNull()) {
+                logger.debug("Property '{}' returned null (is it supported?).", para.get(i).getAsString());
+                continue;
+            }
             MiIoBasicChannel basicChannel = getChannel(para.get(i).getAsString());
             if (basicChannel != null) {
                 // TODO add mapping to JSON database and apply here
@@ -331,6 +339,8 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
                     logger.debug("Error updating propery {} with '{}' : {}", basicChannel.getChannel(),
                             res.get(i).getAsString(), e.getMessage());
                 }
+            } else {
+                logger.debug("Channel not found for {}", para.get(i).getAsString());
             }
         }
     }
