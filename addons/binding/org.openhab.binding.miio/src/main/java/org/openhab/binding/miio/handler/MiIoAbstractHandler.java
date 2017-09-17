@@ -178,7 +178,7 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
         }
         try {
             command = command.trim();
-            String param = "";
+            String param = "[]";
             int loc = command.indexOf("[");
             loc = (loc > 0 ? loc : command.indexOf("{"));
             if (loc > 0) {
