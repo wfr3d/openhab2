@@ -75,6 +75,8 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
     public void initialize() {
         super.initialize();
         hasChannelStructure = false;
+        isIdentified = false;
+        refreshList = new ArrayList<MiIoBasicChannel>();
     }
 
     @Override
@@ -139,14 +141,13 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
             return;
         }
         logger.debug("Periodic update for '{}' ({})", getThing().getUID().toString(), getThing().getThingTypeUID());
-
-        checkChannelStructure();
         try {
             miioCom.sendPing(configuration.host);
         } catch (Exception e) {
             // ignore
         }
         try {
+            checkChannelStructure();
             if (!isIdentified) {
                 miioCom.queueCommand(MiIoCommand.MIIO_INFO);
             }
@@ -348,9 +349,6 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
                     if (response.getResult().isJsonArray()) {
                         updateProperties(response);
                     }
-                    break;
-                case UNKNOWN:
-                    updateState(CHANNEL_COMMAND, new StringType(response.getResponse().toString()));
                     break;
                 default:
                     break;
