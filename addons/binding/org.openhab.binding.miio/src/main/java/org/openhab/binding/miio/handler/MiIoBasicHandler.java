@@ -165,15 +165,20 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
         for (MiIoBasicChannel miChannel : refreshList) {
             getPropString.add(miChannel.getProperty());
             if (getPropString.size() >= MAX_PROPERTIES) {
-                try {
-                    miioCom.queueCommand(MiIoCommand.GET_PROPERTY, getPropString.toString());
-                } catch (MiIoCryptoException | IOException e) {
-                    logger.debug("Send refresh failed {}", e.getMessage(), e);
-                }
+                sendRefreshProperties(getPropString);
                 getPropString = new JsonArray();
             }
         }
+        sendRefreshProperties(getPropString);
         return true;
+    }
+
+    private void sendRefreshProperties(JsonArray getPropString) {
+        try {
+            miioCom.queueCommand(MiIoCommand.GET_PROPERTY, getPropString.toString());
+        } catch (MiIoCryptoException | IOException e) {
+            logger.debug("Send refresh failed {}", e.getMessage(), e);
+        }
     }
 
     @Override
