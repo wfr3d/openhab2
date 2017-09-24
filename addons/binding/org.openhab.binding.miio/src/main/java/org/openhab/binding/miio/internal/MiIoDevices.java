@@ -30,7 +30,7 @@ public enum MiIoDevices {
     POWERPLUG1("chuangmi.plug.v1", "Mi Power-plug v1", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     POWERPLUG2("chuangmi.plug.v2", "Mi Power-plug v2", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     POWERSTRIP("qmi.powerstrip.v1", "Mi Power-strip v1", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
-    POWERSTRIP2("zimi.powerstrip.v2", "Mi Power-strip v2", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
+    POWERSTRIP2("zimi.powerstrip.v2", "Mi Power-strip v2", MiIoBindingConstants.THING_TYPE_BASIC),
     GATEWAY1("lumi.gateway.v1", "Mi Smart Home Gateway 1", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     GATEWAY2("lumi.gateway.v2", "Mi Smart Home Gateway 2", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     GATEWAY3("lumi.gateway.v3", "Mi Smart Home Gateway 3", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),

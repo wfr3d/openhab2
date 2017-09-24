@@ -49,6 +49,16 @@
 		<item-type>String</item-type>
 		<label>Mode</label>
 	</channel-type>
+	<channel-type id="modeGreen">
+		<item-type>String</item-type>
+		<label>Mode</label>
+		<state>
+			<options>
+				<option value="green">Green</option>
+				<option value="normal">Normal</option>
+			</options>
+		</state>
+	</channel-type>
 	<channel-type id="brightness">
 		<item-type>Number</item-type>
 		<label>Brightness</label>
@@ -83,15 +93,15 @@
 		<label>Air Quality Index</label>
 		<state readOnly="true" />
 	</channel-type>
-    <channel-type id="filtermaxlive">
-        <item-type>Number</item-type>
-        <label>Filter Max Life</label>
-        <state readOnly="true" />
-    </channel-type>
-    <channel-type id="filterlive">
-        <item-type>Number</item-type>
-        <label>Filter Life</label>
-        <state readOnly="true" />
-    </channel-type>
+	<channel-type id="filtermaxlive">
+		<item-type>Number</item-type>
+		<label>Filter Max Life</label>
+		<state readOnly="true" />
+	</channel-type>
+	<channel-type id="filterlive">
+		<item-type>Number</item-type>
+		<label>Filter Life</label>
+		<state readOnly="true" />
+	</channel-type>
 
 </thing:thing-descriptions>
