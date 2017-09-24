@@ -1,0 +1,37 @@
+{
+	"deviceMapping": {
+		"id": [
+			"zimi.powerstrip.v2"
+		],
+		"channels": [
+			{
+				"property": "power",
+				"friendlyName": "Power",
+				"channel": "power",
+				"type": "Switch",
+				"refresh": true,
+				"ChannelGroup": "",
+				"actions": [
+					{
+						"command": "set_power",
+						"parameterType": "ONOFF"
+					}
+				]
+			},
+			{
+                "property": "mode",
+                "friendlyName": "Mode",
+                "channel": "modeGreen",
+                "type": "String",
+                "refresh": true,
+                "ChannelGroup": "",
+                "actions": [
+                    {
+                        "command": "set_power_mode",
+                        "parameterType": "String"
+                    }
+                ]
+            }
+		]
+	}
+}
