@@ -84,7 +84,8 @@ public class MiIoUnsupportedHandler extends MiIoAbstractHandler {
             case AIR_PURIFIER6:
                 testCommands = new String[] { "miIO.info", "set_power[\"on\"]", "set_power[\"off\"]",
                         "get_prop[\"power\", \"mode\", \"temperature\", \"humidity\", \"aqi\"]", "set_mode[\"auto\"]",
-                        "led", "favoriteLevel", "ledBrightness" };
+                        "led", "favoriteLevel", "ledBrightness",
+                        "get_prop[\"power\",\"mode\",\"favorite_level\",\"temp_dec\",\"humidity\",\"aqi\",\"bright\",\"filter1_life\",\"f1_hour_used\",\"use_time\",\"led\",\"led_b\",\"buzzer\"]" };
                 break;
 
             default:
