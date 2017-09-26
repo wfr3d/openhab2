@@ -103,5 +103,14 @@
 		<label>Filter Life</label>
 		<state readOnly="true" />
 	</channel-type>
-
+	<channel-type id="current">
+		<item-type>Number</item-type>
+		<label>Current</label>
+        <state pattern="%.2fA" readOnly="true" />
+	</channel-type>
+	<channel-type id="powerUsage">
+		<item-type>Number</item-type>
+		<label>Power Usage</label>
+        <state pattern="%.0fW" readOnly="true" />
+	</channel-type>
 </thing:thing-descriptions>
