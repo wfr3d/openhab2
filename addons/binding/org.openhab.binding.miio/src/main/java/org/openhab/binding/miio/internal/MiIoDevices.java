@@ -41,7 +41,7 @@ public enum MiIoDevices {
     YEELIGHT_CEIL1("yeelink.light.ceiling1", "Yeelight LED Ceiling Lamp", MiIoBindingConstants.THING_TYPE_BASIC),
     YEELIGHT_CEIL2("yeelink.light.ceiling2", "Yeelight LED Ceiling Lamp v2",
             MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
-    YEELIGHT_CEIL3("yeelink.light.ceiling3", "Yeelight LED Ceiling Lamp v33",
+    YEELIGHT_CEIL3("yeelink.light.ceiling3", "Yeelight LED Ceiling Lamp v3",
             MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     YEELIGHT_BS("yeelink.light.bslamp1", "Yeelight Lamp", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     YEELIGHT_STRIP("yeelink.light.strip1", "Yeelight Strip", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
