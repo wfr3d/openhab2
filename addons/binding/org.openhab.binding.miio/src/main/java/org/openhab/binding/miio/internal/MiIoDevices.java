@@ -26,7 +26,7 @@ public enum MiIoDevices {
     HUMIDIFIER("zhimi.humidifier.v1", "Mi Humdifier", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     AIRMONITOR1("zhimi.airmonitor.v1", "Mi Air Monitor v1", MiIoBindingConstants.THING_TYPE_BASIC),
     WATER_PURIFIER2("yunmi.waterpuri.v2", "Mi Water Purifier v2", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
-    POWERPLUG("chuangmi.plug.m1", "Mi Power-plug", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
+    POWERPLUG("chuangmi.plug.m1", "Mi Power-plug", MiIoBindingConstants.THING_TYPE_BASIC),
     POWERPLUG1("chuangmi.plug.v1", "Mi Power-plug v1", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     POWERPLUG2("chuangmi.plug.v2", "Mi Power-plug v2", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     POWERSTRIP("qmi.powerstrip.v1", "Mi Power-strip v1", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
