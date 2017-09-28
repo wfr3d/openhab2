@@ -248,7 +248,11 @@ public class MiIoAsyncCommunication {
         if (!miIoResponseMsg.isChecksumValid()) {
             return "{\"error\":\"Message has invalid checksum\"}";
         }
-        errorCounter = 0;
+        if (errorCounter > 0) {
+            errorCounter = 0;
+            status = ThingStatusDetail.NONE;
+            updateStatus(ThingStatus.ONLINE, status);
+        }
         if (!connected) {
             pingSuccess();
         }
