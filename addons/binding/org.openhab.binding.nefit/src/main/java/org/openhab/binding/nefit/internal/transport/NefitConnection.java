@@ -1,9 +1,14 @@
 package org.openhab.binding.nefit.internal.transport;
 
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import org.jivesoftware.smack.SmackException.NotConnectedException;
 import org.jivesoftware.smack.chat2.Chat;
@@ -49,6 +54,7 @@ public class NefitConnection {
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
             logger.trace("Error generating key {}", e.getMessage(), e);
         }
+        Utils.fixKeyLength();
     }
 
     /**
@@ -77,20 +83,13 @@ public class NefitConnection {
         try {
             XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder().setHost(HOST)
                     .setXmppDomain(HOST).setUsernameAndPassword(jid, password).build();
-
             connection = new XMPPTCPConnection(config);
-            // Stanza stanza = new Stanza();
-            logger.debug("Start Connection to XMPP as '{}' has been established. Is secure/encrypted: {}", username,
-                    password);
 
+            logger.trace("Start XMPP Connection as '{}' to {}.", username, config.getXMPPServiceDomain());
             connection.connect();
-            logger.debug("Connection to XMPP as '{}' has been established. Is secure/encrypted: {}",
-                    connection.isSecureConnection());
-
             connection.login();
-
-            logger.debug("Connection to XMPP as '{}' has been established. Is secure/encrypted: {}",
-                    connection.getUser(), connection.getUsedSaslMechansism());
+            logger.debug("XMPP Connection as '{}' has been established. Is connection secure/encrypted: {}",
+                    connection.getUser(), connection.isSecureConnection());
 
             Presence presence = new Presence(Type.available);
             connection.sendStanza(presence);
@@ -151,8 +150,20 @@ public class NefitConnection {
     public void send(String cmd, String para) {
         try {
             Message newMessage = new Message();
-            newMessage.setBody("GET " + cmd + " HTTP/1.1\rUser-Agent: NefitEasy\r\r");
+            if (para.isEmpty()) {
+                newMessage.setBody("GET " + cmd + " HTTP/1.1\rUser-Agent: NefitEasy\r\r");
+            } else {
+                String paraEncr = NefitCrypto.encrypt(key, para);
+                String body = "PUT " + cmd + " HTTP/1.1\rContent-Type: application/json\rContent-Length: "
+                        + paraEncr.length() + "\rUser-Agent: NefitEasy\r\r" + paraEncr;
+                logger.debug("Sending : {}", body);
+                newMessage.setBody(body);
+            }
             chat.send(newMessage);
+        } catch (InvalidKeyException | UnsupportedEncodingException | IllegalBlockSizeException | BadPaddingException
+                | NoSuchAlgorithmException | NoSuchPaddingException e) {
+            logger.debug("Error encrypting while sending command {}: {}", cmd, e.getMessage(), e);
+
         } catch (NotConnectedException | InterruptedException e) {
             logger.debug("Error while sending command {}: {}", cmd, e.getMessage(), e);
         }

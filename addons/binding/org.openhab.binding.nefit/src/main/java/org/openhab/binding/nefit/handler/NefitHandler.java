@@ -14,6 +14,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.smarthome.core.library.types.DecimalType;
+import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -43,11 +44,9 @@ import com.google.gson.JsonArray;
  */
 public class NefitHandler extends BaseThingHandler implements NefitMessageListener {
 
-    private String host;
-    long port;
     Logger logger = LoggerFactory.getLogger(NefitHandler.class);
     private ScheduledFuture<?> pollingJob;
-    private NefitConnection con;
+    private NefitConnection connection;
 
     public NefitHandler(Thing thing) {
         super(thing);
@@ -58,9 +57,24 @@ public class NefitHandler extends BaseThingHandler implements NefitMessageListen
         if (command == RefreshType.REFRESH) {
             logger.debug("Refreshing {}", channelUID);
             updateData();
-        } else {
-            logger.warn("This binding is a read-only binding and cannot handle commands");
+            return;
         }
+
+        switch (channelUID.getId()) {
+            case CHANNEL_MODE:
+                logger.debug("update mode to {} ", command);
+                connection.send("/heatingCircuits/hc1/usermode", "{ \"value\" : \"" + command.toString() + "\"}");
+                break;
+            default:
+                logger.debug("Channel {} updates not implemented", channelUID);
+
+        }
+
+        /*
+         * "/heatingCircuits/hc1/temperatureRoomManual" , command),
+         * "/heatingCircuits/hc1/manualTempOverride/status", value : "on"
+         * "/heatingCircuits/hc1/manualTempOverride/temperature', command
+         */
     }
 
     @Override
@@ -68,19 +82,18 @@ public class NefitHandler extends BaseThingHandler implements NefitMessageListen
         logger.debug("Initializing nefit handler '{}'", getThing().getUID());
 
         NefitBindingConfiguration config = getConfigAs(NefitBindingConfiguration.class);
-
         int pollingPeriod = config.refreshInterval;
+        connection = new NefitConnection(config.serialNumber, config.accessKey, config.password);
+        connection.registerListener(this);
 
-        updateProperty(Thing.PROPERTY_VENDOR, "nefit");
-
-        con = new NefitConnection(config.serialNumber, config.accessKey, config.password);
-        con.registerListener(this);
-        pollingJob = scheduler.scheduleWithFixedDelay(new Runnable() {
-            @Override
-            public void run() {
-                updateData();
-            }
-        }, 0, pollingPeriod, TimeUnit.SECONDS);
+        if (pollingPeriod > 0) {
+            pollingJob = scheduler.scheduleWithFixedDelay(new Runnable() {
+                @Override
+                public void run() {
+                    updateData();
+                }
+            }, 0, pollingPeriod, TimeUnit.SECONDS);
+        }
         logger.debug("Polling job scheduled to run every {} sec. for '{}'", pollingPeriod, getThing().getUID());
         updateStatus(ThingStatus.OFFLINE);
     }
@@ -96,9 +109,9 @@ public class NefitHandler extends BaseThingHandler implements NefitMessageListen
 
     private synchronized void updateData() {
         logger.debug("Update Nefit Easy data '{}'", getThing().getUID());
-        con.send(OutdoorTemp.ENDPOINT, "");
+        connection.send(OutdoorTemp.ENDPOINT, "");
         scheduler.schedule(() -> {
-            con.send(Status.ENDPOINT, "");
+            connection.send(Status.ENDPOINT, "");
         }, 10, TimeUnit.SECONDS);
     }
 
@@ -106,10 +119,10 @@ public class NefitHandler extends BaseThingHandler implements NefitMessageListen
     public void onDataReceived(String message) {
         updateStatus(ThingStatus.ONLINE);
 
-        logger.info("received message: {}", message);
+        logger.debug("received message: {}", message);
 
         MessageParser parser = new HeaderParser(message);
-        logger.info("received id: {}", parser.getId());
+        logger.trace("received id: {}", parser.getId());
 
         switch (parser.getId()) {
             case OutdoorTemp.ENDPOINT:
@@ -118,6 +131,7 @@ public class NefitHandler extends BaseThingHandler implements NefitMessageListen
             case Status.ENDPOINT:
                 updateState(CHANNEL_ROOM_TEMP, new DecimalType(new Status(message).getTemperature()));
                 updateState(CHANNEL_SET_TEMP, new DecimalType(new Status(message).getsetPointTemperature()));
+                updateState(CHANNEL_MODE, new StringType(new Status(message).getUserMode()));
                 break;
             default:
                 logger.debug("Parsing {} not implemented", parser.getId());

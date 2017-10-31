@@ -29,17 +29,30 @@ public class NefitCrypto {
         return m.digest(source);
     }
 
-    public static String decrypt(byte[] key, String cipherText)
+    public static String encrypt(byte[] key, String chipherText)
             throws UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException,
             NoSuchAlgorithmException, NoSuchPaddingException {
-        byte[] encrypted = Base64.getDecoder().decode(cipherText);
+        byte[] chipherTextPadded = new byte[chipherText.length() + (16 - chipherText.length() % 16)];
+        System.arraycopy(chipherText.getBytes(), 0, chipherTextPadded, 0, chipherText.length());
+        SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
+        Cipher cipher = Cipher.getInstance(ENCRYPTION_TRANSFORMATION);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+        return Base64.getEncoder().encodeToString(cipher.doFinal(chipherTextPadded));
+    }
+
+    public static String decrypt(byte[] key, String cipher64)
+            throws UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException,
+            NoSuchAlgorithmException, NoSuchPaddingException {
+        byte[] chipherText = Base64.getDecoder().decode(cipher64);
         SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
         Cipher cipher = Cipher.getInstance(ENCRYPTION_TRANSFORMATION);
         cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
-        System.arraycopy(encrypted, 0, new byte[(encrypted.length + (8 - (encrypted.length % 8)))], 0,
-                encrypted.length);
-        return new String(cipher.doFinal(encrypted), "UTF-8").trim();
-
+        if (chipherText.length % 8 != 0) {
+            byte[] chipherTextPadded = new byte[(chipherText.length + (8 - (chipherText.length % 8)))];
+            System.arraycopy(chipherText, 0, chipherTextPadded, 0, chipherText.length);
+            chipherText = chipherTextPadded;
+        }
+        return new String(cipher.doFinal(chipherText), "UTF-8").trim();
     }
 
     public static String decrypt(String id, String pwd, String cipherText) throws Exception {

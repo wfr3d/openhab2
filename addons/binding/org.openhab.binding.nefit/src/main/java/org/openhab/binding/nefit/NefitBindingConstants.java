@@ -32,5 +32,6 @@ public class NefitBindingConstants {
     public final static String CHANNEL_SET_TEMP = "settemperature";
     public final static String CHANNEL_ROOM_TEMP = "temperature";
     public final static String CHANNEL_OUTDOOR_TEMP = "outdoortemperature";
+    public final static String CHANNEL_MODE = "mode";
 
 }

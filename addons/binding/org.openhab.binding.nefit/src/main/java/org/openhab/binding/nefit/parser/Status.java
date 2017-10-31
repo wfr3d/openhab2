@@ -95,6 +95,10 @@ public class Status extends MessageParser {
         return setPointTemperature;
     }
 
+    public String getUserMode() {
+        return userMode;
+    }
+
     @Override
     public String toString() {
         return "room Temp:" + getTemperature();
