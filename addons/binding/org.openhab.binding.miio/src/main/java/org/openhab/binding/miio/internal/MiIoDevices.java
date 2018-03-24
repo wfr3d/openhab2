@@ -31,6 +31,8 @@ public enum MiIoDevices {
     AIR_PURIFIER_CA1("zhimi-humidifier-ca1", "Mi Air Purifier", MiIoBindingConstants.THING_TYPE_BASIC),
     AIR_PURIFIERM("zhimi.airpurifier.m1", "Mi Air Purifier 2 (mini)", MiIoBindingConstants.THING_TYPE_BASIC),
     AIR_PURIFIERM2("zhimi.airpurifier.m2", "Mi Air Purifier (mini)", MiIoBindingConstants.THING_TYPE_BASIC),
+    AIR_PURIFIERMA2("zhimi.airpurifier.ma2", "Mi Air Purifier 2S", MiIoBindingConstants.THING_TYPE_BASIC),
+
     CHUANGMI_IR2("chuangmi.ir.v2", "Mi Remote v2", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     COOKER1("chunmi.cooker.normal1", "MiJia Rice Cooker", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     COOKER2("chunmi.cooker.normal2", "MiJia Rice Cooker", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
@@ -47,8 +49,7 @@ public enum MiIoDevices {
     HUMIDIFIER("zhimi.humidifier.v1", "Mi Humdifier", MiIoBindingConstants.THING_TYPE_BASIC),
     LUMI_C11("lumi.ctrl_neutral1.v1", "Light Control (Wall Switch)", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     LUMI_C12("lumi.ctrl_neutral2.v1", "Light Control (Wall Switch)", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
-    PHILIPS_R1("philips.light.sread1", "Xiaomi Philips Eyecare Smart Lamp 2",
-            MiIoBindingConstants.THING_TYPE_BASIC),
+    PHILIPS_R1("philips.light.sread1", "Xiaomi Philips Eyecare Smart Lamp 2", MiIoBindingConstants.THING_TYPE_BASIC),
     PHILIPS_C("philips.light.ceiling", "Xiaomi Philips LED Ceiling Lamp", MiIoBindingConstants.THING_TYPE_BASIC),
     PHILIPS_C2("philips.light.zyceiling", "Xiaomi Philips LED Ceiling Lamp", MiIoBindingConstants.THING_TYPE_BASIC),
     PHILIPS_BULB("philips.light.bulb", "Xiaomi Philips Bulb", MiIoBindingConstants.THING_TYPE_BASIC),
