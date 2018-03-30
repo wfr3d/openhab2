@@ -95,8 +95,9 @@ public class MiIoDiscoveryParticipant implements MDNSDiscoveryParticipant {
                 return null;
             }
             String inetAddress = ip.toString().substring(1); // trim leading slash
-            String label = service.getName();
             String id = uid.getId();
+            String label = "Xiaomi Mi IO Device " + id + " (" + Long.parseUnsignedLong(id, 16) + ") "
+                    + service.getName();
             properties.put(PROPERTY_HOST_IP, inetAddress);
             properties.put(PROPERTY_DID, id);
             result = DiscoveryResultBuilder.create(uid).withProperties(properties).withRepresentationProperty(id)
