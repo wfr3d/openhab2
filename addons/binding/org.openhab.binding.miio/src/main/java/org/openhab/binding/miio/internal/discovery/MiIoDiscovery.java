@@ -16,6 +16,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -120,8 +121,7 @@ public class MiIoDiscovery extends AbstractDiscoveryService implements ExtendedD
         Message msg = new Message(response);
         String token = Utils.getHex(msg.getChecksum());
         String id = Utils.getHex(msg.getDeviceId());
-        String label = "Discovered Xiaomi Mi IO Device";
-
+        String label = "Xiaomi Mi IO Device " + id + " (" + Long.parseUnsignedLong(id, 16) + ")";
         ThingUID uid = new ThingUID(THING_TYPE_MIIO, id);
         // Test if the device is already known by specific ThingTypes. In that case don't use the generic thingType
         for (ThingTypeUID typeU : NONGENERIC_THING_TYPES_UIDS) {
@@ -142,7 +142,7 @@ public class MiIoDiscovery extends AbstractDiscoveryService implements ExtendedD
                 break;
             }
         }
-        logger.debug("Discovered Mi IO Device {} ({}) at {} as {}", id, Long.parseUnsignedLong(id, 32), ip, uid);
+        logger.debug("Discovered Mi IO Device {} ({}) at {} as {}", id, Long.parseUnsignedLong(id, 16), ip, uid);
         if (IGNORED_TOLKENS.contains(token)) {
             logger.debug(
                     "No token discovered for device {}. For options how to get the token, check the binding readme.",
@@ -172,6 +172,14 @@ public class MiIoDiscovery extends AbstractDiscoveryService implements ExtendedD
             logger.debug("Error getting socket for discovery: {}", e.getMessage(), e);
         }
         return null;
+    }
+
+    private void closeSocket() {
+        if (clientSocket == null) {
+            return;
+        }
+        clientSocket.close();
+        clientSocket = null;
     }
 
     /**
@@ -234,12 +242,7 @@ public class MiIoDiscovery extends AbstractDiscoveryService implements ExtendedD
      */
     private synchronized void stopReceiverThreat() {
         if (socketReceiveThread != null) {
-            try {
-                socketReceiveThread.interrupt();
-                socketReceiveThread.join(1000);
-            } catch (InterruptedException e) {
-                logger.debug("Waiting socketReceiveThread", e);
-            }
+            closeSocket();
             socketReceiveThread = null;
         }
     }
@@ -288,12 +291,10 @@ public class MiIoDiscovery extends AbstractDiscoveryService implements ExtendedD
                     }
                     responseIps.add(hostAddress);
                 }
+            } catch (SocketException e) {
+                logger.debug("Receiver thread received SocketException: {}", e.getMessage());
             } catch (IOException e) {
-                if (!isInterrupted()) {
-                    logger.error("Error while receiving", e);
-                } else {
-                    logger.trace("Receiver thread was interrupted");
-                }
+                logger.trace("Receiver thread was interrupted");
             }
             logger.debug("Receiver thread ended");
         }
