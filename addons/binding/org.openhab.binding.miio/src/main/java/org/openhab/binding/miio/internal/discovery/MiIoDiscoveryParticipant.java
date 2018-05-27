@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 /**
  * discovers Mi IO devices announced by mDNS
  *
- * @author Marcel Verpaalen
+ * @author Marcel Verpaalen - Initial contribution
  *
  */
 public class MiIoDiscoveryParticipant implements MDNSDiscoveryParticipant {

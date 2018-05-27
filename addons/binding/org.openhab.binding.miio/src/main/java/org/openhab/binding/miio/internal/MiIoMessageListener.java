@@ -15,7 +15,7 @@ import org.eclipse.smarthome.core.thing.ThingStatusDetail;
  * Interface for a listener on the {@link MiIoCommunication}.
  * Informs when a message is received.
  *
- * @author Marcel Verpaalen- Initial contribution
+ * @author Marcel Verpaalen - Initial contribution
  */
 public interface MiIoMessageListener {
     /**

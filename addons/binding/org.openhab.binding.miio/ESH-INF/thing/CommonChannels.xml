@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<thing:thing-descriptions bindingId="miio" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<thing:thing-descriptions bindingId="miio"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
@@ -222,10 +223,10 @@
 		<item-type>Number</item-type>
 		<label>Trans Level</label>
 	</channel-type>
-    <channel-type id="dry">
-        <item-type>Switch</item-type>
-        <label>Dry</label>
-    </channel-type>
+	<channel-type id="dry">
+		<item-type>Switch</item-type>
+		<label>Dry</label>
+	</channel-type>
 	<channel-type id="depth">
 		<item-type>Number</item-type>
 		<label>Depth</label>

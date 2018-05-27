@@ -22,7 +22,7 @@ import com.google.gson.JsonSyntaxException;
 /**
  * Utility class for common tasks within the Xiaomi vacuum binding.
  *
- * @author Marcel Verpaalen
+ * @author Marcel Verpaalen - Initial contribution
  *
  */
 

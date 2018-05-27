@@ -67,7 +67,7 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
 
     protected Map<Integer, String> cmds = new ConcurrentHashMap<Integer, String>();
     protected ExpiringCache<String> network;
-    protected final long CACHE_EXPIRY = TimeUnit.SECONDS.toMillis(5);
+    protected static final long CACHE_EXPIRY = TimeUnit.SECONDS.toMillis(5);
     private final Logger logger = LoggerFactory.getLogger(MiIoAbstractHandler.class);
 
     @NonNullByDefault
