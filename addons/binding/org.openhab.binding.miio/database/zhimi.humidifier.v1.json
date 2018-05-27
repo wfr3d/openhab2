@@ -1,7 +1,8 @@
 {
 	"deviceMapping": {
 		"id": [
-			"zhimi.humidifier.v1"
+			"zhimi.humidifier.v1",
+			"zhimi.humidifier.ca1"
 		],
 		"channels": [
 			{
