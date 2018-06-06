@@ -231,4 +231,44 @@
 		<item-type>Number</item-type>
 		<label>Depth</label>
 	</channel-type>
+	<channel-type id="angleEnable">
+		<item-type>Switch</item-type>
+		<label>Enable Angle</label>
+	</channel-type>
+	<channel-type id="angleEnable">
+		<item-type>Switch</item-type>
+		<label>Enable Angle</label>
+	</channel-type>
+	<channel-type id="angle">
+		<item-type>Number</item-type>
+		<label>Enable Angle</label>
+	</channel-type>
+	<channel-type id="move">
+		<item-type>String</item-type>
+		<label>Move</label>
+	</channel-type>
+	<channel-type id="poweroffTime">
+		<item-type>Number</item-type>
+		<label>Power Off Timer</label>
+	</channel-type>
+	<channel-type id="speed">
+		<item-type>Number</item-type>
+		<label>Speed Level</label>
+		<state pattern="%.0f" />
+	</channel-type>
+	<channel-type id="naturalLevel">
+		<item-type>Number</item-type>
+		<label>Natural Fan Level</label>
+		<state pattern="%.0f" />
+	</channel-type>
+	<channel-type id="acPower">
+		<item-type>Switch</item-type>
+		<label>AC Power</label>
+		<state readOnly="true" />
+	</channel-type>
+	<channel-type id="battery">
+		<item-type>Number</item-type>
+		<label>battery</label>
+		<state pattern="%.0f" />
+	</channel-type>
 </thing:thing-descriptions>
