@@ -30,23 +30,19 @@
 				"actions": [
 					{
 						"command": "set_angle_enable",
-						"parameterType": "NUMBER"
+						"parameterType": "ONOFF"
 					}
 				]
 			},
 			{
-				"property": "move",
-				"friendlyName": "Direction ",
-				"channel": "move",
-				"type": "String",
+				"property": "use_time",
+				"friendlyName": "Run Time",
+				"channel": "usedhours",
+				"type": "Number",
 				"refresh": true,
-				"ChannelGroup": "actions",
-				"actions": [
-					{
-						"command": "set_move",
-						"parameterType": "STRING"
-					}
-				]
+				"transformation": "SecondsToHours",
+				"ChannelGroup": "Status",
+				"actions": []
 			},
 			{
 				"property": "angle",
@@ -91,7 +87,7 @@
 				]
 			},
 			{
-				"property": "set_led_b",
+				"property": "led_b",
 				"friendlyName": "Led ",
 				"channel": "led_b",
 				"type": "Number",
@@ -120,8 +116,8 @@
 			},
 			{
 				"property": "speed_level",
-				"friendlyName": "Speed ",
-				"channel": "speed",
+				"friendlyName": "Speed Level",
+				"channel": "speedLevel",
 				"type": "Number",
 				"refresh": true,
 				"ChannelGroup": "actions",
@@ -133,8 +129,22 @@
 				]
 			},
 			{
+				"property": "speed",
+				"friendlyName": "Speed",
+				"channel": "speed",
+				"type": "Number",
+				"refresh": true,
+				"ChannelGroup": "actions",
+				"actions": [
+					{
+						"command": "set_speed",
+						"parameterType": "NUMBER"
+					}
+				]
+			},
+			{
 				"property": "natural_level",
-				"friendlyName": "Natural ",
+				"friendlyName": "Natural Level",
 				"channel": "naturalLevel",
 				"type": "Number",
 				"refresh": true,
@@ -175,6 +185,15 @@
 				"actions": []
 			},
 			{
+				"property": "bat_charge",
+				"friendlyName": "Battery Charge",
+				"channel": "mode",
+				"type": "String",
+				"refresh": true,
+				"ChannelGroup": "actions",
+				"actions": []
+			},
+			{
 				"property": "battery",
 				"friendlyName": "Battery",
 				"channel": "battery",
@@ -182,6 +201,20 @@
 				"refresh": true,
 				"ChannelGroup": "Status",
 				"actions": []
+			},
+			{
+				"property": "",
+				"friendlyName": "Move Direction ",
+				"channel": "move",
+				"type": "String",
+				"refresh": true,
+				"ChannelGroup": "actions",
+				"actions": [
+					{
+						"command": "set_move",
+						"parameterType": "STRING"
+					}
+				]
 			}
 		]
 	}

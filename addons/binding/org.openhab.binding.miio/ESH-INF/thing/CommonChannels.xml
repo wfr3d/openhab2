@@ -235,31 +235,40 @@
 		<item-type>Switch</item-type>
 		<label>Enable Angle</label>
 	</channel-type>
-	<channel-type id="angleEnable">
-		<item-type>Switch</item-type>
-		<label>Enable Angle</label>
-	</channel-type>
 	<channel-type id="angle">
 		<item-type>Number</item-type>
-		<label>Enable Angle</label>
+		<label>Angle</label>
+		<state min="0" max="360" step="1" pattern="%.0f" readOnly="false" />
 	</channel-type>
 	<channel-type id="move">
 		<item-type>String</item-type>
 		<label>Move</label>
+		<state>
+			<options>
+				<option value="left">left</option>
+				<option value="right">right</option>
+			</options>
+		</state>
 	</channel-type>
 	<channel-type id="poweroffTime">
 		<item-type>Number</item-type>
 		<label>Power Off Timer</label>
+		<state min="0" max="28800" step="1" pattern="%.0f" readOnly="false" />
 	</channel-type>
 	<channel-type id="speed">
 		<item-type>Number</item-type>
+		<label>Speed</label>
+		<state pattern="%.0f%%" readOnly="false" />
+	</channel-type>
+	<channel-type id="speedLevel">
+		<item-type>Number</item-type>
 		<label>Speed Level</label>
-		<state pattern="%.0f" />
+		<state min="0" max="99" step="1" pattern="%.0f%%" readOnly="false" />
 	</channel-type>
 	<channel-type id="naturalLevel">
 		<item-type>Number</item-type>
 		<label>Natural Fan Level</label>
-		<state pattern="%.0f" />
+		<state min="0" max="99" step="1" pattern="%.0f%%" readOnly="false" />
 	</channel-type>
 	<channel-type id="acPower">
 		<item-type>Switch</item-type>
@@ -269,6 +278,11 @@
 	<channel-type id="battery">
 		<item-type>Number</item-type>
 		<label>battery</label>
-		<state pattern="%.0f" />
+		<state pattern="%.0f" readOnly="true" />
+	</channel-type>
+	<channel-type id="bat_state">
+		<item-type>String</item-type>
+		<label>Battery State</label>
+		<state readOnly="true" />
 	</channel-type>
 </thing:thing-descriptions>
