@@ -380,7 +380,8 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
                     miDevice.getThingType().toString());
             return true;
         } else {
-            if (getThing().getThingTypeUID().equals(THING_TYPE_MIIO)) {
+            if (getThing().getThingTypeUID().equals(THING_TYPE_MIIO)
+                    || getThing().getThingTypeUID().equals(THING_TYPE_UNSUPPORTED)) {
                 changeType(model);
             } else {
                 logger.warn(

@@ -58,6 +58,7 @@ public enum MiIoDevices {
     PHILIPS_C("philips.light.ceiling", "Xiaomi Philips LED Ceiling Lamp", MiIoBindingConstants.THING_TYPE_BASIC),
     PHILIPS_C2("philips.light.zyceiling", "Xiaomi Philips LED Ceiling Lamp", MiIoBindingConstants.THING_TYPE_BASIC),
     PHILIPS_BULB("philips.light.bulb", "Xiaomi Philips Bulb", MiIoBindingConstants.THING_TYPE_BASIC),
+    PHILIPS_DOWN("philips.light.downlight", "Xiaomi Philips Downlight", MiIoBindingConstants.THING_TYPE_BASIC),
     POWERPLUG("chuangmi.plug.m1", "Mi Power-plug", MiIoBindingConstants.THING_TYPE_BASIC),
     POWERPLUG1("chuangmi.plug.v1", "Mi Power-plug v1", MiIoBindingConstants.THING_TYPE_BASIC),
     POWERPLUG2("chuangmi.plug.v2", "Mi Power-plug v2", MiIoBindingConstants.THING_TYPE_BASIC),
