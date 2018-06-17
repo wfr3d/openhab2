@@ -73,6 +73,7 @@ public enum MiIoDevices {
     WIFISPEAKER("xiaomi.wifispeaker.v1", "Mi Internet Speaker", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     YEELIGHT_BS("yeelink.light.bslamp1", "Yeelight Lamp", MiIoBindingConstants.THING_TYPE_BASIC),
     YEELIGHT_C1("yeelink.light.color1", "Yeelight Color Bulb", MiIoBindingConstants.THING_TYPE_BASIC),
+    YEELIGHT_C2("yeelink.light.color2", " Yeelight Color Bulb YLDP06YL 10W", MiIoBindingConstants.THING_TYPE_BASIC),
     YEELIGHT_CEIL1("yeelink.light.ceiling1", "Yeelight LED Ceiling Lamp", MiIoBindingConstants.THING_TYPE_BASIC),
     YEELIGHT_CEIL2("yeelink.light.ceiling2", "Yeelight LED Ceiling Lamp v2", MiIoBindingConstants.THING_TYPE_BASIC),
     YEELIGHT_CEIL3("yeelink.light.ceiling3", "Yeelight LED Ceiling Lamp v3", MiIoBindingConstants.THING_TYPE_BASIC),

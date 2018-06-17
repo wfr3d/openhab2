@@ -90,7 +90,7 @@ public class MiIoBasicChannel {
     }
 
     public Boolean getRefresh() {
-        return refresh;
+        return refresh && !property.isEmpty();
     }
 
     public void setRefresh(Boolean refresh) {

@@ -179,7 +179,7 @@
 				"property": "ac_power",
 				"friendlyName": "AC Power",
 				"channel": "acPower",
-				"type": "Switch",
+				"type": "String",
 				"refresh": true,
 				"ChannelGroup": "Status",
 				"actions": []
