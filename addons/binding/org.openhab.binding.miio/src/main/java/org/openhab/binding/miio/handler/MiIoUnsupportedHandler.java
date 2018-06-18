@@ -55,6 +55,8 @@ public class MiIoUnsupportedHandler extends MiIoAbstractHandler {
         }
     }
 
+    // TODO: In future version this ideally would test all known commands (e.g. from the database) and create/enable a
+    // channel if they appear to be supported
     private void executeExperimentalCommands() {
         String[] testCommands = new String[0];
         switch (miDevice) {
@@ -62,16 +64,9 @@ public class MiIoUnsupportedHandler extends MiIoAbstractHandler {
             case POWERPLUG2:
             case POWERSTRIP:
             case POWERSTRIP2:
-                testCommands = new String[] { "miIO.info", "set_power[\"on\"]", "set_power[\"off\"]",
-                        "get_prop[\"power\", \"temperature\", \"current\", \"mode\"]", "set_power_mode[\"green\"]",
-                        "set_power_mode[\"normal\"]", "set_power[on]", "set_power[off]", };
-                break;
             case YEELIGHT_C1:
             case YEELIGHT_L1:
             case YEELIGHT_M1:
-                testCommands = new String[] { "miIO.info", "set_power[\"on\"]", "set_power[\"off\"]",
-                        "get_prop[\"power\", \"bright\", \"ct\", \"rgb\"]", "set_bright[50, \"smooth\", 500]",
-                        "start_cf[ 4, 2, \"1000, 2, 2700, 100, 500, 1,255, 10, 5000, 7, 0,0, 500, 2, 5000, 1\"]" };
                 break;
             case VACUUM:
                 testCommands = new String[] { "miIO.info", "get_current_sound", "get_map_v1", "get_serial_number",
@@ -82,10 +77,6 @@ public class MiIoUnsupportedHandler extends MiIoAbstractHandler {
             case AIR_PURIFIER2:
             case AIR_PURIFIER3:
             case AIR_PURIFIER6:
-                testCommands = new String[] { "miIO.info", "set_power[\"on\"]", "set_power[\"off\"]",
-                        "get_prop[\"power\", \"mode\", \"temperature\", \"humidity\", \"aqi\"]", "set_mode[\"auto\"]",
-                        "led", "favoriteLevel", "ledBrightness",
-                        "get_prop[\"power\",\"mode\",\"favorite_level\",\"temp_dec\",\"humidity\",\"aqi\",\"bright\",\"filter1_life\",\"f1_hour_used\",\"use_time\",\"led\",\"led_b\",\"buzzer\"]" };
                 break;
 
             default:
