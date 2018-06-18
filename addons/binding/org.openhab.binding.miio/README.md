@@ -114,21 +114,21 @@ No binding configuration is required.
 
 ## Thing Configuration
 
-The binding needs ip address and token to be able to communicate. See discovery for details.
+Each Xiami device (thing) needs the IP address and token configured to be able to communicate. See discovery for details.
 Optional configuration is the refresh interval and the deviceID. Note that the deviceID is automatically retrieved when it is left blank.
-The configuration for model is automatically retreived from the device in normal operation. However, for devices that are unsupported, you may try to use a model from a similar device to experimentally use your device with the binding  
+The configuration for model is automatically retrieved from the device in normal operation. 
+However, for devices that are unsupported, you may override the value and try to use a model string from a similar device to experimentally use your device with the binding.
 
 
 ## Channels
 
-Depending on the device, different  channels are available.
+Depending on the device, different channels are available.
 
 note: the ADVANCED  `actions#commands` channel can be used to send commands that are not automated via the binding. This is available for all devices
 e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would enable a pre-configured timer. See https://github.com/marcelrv/XiaomiRobotVacuumProtocol for all known available commands.
 
 
-### Mi Air Monitor v1 (zhimi.airmonitor.v1 ) Channels
-
+### Mi Air Monitor v1 (zhimi.airmonitor.v1) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -137,29 +137,7 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | usb_state | Number | USB State | 
 
 
-### Mi Air Humidifier (zhimi.humidifier.v1 ) Channels
-
-
-| Channel | Type | Description |
-| ----- | ----- | -------------------------------- |
-| power | Switch | Power | 
-| mode | String | Mode | 
-| humidity | Number | Humidity | 
-| setHumidity | Number | Humidity Set | 
-| aqi | Number | Air Quality Index | 
-| translevel | Number | Trans_level | 
-| bright | Number | Led Brightness | 
-| buzzer | Switch | Buzzer Status | 
-| depth | Number | Depth | 
-| dry | Switch | Dry | 
-| usedhours | Number | Run Time | 
-| motorspeed | Number | Motor Speed | 
-| temperature | Number | Temperature | 
-| childlock | Switch | Child Lock | 
-
-
-### Mi Air Humidifier (zhimi.humidifier.ca1 ) Channels
-
+### Mi Air Humidifier (zhimi.humidifier.v1) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -179,8 +157,27 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | childlock | Switch | Child Lock | 
 
 
-### Mi Air Purifier v1 (zhimi.airpurifier.v1 ) Channels
+### Mi Air Humidifier (zhimi.humidifier.ca1) Channels
 
+| Channel | Type | Description |
+| ----- | ----- | -------------------------------- |
+| power | Switch | Power | 
+| mode | String | Mode | 
+| humidity | Number | Humidity | 
+| setHumidity | Number | Humidity Set | 
+| aqi | Number | Air Quality Index | 
+| translevel | Number | Trans_level | 
+| bright | Number | Led Brightness | 
+| buzzer | Switch | Buzzer Status | 
+| depth | Number | Depth | 
+| dry | Switch | Dry | 
+| usedhours | Number | Run Time | 
+| motorspeed | Number | Motor Speed | 
+| temperature | Number | Temperature | 
+| childlock | Switch | Child Lock | 
+
+
+### Mi Air Purifier v1 (zhimi.airpurifier.v1) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -202,31 +199,7 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | childlock | Switch | Child Lock | 
 
 
-### Mi Air Purifier v2 (zhimi.airpurifier.v2 ) Channels
-
-
-| Channel | Type | Description |
-| ----- | ----- | -------------------------------- |
-| power | Switch | Power | 
-| mode | String | Mode | 
-| humidity | Number | Humidity | 
-| aqi | Number | Air Quality Index | 
-| averageaqi | Number | Average Air Quality Index | 
-| led | Switch | Led Status | 
-| buzzer | Switch | Buzzer Status | 
-| filtermaxlife | Number | Filter Max Life | 
-| filterhours | Number | Filter Hours used | 
-| usedhours | Number | Run Time | 
-| motorspeed | Number | Motor Speed | 
-| filterlife | Number | Filter  Life | 
-| favoritelevel | Number | Favorite Level | 
-| temperature | Number | Temperature | 
-| purifyvolume | Number | Purivied Volume | 
-| childlock | Switch | Child Lock | 
-
-
-### Mi Air Purifier v3 (zhimi.airpurifier.v3 ) Channels
-
+### Mi Air Purifier v2 (zhimi.airpurifier.v2) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -248,8 +221,29 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | childlock | Switch | Child Lock | 
 
 
-### Mi Air Purifier Pro v6 (zhimi.airpurifier.v6 ) Channels
+### Mi Air Purifier v3 (zhimi.airpurifier.v3) Channels
 
+| Channel | Type | Description |
+| ----- | ----- | -------------------------------- |
+| power | Switch | Power | 
+| mode | String | Mode | 
+| humidity | Number | Humidity | 
+| aqi | Number | Air Quality Index | 
+| averageaqi | Number | Average Air Quality Index | 
+| led | Switch | Led Status | 
+| buzzer | Switch | Buzzer Status | 
+| filtermaxlife | Number | Filter Max Life | 
+| filterhours | Number | Filter Hours used | 
+| usedhours | Number | Run Time | 
+| motorspeed | Number | Motor Speed | 
+| filterlife | Number | Filter  Life | 
+| favoritelevel | Number | Favorite Level | 
+| temperature | Number | Temperature | 
+| purifyvolume | Number | Purivied Volume | 
+| childlock | Switch | Child Lock | 
+
+
+### Mi Air Purifier Pro v6 (zhimi.airpurifier.v6) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -271,31 +265,7 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | childlock | Switch | Child Lock | 
 
 
-### Mi Air Purifier 2 (mini) (zhimi.airpurifier.m1 ) Channels
-
-
-| Channel | Type | Description |
-| ----- | ----- | -------------------------------- |
-| power | Switch | Power | 
-| mode | String | Mode | 
-| humidity | Number | Humidity | 
-| aqi | Number | Air Quality Index | 
-| averageaqi | Number | Average Air Quality Index | 
-| led | Switch | Led Status | 
-| buzzer | Switch | Buzzer Status | 
-| filtermaxlife | Number | Filter Max Life | 
-| filterhours | Number | Filter Hours used | 
-| usedhours | Number | Run Time | 
-| motorspeed | Number | Motor Speed | 
-| filterlife | Number | Filter  Life | 
-| favoritelevel | Number | Favorite Level | 
-| temperature | Number | Temperature | 
-| purifyvolume | Number | Purivied Volume | 
-| childlock | Switch | Child Lock | 
-
-
-### Mi Air Purifier (mini) (zhimi.airpurifier.m2 ) Channels
-
+### Mi Air Purifier 2 (mini) (zhimi.airpurifier.m1) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -317,8 +287,29 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | childlock | Switch | Child Lock | 
 
 
-### Mi Air Purifier MS2 (zhimi.airpurifier.ma2 ) Channels
+### Mi Air Purifier (mini) (zhimi.airpurifier.m2) Channels
 
+| Channel | Type | Description |
+| ----- | ----- | -------------------------------- |
+| power | Switch | Power | 
+| mode | String | Mode | 
+| humidity | Number | Humidity | 
+| aqi | Number | Air Quality Index | 
+| averageaqi | Number | Average Air Quality Index | 
+| led | Switch | Led Status | 
+| buzzer | Switch | Buzzer Status | 
+| filtermaxlife | Number | Filter Max Life | 
+| filterhours | Number | Filter Hours used | 
+| usedhours | Number | Run Time | 
+| motorspeed | Number | Motor Speed | 
+| filterlife | Number | Filter  Life | 
+| favoritelevel | Number | Favorite Level | 
+| temperature | Number | Temperature | 
+| purifyvolume | Number | Purivied Volume | 
+| childlock | Switch | Child Lock | 
+
+
+### Mi Air Purifier MS2 (zhimi.airpurifier.ma2) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -340,8 +331,7 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | childlock | Switch | Child Lock | 
 
 
-### Mi Smart Fan (zhimi.fan.v1 ) Channels
-
+### Mi Smart Fan (zhimi.fan.v1) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -364,32 +354,7 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | move | String | Move Direction  | 
 
 
-### Mi Smart Fan (zhimi.fan.v2 ) Channels
-
-
-| Channel | Type | Description |
-| ----- | ----- | -------------------------------- |
-| power | Switch | Power | 
-| angleEnable | Switch | Rotation | 
-| usedhours | Number | Run Time | 
-| angle | Number | Angle  | 
-| poweroffTime | Number | Timer  | 
-| buzzer | Switch | Buzzer  | 
-| led_b | Number | Led  | 
-| child_lock | Switch | Child Lock  | 
-| speedLevel | Number | Speed Level | 
-| speed | Number | Speed | 
-| naturalLevel | Number | Natural Level | 
-| temp_dec | Number | Temperature | 
-| humidity | Number | Humidity | 
-| acPower | String | AC Power | 
-| mode | String | Battery Charge | 
-| battery | Number | Battery | 
-| move | String | Move Direction  | 
-
-
-### Mi Smart Pedestal Fan (zhimi.fan.v3 ) Channels
-
+### Mi Smart Fan (zhimi.fan.v2) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -412,8 +377,30 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | move | String | Move Direction  | 
 
 
-### Mi Humdifier (zhimi.humidifier.v1 ) Channels
+### Mi Smart Pedestal Fan (zhimi.fan.v3) Channels
 
+| Channel | Type | Description |
+| ----- | ----- | -------------------------------- |
+| power | Switch | Power | 
+| angleEnable | Switch | Rotation | 
+| usedhours | Number | Run Time | 
+| angle | Number | Angle  | 
+| poweroffTime | Number | Timer  | 
+| buzzer | Switch | Buzzer  | 
+| led_b | Number | Led  | 
+| child_lock | Switch | Child Lock  | 
+| speedLevel | Number | Speed Level | 
+| speed | Number | Speed | 
+| naturalLevel | Number | Natural Level | 
+| temp_dec | Number | Temperature | 
+| humidity | Number | Humidity | 
+| acPower | String | AC Power | 
+| mode | String | Battery Charge | 
+| battery | Number | Battery | 
+| move | String | Move Direction  | 
+
+
+### Mi Humdifier (zhimi.humidifier.v1) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -433,8 +420,7 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | childlock | Switch | Child Lock | 
 
 
-### Xiaomi Philips Eyecare Smart Lamp 2 (philips.light.sread1 ) Channels
-
+### Xiaomi Philips Eyecare Smart Lamp 2 (philips.light.sread1) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -446,21 +432,7 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | eyecare | Switch | Eyecare | 
 
 
-### Xiaomi Philips LED Ceiling Lamp (philips.light.ceiling ) Channels
-
-
-| Channel | Type | Description |
-| ----- | ----- | -------------------------------- |
-| power | Switch | Power | 
-| brightness | Number | Brightness | 
-| cct | Number | Correlated Color Temperature | 
-| scene | Number | Scene | 
-| switchscene | Switch | Switch Scene | 
-| toggle | Switch | Toggle | 
-
-
-### Xiaomi Philips LED Ceiling Lamp (philips.light.zyceiling ) Channels
-
+### Xiaomi Philips LED Ceiling Lamp (philips.light.ceiling) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -472,8 +444,7 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | toggle | Switch | Toggle | 
 
 
-### Xiaomi Philips Bulb (philips.light.bulb ) Channels
-
+### Xiaomi Philips LED Ceiling Lamp (philips.light.zyceiling) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -481,14 +452,11 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | brightness | Number | Brightness | 
 | cct | Number | Correlated Color Temperature | 
 | scene | Number | Scene | 
-| dv | Number | DV | 
 | switchscene | Switch | Switch Scene | 
-| delayoff | Switch | Delay Off | 
 | toggle | Switch | Toggle | 
 
 
-### Xiaomi Philips Downlight (philips.light.downlight ) Channels
-
+### Xiaomi Philips Bulb (philips.light.bulb) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -502,8 +470,21 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | toggle | Switch | Toggle | 
 
 
-### Mi Power-plug (chuangmi.plug.m1 ) Channels
+### Xiaomi Philips Downlight (philips.light.downlight) Channels
 
+| Channel | Type | Description |
+| ----- | ----- | -------------------------------- |
+| power | Switch | Power | 
+| brightness | Number | Brightness | 
+| cct | Number | Correlated Color Temperature | 
+| scene | Number | Scene | 
+| dv | Number | DV | 
+| switchscene | Switch | Switch Scene | 
+| delayoff | Switch | Delay Off | 
+| toggle | Switch | Toggle | 
+
+
+### Mi Power-plug (chuangmi.plug.m1) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -511,17 +492,7 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | temperature | Number | Temperature | 
 
 
-### Mi Power-plug v1 (chuangmi.plug.v1 ) Channels
-
-
-| Channel | Type | Description |
-| ----- | ----- | -------------------------------- |
-| power | Switch | Power | 
-| usb | OnOffType | USB | 
-
-
-### Mi Power-plug v2 (chuangmi.plug.v2 ) Channels
-
+### Mi Power-plug v1 (chuangmi.plug.v1) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -529,8 +500,15 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | usb | OnOffType | USB | 
 
 
-### Mi Power-plug v3 (chuangmi.plug.v3 ) Channels
+### Mi Power-plug v2 (chuangmi.plug.v2) Channels
 
+| Channel | Type | Description |
+| ----- | ----- | -------------------------------- |
+| power | Switch | Power | 
+| usb | OnOffType | USB | 
+
+
+### Mi Power-plug v3 (chuangmi.plug.v3) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -540,21 +518,7 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | led | Switch | Wifi led | 
 
 
-### Qing Mi Smart Power Strip v1 (qmi.powerstrip.v1 ) Channels
-
-
-| Channel | Type | Description |
-| ----- | ----- | -------------------------------- |
-| power | Switch | Power | 
-| powerUsage | Number | Power Consumption | 
-| led | Switch | wifi_led | 
-| power_price | Number | power_price | 
-| current | Number | Current | 
-| temperature | Number | Temperature | 
-
-
-### Mi Power-strip v2 (zimi.powerstrip.v2 ) Channels
-
+### Qing Mi Smart Power Strip v1 (qmi.powerstrip.v1) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -566,16 +530,26 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | temperature | Number | Temperature | 
 
 
-### Mi Water Purifier v2 (yunmi.waterpuri.v2 ) Channels
+### Mi Power-strip v2 (zimi.powerstrip.v2) Channels
 
+| Channel | Type | Description |
+| ----- | ----- | -------------------------------- |
+| power | Switch | Power | 
+| powerUsage | Number | Power Consumption | 
+| led | Switch | wifi_led | 
+| power_price | Number | power_price | 
+| current | Number | Current | 
+| temperature | Number | Temperature | 
+
+
+### Mi Water Purifier v2 (yunmi.waterpuri.v2) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
 | power | Switch | Power | 
 
 
-### Yeelight Lamp (yeelink.light.bslamp1 ) Channels
-
+### Yeelight Lamp (yeelink.light.bslamp1) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -587,8 +561,7 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | name | String | Name | 
 
 
-### Yeelight Color Bulb (yeelink.light.color1 ) Channels
-
+### Yeelight Color Bulb (yeelink.light.color1) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -602,8 +575,7 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | name | String | Name | 
 
 
-### Yeelight Color Bulb YLDP06YL 10W (yeelink.light.color2 ) Channels
-
+### Yeelight Color Bulb YLDP06YL 10W (yeelink.light.color2) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -617,21 +589,7 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | name | String | Name | 
 
 
-### Yeelight LED Ceiling Lamp (yeelink.light.ceiling1 ) Channels
-
-
-| Channel | Type | Description |
-| ----- | ----- | -------------------------------- |
-| power | Switch | Power | 
-| brightness | Number | Brightness | 
-| delayoff | Number | delayoff | 
-| colorTemperature | Number | Color Temperature  | 
-| colorMode | Number | colorMode | 
-| name | String | Name | 
-
-
-### Yeelight LED Ceiling Lamp v2 (yeelink.light.ceiling2 ) Channels
-
+### Yeelight LED Ceiling Lamp (yeelink.light.ceiling1) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -643,8 +601,7 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | name | String | Name | 
 
 
-### Yeelight LED Ceiling Lamp v3 (yeelink.light.ceiling3 ) Channels
-
+### Yeelight LED Ceiling Lamp v2 (yeelink.light.ceiling2) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -656,8 +613,19 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | name | String | Name | 
 
 
-### Yeelight LED Ceiling Lamp v4 (JIAOYUE 650 RGB) (yeelink.light.ceiling4 ) Channels
+### Yeelight LED Ceiling Lamp v3 (yeelink.light.ceiling3) Channels
 
+| Channel | Type | Description |
+| ----- | ----- | -------------------------------- |
+| power | Switch | Power | 
+| brightness | Number | Brightness | 
+| delayoff | Number | delayoff | 
+| colorTemperature | Number | Color Temperature  | 
+| colorMode | Number | colorMode | 
+| name | String | Name | 
+
+
+### Yeelight LED Ceiling Lamp v4 (JIAOYUE 650 RGB) (yeelink.light.ceiling4) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -676,21 +644,7 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | nightlightBrightness | Number | Nightlight Brightness | 
 
 
-### Yeelight (yeelink.light.lamp1 ) Channels
-
-
-| Channel | Type | Description |
-| ----- | ----- | -------------------------------- |
-| power | Switch | Power | 
-| brightness | Number | Brightness | 
-| delayoff | Number | delayoff | 
-| colorTemperature | Number | Color Temperature  | 
-| colorMode | Number | colorMode | 
-| name | String | Name | 
-
-
-### Yeelight White Bulb (yeelink.light.mono1 ) Channels
-
+### Yeelight (yeelink.light.lamp1) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -702,8 +656,19 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | name | String | Name | 
 
 
-### Yeelight White Bulb v2 (yeelink.light.mono2 ) Channels
+### Yeelight White Bulb (yeelink.light.mono1) Channels
 
+| Channel | Type | Description |
+| ----- | ----- | -------------------------------- |
+| power | Switch | Power | 
+| brightness | Number | Brightness | 
+| delayoff | Number | delayoff | 
+| colorTemperature | Number | Color Temperature  | 
+| colorMode | Number | colorMode | 
+| name | String | Name | 
+
+
+### Yeelight White Bulb v2 (yeelink.light.mono2) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -715,8 +680,7 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | name | String | Name | 
 
 
-### Yeelight Strip (yeelink.light.strip1 ) Channels
-
+### Yeelight Strip (yeelink.light.strip1) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -726,7 +690,6 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | colorTemperature | Number | Color Temperature  | 
 | colorMode | Number | colorMode | 
 | name | String | Name | 
-
 
 
 ## Example item file Rockrobo vacuum
