@@ -58,7 +58,7 @@ public class MiIoBasicChannel {
     }
 
     public String getFriendlyName() {
-        return channelType == null || friendlyName.isEmpty() ? channel : friendlyName;
+        return type == null || friendlyName.isEmpty() ? channel : friendlyName;
     }
 
     public void setFriendlyName(String friendlyName) {
