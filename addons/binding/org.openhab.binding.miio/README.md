@@ -1,4 +1,4 @@
-# Xiaomi Robot Vacuum Binding
+# Xiaomi Mi IO Binding
 
 This binding is used to control Xiaomi products implementing the Mi IO protocol. 
 This is a set of wifi devices from Xiaomi that are part of the Mi Ecosystem which is branded as MiJia.
