@@ -46,7 +46,7 @@
 			},
 			{
 				"property": "angle",
-				"friendlyName": "Angle ",
+				"friendlyName": "Angle",
 				"channel": "angle",
 				"type": "Number",
 				"refresh": true,
@@ -60,7 +60,7 @@
 			},
 			{
 				"property": "poweroff_time",
-				"friendlyName": "Timer ",
+				"friendlyName": "Timer",
 				"channel": "poweroffTime",
 				"type": "Number",
 				"refresh": true,
@@ -74,7 +74,7 @@
 			},
 			{
 				"property": "buzzer",
-				"friendlyName": "Buzzer ",
+				"friendlyName": "Buzzer",
 				"channel": "buzzer",
 				"type": "Switch",
 				"refresh": true,
@@ -88,7 +88,7 @@
 			},
 			{
 				"property": "led_b",
-				"friendlyName": "Led ",
+				"friendlyName": "Led",
 				"channel": "led_b",
 				"type": "Number",
 				"refresh": true,
@@ -102,7 +102,7 @@
 			},
 			{
 				"property": "child_lock",
-				"friendlyName": "Child Lock ",
+				"friendlyName": "Child Lock",
 				"channel": "child_lock",
 				"type": "Switch",
 				"refresh": true,
@@ -204,7 +204,7 @@
 			},
 			{
 				"property": "",
-				"friendlyName": "Move Direction ",
+				"friendlyName": "Move Direction",
 				"channel": "move",
 				"type": "String",
 				"refresh": true,
