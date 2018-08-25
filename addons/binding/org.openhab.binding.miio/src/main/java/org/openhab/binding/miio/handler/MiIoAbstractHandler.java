@@ -223,7 +223,14 @@ public abstract class MiIoAbstractHandler extends BaseThingHandler implements Mi
         try {
             updateState(CHANNEL_SSID, new StringType(networkData.getAsJsonObject("ap").get("ssid").getAsString()));
             updateState(CHANNEL_BSSID, new StringType(networkData.getAsJsonObject("ap").get("bssid").getAsString()));
-            updateState(CHANNEL_RSSI, new DecimalType(networkData.getAsJsonObject("ap").get("rssi").getAsLong()));
+            if (networkData.getAsJsonObject("ap").get("rssi") != null) {
+                updateState(CHANNEL_RSSI, new DecimalType(networkData.getAsJsonObject("ap").get("rssi").getAsLong()));
+            } else if (networkData.getAsJsonObject("ap").get("wifi_rssi") != null) {
+                updateState(CHANNEL_RSSI,
+                        new DecimalType(networkData.getAsJsonObject("ap").get("wifi_rssi").getAsLong()));
+            } else {
+                logger.debug("No RSSI info in response");
+            }
             updateState(CHANNEL_LIFE, new DecimalType(networkData.get("life").getAsLong()));
             return true;
         } catch (Exception e) {

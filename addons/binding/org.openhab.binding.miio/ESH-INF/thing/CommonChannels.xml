@@ -258,7 +258,7 @@
 	<channel-type id="speed">
 		<item-type>Number</item-type>
 		<label>Speed</label>
-		<state pattern="%.0f%%" readOnly="false" />
+		<state pattern="%.0f" readOnly="false" />
 	</channel-type>
 	<channel-type id="speedLevel">
 		<item-type>Number</item-type>
@@ -271,7 +271,7 @@
 		<state min="0" max="99" step="1" pattern="%.0f%%" readOnly="false" />
 	</channel-type>
 	<channel-type id="acPower">
-		<item-type>String</item-type>
+		<item-type>Switch</item-type>
 		<label>AC Power</label>
 		<state readOnly="true" />
 	</channel-type>
