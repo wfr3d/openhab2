@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<thing:thing-descriptions bindingId="miio" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<thing:thing-descriptions bindingId="miio"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
@@ -58,7 +59,7 @@
 			<channel id="side_brush_time" typeId="side_brush_time" />
 			<channel id="filter_time" typeId="filter_time" />
 			<channel id="sensor_dirt_time" typeId="sensor_dirt_time" />
-            <channel id="consumable_reset" typeId="consumable_reset" />
+			<channel id="consumable_reset" typeId="consumable_reset" />
 		</channels>
 	</channel-group-type>
 	<channel-group-type id="dnd">
@@ -219,7 +220,7 @@
 				<option value="side_brush_work_time">Reset Sidebrush</option>
 				<option value="filter_work_time">Reset Filter</option>
 				<option value="sensor_dirty_time">Reset Sensors</option>
-			</options>		
+			</options>
 		</state>
 	</channel-type>
 	<!-- DND Setting -->

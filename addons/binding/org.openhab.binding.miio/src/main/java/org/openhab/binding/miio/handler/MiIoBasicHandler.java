@@ -194,7 +194,7 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
     }
 
     private boolean refreshProperties(MiIoBasicDevice device) {
-        // TODO do not refresh for unlinked channels or channels that have refresh no
+        // TODO: do not refresh for unlinked channels or channels that have refresh no
         JsonArray getPropString = new JsonArray();
         for (MiIoBasicChannel miChannel : refreshList) {
             getPropString.add(miChannel.getProperty());
@@ -282,7 +282,6 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
     }
 
     private boolean buildChannelStructure(String deviceName) {
-        // TODO This still needs cleanup but should be functional.
         logger.debug("Building Channel Structure for {} - Model: {}", getThing().getUID().toString(), deviceName);
         URL fn = findDatabaseEntry(deviceName);
         if (fn == null) {
@@ -342,8 +341,8 @@ public class MiIoBasicHandler extends MiIoAbstractHandler {
         ChannelUID channelUID = new ChannelUID(getThing().getUID(), channel);
         ChannelTypeUID channelTypeUID = new ChannelTypeUID(MiIoBindingConstants.BINDING_ID, channelType);
 
-        // TODO only for testing. This should not be done finally. Channel only to be added when not there
-        // already
+        // TODO: Need to understand if this harms anything. If yes, channel only to be added when not there already.
+        // current way allows to have no issues when channels are changing.
         if (getThing().getChannel(channel) != null) {
             logger.info("Channel '{}' for thing {} already exist... removing", channel, getThing().getUID());
             thingBuilder.withoutChannel(new ChannelUID(getThing().getUID(), channel));

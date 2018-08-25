@@ -22,7 +22,7 @@ import com.google.gson.JsonPrimitive;
  * @author Marcel Verpaalen - Initial contribution
  */
 public class Conversions {
-    private final static Logger logger = LoggerFactory.getLogger(Conversions.class);
+    private static final Logger logger = LoggerFactory.getLogger(Conversions.class);
 
     public static JsonElement secondsToHours(JsonElement seconds) {
         long hours = TimeUnit.SECONDS.toHours(seconds.getAsInt());

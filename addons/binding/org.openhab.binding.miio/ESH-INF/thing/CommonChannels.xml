@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<thing:thing-descriptions bindingId="miio" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<thing:thing-descriptions bindingId="miio"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
@@ -222,12 +223,66 @@
 		<item-type>Number</item-type>
 		<label>Trans Level</label>
 	</channel-type>
-    <channel-type id="dry">
-        <item-type>Switch</item-type>
-        <label>Dry</label>
-    </channel-type>
+	<channel-type id="dry">
+		<item-type>Switch</item-type>
+		<label>Dry</label>
+	</channel-type>
 	<channel-type id="depth">
 		<item-type>Number</item-type>
 		<label>Depth</label>
+	</channel-type>
+	<channel-type id="angleEnable">
+		<item-type>Switch</item-type>
+		<label>Enable Angle</label>
+	</channel-type>
+	<channel-type id="angle">
+		<item-type>Number</item-type>
+		<label>Angle</label>
+		<state min="0" max="360" step="1" pattern="%.0f" readOnly="false" />
+	</channel-type>
+	<channel-type id="move">
+		<item-type>String</item-type>
+		<label>Move</label>
+		<state>
+			<options>
+				<option value="left">left</option>
+				<option value="right">right</option>
+			</options>
+		</state>
+	</channel-type>
+	<channel-type id="poweroffTime">
+		<item-type>Number</item-type>
+		<label>Power Off Timer</label>
+		<state min="0" max="28800" step="1" pattern="%.0f" readOnly="false" />
+	</channel-type>
+	<channel-type id="speed">
+		<item-type>Number</item-type>
+		<label>Speed</label>
+		<state pattern="%.0f" readOnly="false" />
+	</channel-type>
+	<channel-type id="speedLevel">
+		<item-type>Number</item-type>
+		<label>Speed Level</label>
+		<state min="0" max="99" step="1" pattern="%.0f%%" readOnly="false" />
+	</channel-type>
+	<channel-type id="naturalLevel">
+		<item-type>Number</item-type>
+		<label>Natural Fan Level</label>
+		<state min="0" max="99" step="1" pattern="%.0f%%" readOnly="false" />
+	</channel-type>
+	<channel-type id="acPower">
+		<item-type>Switch</item-type>
+		<label>AC Power</label>
+		<state readOnly="true" />
+	</channel-type>
+	<channel-type id="battery">
+		<item-type>Number</item-type>
+		<label>battery</label>
+		<state pattern="%.0f" readOnly="true" />
+	</channel-type>
+	<channel-type id="bat_state">
+		<item-type>String</item-type>
+		<label>Battery State</label>
+		<state readOnly="true" />
 	</channel-type>
 </thing:thing-descriptions>
