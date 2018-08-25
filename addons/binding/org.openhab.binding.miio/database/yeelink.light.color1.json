@@ -44,7 +44,7 @@
 			},
 			{
 				"property": "ct",
-				"friendlyName": "Color Temperature ",
+				"friendlyName": "Color Temperature",
 				"channel": "colorTemperature",
 				"type": "Number",
 				"refresh": true,

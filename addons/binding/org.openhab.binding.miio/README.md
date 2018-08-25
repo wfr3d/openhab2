@@ -48,6 +48,8 @@ The following things are available:
 | Mi Smart Fan | miio:basic | zhimi.fan.v1 | Yes |  |
 | Mi Smart Fan | miio:basic | zhimi.fan.v2 | Yes |  |
 | Mi Smart Pedestal Fan | miio:basic | zhimi.fan.v3 | Yes |  |
+| Xiaomi Mi Smart Pedestal Fan | miio:basic | zhimi.fan.sa1 | Yes |  |
+| Xiaomi Mi Smart Pedestal Fan | miio:basic | zhimi.fan.za1 | Yes |  |
 | Mi Smart Home Gateway v1 | miio:unsupported | lumi.gateway.v1 | No |  |
 | Mi Smart Home Gateway v2 | miio:unsupported | lumi.gateway.v2 | No |  |
 | Mi Smart Home Gateway v3 | miio:unsupported | lumi.gateway.v3 | No |  |
@@ -128,7 +130,8 @@ note: the ADVANCED  `actions#commands` channel can be used to send commands that
 e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would enable a pre-configured timer. See https://github.com/marcelrv/XiaomiRobotVacuumProtocol for all known available commands.
 
 
-### Mi Air Monitor v1 (zhimi.airmonitor.v1) Channels
+### Mi Air Monitor v1 (zhimi.airmonitor.v1 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -137,7 +140,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | usb_state | Number | USB State | 
 
 
-### Mi Air Humidifier (zhimi.humidifier.v1) Channels
+### Mi Air Humidifier (zhimi.humidifier.v1 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -157,7 +161,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | childlock | Switch | Child Lock | 
 
 
-### Mi Air Humidifier (zhimi.humidifier.ca1) Channels
+### Mi Air Humidifier (zhimi.humidifier.ca1 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -177,7 +182,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | childlock | Switch | Child Lock | 
 
 
-### Mi Air Purifier v1 (zhimi.airpurifier.v1) Channels
+### Mi Air Purifier v1 (zhimi.airpurifier.v1 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -199,7 +205,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | childlock | Switch | Child Lock | 
 
 
-### Mi Air Purifier v2 (zhimi.airpurifier.v2) Channels
+### Mi Air Purifier v2 (zhimi.airpurifier.v2 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -221,7 +228,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | childlock | Switch | Child Lock | 
 
 
-### Mi Air Purifier v3 (zhimi.airpurifier.v3) Channels
+### Mi Air Purifier v3 (zhimi.airpurifier.v3 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -243,7 +251,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | childlock | Switch | Child Lock | 
 
 
-### Mi Air Purifier Pro v6 (zhimi.airpurifier.v6) Channels
+### Mi Air Purifier Pro v6 (zhimi.airpurifier.v6 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -265,7 +274,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | childlock | Switch | Child Lock | 
 
 
-### Mi Air Purifier 2 (mini) (zhimi.airpurifier.m1) Channels
+### Mi Air Purifier 2 (mini) (zhimi.airpurifier.m1 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -287,7 +297,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | childlock | Switch | Child Lock | 
 
 
-### Mi Air Purifier (mini) (zhimi.airpurifier.m2) Channels
+### Mi Air Purifier (mini) (zhimi.airpurifier.m2 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -309,7 +320,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | childlock | Switch | Child Lock | 
 
 
-### Mi Air Purifier MS2 (zhimi.airpurifier.ma2) Channels
+### Mi Air Purifier MS2 (zhimi.airpurifier.ma2 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -331,7 +343,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | childlock | Switch | Child Lock | 
 
 
-### Mi Smart Fan (zhimi.fan.v1) Channels
+### Mi Smart Fan (zhimi.fan.v1 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -354,7 +367,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | move | String | Move Direction  | 
 
 
-### Mi Smart Fan (zhimi.fan.v2) Channels
+### Mi Smart Fan (zhimi.fan.v2 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -377,7 +391,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | move | String | Move Direction  | 
 
 
-### Mi Smart Pedestal Fan (zhimi.fan.v3) Channels
+### Mi Smart Pedestal Fan (zhimi.fan.v3 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -400,7 +415,48 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | move | String | Move Direction  | 
 
 
-### Mi Humdifier (zhimi.humidifier.v1) Channels
+### Xiaomi Mi Smart Pedestal Fan (zhimi.fan.sa1 ) Channels
+
+
+| Channel | Type | Description |
+| ----- | ----- | -------------------------------- |
+| power | Switch | Power | 
+| angleEnable | Switch | Rotation | 
+| usedhours | Number | Run Time | 
+| angle | Number | Angle  | 
+| poweroffTime | Number | Timer  | 
+| buzzer | Switch | Buzzer  | 
+| led_b | Number | Led  | 
+| child_lock | Switch | Child Lock  | 
+| speedLevel | Number | Speed Level | 
+| speed | Number | Speed | 
+| naturalLevel | Number | Natural Level | 
+| acPower | Switch | AC Power | 
+| move | String | Move Direction  | 
+
+
+### Xiaomi Mi Smart Pedestal Fan (zhimi.fan.za1 ) Channels
+
+
+| Channel | Type | Description |
+| ----- | ----- | -------------------------------- |
+| power | Switch | Power | 
+| angleEnable | Switch | Rotation | 
+| usedhours | Number | Run Time | 
+| angle | Number | Angle  | 
+| poweroffTime | Number | Timer  | 
+| buzzer | Switch | Buzzer  | 
+| led_b | Number | Led  | 
+| child_lock | Switch | Child Lock  | 
+| speedLevel | Number | Speed Level | 
+| speed | Number | Speed | 
+| naturalLevel | Number | Natural Level | 
+| acPower | Switch | AC Power | 
+| move | String | Move Direction  | 
+
+
+### Mi Humdifier (zhimi.humidifier.v1 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -420,7 +476,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | childlock | Switch | Child Lock | 
 
 
-### Xiaomi Philips Eyecare Smart Lamp 2 (philips.light.sread1) Channels
+### Xiaomi Philips Eyecare Smart Lamp 2 (philips.light.sread1 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -432,7 +489,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | eyecare | Switch | Eyecare | 
 
 
-### Xiaomi Philips LED Ceiling Lamp (philips.light.ceiling) Channels
+### Xiaomi Philips LED Ceiling Lamp (philips.light.ceiling ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -444,7 +502,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | toggle | Switch | Toggle | 
 
 
-### Xiaomi Philips LED Ceiling Lamp (philips.light.zyceiling) Channels
+### Xiaomi Philips LED Ceiling Lamp (philips.light.zyceiling ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -456,21 +515,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | toggle | Switch | Toggle | 
 
 
-### Xiaomi Philips Bulb (philips.light.bulb) Channels
+### Xiaomi Philips Bulb (philips.light.bulb ) Channels
 
-| Channel | Type | Description |
-| ----- | ----- | -------------------------------- |
-| power | Switch | Power | 
-| brightness | Number | Brightness | 
-| cct | Number | Correlated Color Temperature | 
-| scene | Number | Scene | 
-| dv | Number | DV | 
-| switchscene | Switch | Switch Scene | 
-| delayoff | Switch | Delay Off | 
-| toggle | Switch | Toggle | 
-
-
-### Xiaomi Philips Downlight (philips.light.downlight) Channels
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -484,7 +530,23 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | toggle | Switch | Toggle | 
 
 
-### Mi Power-plug (chuangmi.plug.m1) Channels
+### Xiaomi Philips Downlight (philips.light.downlight ) Channels
+
+
+| Channel | Type | Description |
+| ----- | ----- | -------------------------------- |
+| power | Switch | Power | 
+| brightness | Number | Brightness | 
+| cct | Number | Correlated Color Temperature | 
+| scene | Number | Scene | 
+| dv | Number | DV | 
+| switchscene | Switch | Switch Scene | 
+| delayoff | Switch | Delay Off | 
+| toggle | Switch | Toggle | 
+
+
+### Mi Power-plug (chuangmi.plug.m1 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -492,7 +554,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | temperature | Number | Temperature | 
 
 
-### Mi Power-plug v1 (chuangmi.plug.v1) Channels
+### Mi Power-plug v1 (chuangmi.plug.v1 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -500,7 +563,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | usb | OnOffType | USB | 
 
 
-### Mi Power-plug v2 (chuangmi.plug.v2) Channels
+### Mi Power-plug v2 (chuangmi.plug.v2 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -508,7 +572,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | usb | OnOffType | USB | 
 
 
-### Mi Power-plug v3 (chuangmi.plug.v3) Channels
+### Mi Power-plug v3 (chuangmi.plug.v3 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -518,7 +583,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | led | Switch | Wifi led | 
 
 
-### Qing Mi Smart Power Strip v1 (qmi.powerstrip.v1) Channels
+### Qing Mi Smart Power Strip v1 (qmi.powerstrip.v1 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -530,7 +596,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | temperature | Number | Temperature | 
 
 
-### Mi Power-strip v2 (zimi.powerstrip.v2) Channels
+### Mi Power-strip v2 (zimi.powerstrip.v2 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -542,14 +609,16 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | temperature | Number | Temperature | 
 
 
-### Mi Water Purifier v2 (yunmi.waterpuri.v2) Channels
+### Mi Water Purifier v2 (yunmi.waterpuri.v2 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
 | power | Switch | Power | 
 
 
-### Yeelight Lamp (yeelink.light.bslamp1) Channels
+### Yeelight Lamp (yeelink.light.bslamp1 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -561,7 +630,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | name | String | Name | 
 
 
-### Yeelight Color Bulb (yeelink.light.color1) Channels
+### Yeelight Color Bulb (yeelink.light.color1 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -575,7 +645,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | name | String | Name | 
 
 
-### Yeelight Color Bulb YLDP06YL 10W (yeelink.light.color2) Channels
+### Yeelight Color Bulb YLDP06YL 10W (yeelink.light.color2 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -589,7 +660,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | name | String | Name | 
 
 
-### Yeelight LED Ceiling Lamp (yeelink.light.ceiling1) Channels
+### Yeelight LED Ceiling Lamp (yeelink.light.ceiling1 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -601,7 +673,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | name | String | Name | 
 
 
-### Yeelight LED Ceiling Lamp v2 (yeelink.light.ceiling2) Channels
+### Yeelight LED Ceiling Lamp v2 (yeelink.light.ceiling2 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -613,7 +686,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | name | String | Name | 
 
 
-### Yeelight LED Ceiling Lamp v3 (yeelink.light.ceiling3) Channels
+### Yeelight LED Ceiling Lamp v3 (yeelink.light.ceiling3 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -625,7 +699,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | name | String | Name | 
 
 
-### Yeelight LED Ceiling Lamp v4 (JIAOYUE 650 RGB) (yeelink.light.ceiling4) Channels
+### Yeelight LED Ceiling Lamp v4 (JIAOYUE 650 RGB) (yeelink.light.ceiling4 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -644,7 +719,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | nightlightBrightness | Number | Nightlight Brightness | 
 
 
-### Yeelight (yeelink.light.lamp1) Channels
+### Yeelight (yeelink.light.lamp1 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -656,7 +732,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | name | String | Name | 
 
 
-### Yeelight White Bulb (yeelink.light.mono1) Channels
+### Yeelight White Bulb (yeelink.light.mono1 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -668,7 +745,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | name | String | Name | 
 
 
-### Yeelight White Bulb v2 (yeelink.light.mono2) Channels
+### Yeelight White Bulb v2 (yeelink.light.mono2 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -680,7 +758,8 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | name | String | Name | 
 
 
-### Yeelight Strip (yeelink.light.strip1) Channels
+### Yeelight Strip (yeelink.light.strip1 ) Channels
+
 
 | Channel | Type | Description |
 | ----- | ----- | -------------------------------- |
@@ -690,6 +769,7 @@ e.g. `smarthome:send actionCommand  "upd_timer['1498595904821', 'on']"` would en
 | colorTemperature | Number | Color Temperature  | 
 | colorMode | Number | colorMode | 
 | name | String | Name | 
+
 
 
 ## Example item file Rockrobo vacuum
@@ -701,29 +781,709 @@ Group  gVacCons "Consumables Usage"        <line-increase> (gVac)
 Group  gVacDND  "Do Not Disturb Settings"  <moon> (gVac)
 Group  gVacHist "Cleaning History"         <calendar> (gVac)
 
-String actionControl  "Vacuum Control"          {channel="xiaomivacuum:vacuum:034F0E45:actions#control" }
-String actionCommand  "Vacuum Command"          {channel="xiaomivacuum:vacuum:034F0E45:actions#commands" }
+String actionControl  "Vacuum Control"          {channel="miio:vacuum:034F0E45:actions#control" }
+String actionCommand  "Vacuum Command"          {channel="miio:vacuum:034F0E45:actions#commands" }
 
-Number statusBat    "Battery Level [%1.0f%%]" <battery>   (gVac,gVacStat) {channel="xiaomivacuum:vacuum:034F0E45:status#battery" }
-Number statusArea    "Cleaned Area [%1.0fm²]" <zoom>   (gVac,gVacStat) {channel="xiaomivacuum:vacuum:034F0E45:status#clean_area" }
-Number statusTime    "Cleaning Time [%1.0f']" <clock>   (gVac,gVacStat) {channel="xiaomivacuum:vacuum:034F0E45:status#clean_time" }
-String  statusError    "Error [%s]"  <error>  (gVac,gVacStat) {channel="xiaomivacuum:vacuum:034F0E45:status#error_code" }
-Number statusFanPow    "Fan Power [%1.0f %%]"  <signal>   (gVacStat) {channel="xiaomivacuum:vacuum:034F0E45:status#fan_power" } 
-Number statusClean    "In Cleaning Status [%1.0f]"   <switch>  (gVacStat) {channel="xiaomivacuum:vacuum:034F0E45:status#in_cleaning" }
-Switch statusDND    "DND Activated"    (gVacStat) {channel="xiaomivacuum:vacuum:034F0E45:status#dnd_enabled" }
-Number statusStatus    "Status [%1.0f]"  <status>  (gVacStat) {channel="xiaomivacuum:vacuum:034F0E45:status#state"} 
+Number statusBat    "Battery Level [%1.0f%%]" <battery>   (gVac,gVacStat) {channel="miio:vacuum:034F0E45:status#battery" }
+Number statusArea    "Cleaned Area [%1.0fm²]" <zoom>   (gVac,gVacStat) {channel="miio:vacuum:034F0E45:status#clean_area" }
+Number statusTime    "Cleaning Time [%1.0f']" <clock>   (gVac,gVacStat) {channel="miio:vacuum:034F0E45:status#clean_time" }
+String  statusError    "Error [%s]"  <error>  (gVac,gVacStat) {channel="miio:vacuum:034F0E45:status#error_code" }
+Number statusFanPow    "Fan Power [%1.0f %%]"  <signal>   (gVacStat) {channel="miio:vacuum:034F0E45:status#fan_power" } 
+Number statusClean    "In Cleaning Status [%1.0f]"   <switch>  (gVacStat) {channel="miio:vacuum:034F0E45:status#in_cleaning" }
+Switch statusDND    "DND Activated"    (gVacStat) {channel="miio:vacuum:034F0E45:status#dnd_enabled" }
+Number statusStatus    "Status [%1.0f]"  <status>  (gVacStat) {channel="miio:vacuum:034F0E45:status#state"} 
 
-Number consumableMain    "Main Brush [%1.0f]"    (gVacCons) {channel="xiaomivacuum:vacuum:034F0E45:consumables#main_brush_time"}
-Number consumableSide    "Side Brush [%1.0f]"    (gVacCons) {channel="xiaomivacuum:vacuum:034F0E45:consumables#side_brush_time"}
-Number consumableFilter    "Filter Time[%1.0f]"    (gVacCons) {channel="xiaomivacuum:vacuum:034F0E45:consumables#filter_time" }
-Number consumableSensor    "Sensor [%1.0f]"    (gVacCons) {channel="xiaomivacuum:vacuum:034F0E45:consumables#sensor_dirt_time"}
+Number consumableMain    "Main Brush [%1.0f]"    (gVacCons) {channel="miio:vacuum:034F0E45:consumables#main_brush_time"}
+Number consumableSide    "Side Brush [%1.0f]"    (gVacCons) {channel="miio:vacuum:034F0E45:consumables#side_brush_time"}
+Number consumableFilter    "Filter Time[%1.0f]"    (gVacCons) {channel="miio:vacuum:034F0E45:consumables#filter_time" }
+Number consumableSensor    "Sensor [%1.0f]"    (gVacCons) {channel="miio:vacuum:034F0E45:consumables#sensor_dirt_time"}
 
-Switch dndFunction   "DND Function" <moon>   (gVacDND) {channel="xiaomivacuum:vacuum:034F0E45:dnd#dnd_function"}
-String dndStart   "DND Start Time [%s]" <clock>   (gVacDND) {channel="xiaomivacuum:vacuum:034F0E45:dnd#dnd_start"}
-String dndEnd   "DND End Time [%s]"   <clock-on>  (gVacDND) {channel="xiaomivacuum:vacuum:034F0E45:dnd#dnd_end"}
+Switch dndFunction   "DND Function" <moon>   (gVacDND) {channel="miio:vacuum:034F0E45:dnd#dnd_function"}
+String dndStart   "DND Start Time [%s]" <clock>   (gVacDND) {channel="miio:vacuum:034F0E45:dnd#dnd_start"}
+String dndEnd   "DND End Time [%s]"   <clock-on>  (gVacDND) {channel="miio:vacuum:034F0E45:dnd#dnd_end"}
 
-Number historyArea    "Total Cleaned Area [%1.0fm²]" <zoom>    (gVacHist) {channel="xiaomivacuum:vacuum:034F0E45:history#total_clean_area"}
-String historyTime    "Total Clean Time [%s]"   <clock>     (gVacHist) {channel="xiaomivacuum:vacuum:034F0E45:history#total_clean_time"}
-Number historyCount    "Total # Cleanings [%1.0f]"  <office>  (gVacHist) {channel="xiaomivacuum:vacuum:034F0E45:history#total_clean_count"}
+Number historyArea    "Total Cleaned Area [%1.0fm²]" <zoom>    (gVacHist) {channel="miio:vacuum:034F0E45:history#total_clean_area"}
+String historyTime    "Total Clean Time [%s]"   <clock>     (gVacHist) {channel="miio:vacuum:034F0E45:history#total_clean_time"}
+Number historyCount    "Total # Cleanings [%1.0f]"  <office>  (gVacHist) {channel="miio:vacuum:034F0E45:history#total_clean_count"}
+```
+
+### Mi Air Monitor v1 (zhimi.airmonitor.v1 ) item file lines
+
+
+note. autogenerated example. Replace the id (airmonitor) in the channel with your own
+```
+Group G_airmonitor "Mi Air Monitor v1" <status>
+Number aqi "Air Quality Index" (G_airmonitor) {channel="miio:basic:airmonitor:aqi"}
+Number battery "Battery" (G_airmonitor) {channel="miio:basic:airmonitor:battery"}
+Number usb_state "USB State" (G_airmonitor) {channel="miio:basic:airmonitor:usb_state"}
+```
+
+### Mi Air Humidifier (zhimi.humidifier.v1 ) item file lines
+
+
+note. autogenerated example. Replace the id (humidifier) in the channel with your own
+```
+Group G_humidifier "Mi Air Humidifier" <status>
+Switch power "Power" (G_humidifier) {channel="miio:basic:humidifier:power"}
+String mode "Mode" (G_humidifier) {channel="miio:basic:humidifier:mode"}
+Number humidity "Humidity" (G_humidifier) {channel="miio:basic:humidifier:humidity"}
+Number setHumidity "Humidity Set" (G_humidifier) {channel="miio:basic:humidifier:setHumidity"}
+Number aqi "Air Quality Index" (G_humidifier) {channel="miio:basic:humidifier:aqi"}
+Number translevel "Trans_level" (G_humidifier) {channel="miio:basic:humidifier:translevel"}
+Number bright "Led Brightness" (G_humidifier) {channel="miio:basic:humidifier:bright"}
+Switch buzzer "Buzzer Status" (G_humidifier) {channel="miio:basic:humidifier:buzzer"}
+Number depth "Depth" (G_humidifier) {channel="miio:basic:humidifier:depth"}
+Switch dry "Dry" (G_humidifier) {channel="miio:basic:humidifier:dry"}
+Number usedhours "Run Time" (G_humidifier) {channel="miio:basic:humidifier:usedhours"}
+Number motorspeed "Motor Speed" (G_humidifier) {channel="miio:basic:humidifier:motorspeed"}
+Number temperature "Temperature" (G_humidifier) {channel="miio:basic:humidifier:temperature"}
+Switch childlock "Child Lock" (G_humidifier) {channel="miio:basic:humidifier:childlock"}
+```
+
+### Mi Air Humidifier (zhimi.humidifier.ca1 ) item file lines
+
+
+note. autogenerated example. Replace the id (humidifier) in the channel with your own
+```
+Group G_humidifier "Mi Air Humidifier" <status>
+Switch power "Power" (G_humidifier) {channel="miio:basic:humidifier:power"}
+String mode "Mode" (G_humidifier) {channel="miio:basic:humidifier:mode"}
+Number humidity "Humidity" (G_humidifier) {channel="miio:basic:humidifier:humidity"}
+Number setHumidity "Humidity Set" (G_humidifier) {channel="miio:basic:humidifier:setHumidity"}
+Number aqi "Air Quality Index" (G_humidifier) {channel="miio:basic:humidifier:aqi"}
+Number translevel "Trans_level" (G_humidifier) {channel="miio:basic:humidifier:translevel"}
+Number bright "Led Brightness" (G_humidifier) {channel="miio:basic:humidifier:bright"}
+Switch buzzer "Buzzer Status" (G_humidifier) {channel="miio:basic:humidifier:buzzer"}
+Number depth "Depth" (G_humidifier) {channel="miio:basic:humidifier:depth"}
+Switch dry "Dry" (G_humidifier) {channel="miio:basic:humidifier:dry"}
+Number usedhours "Run Time" (G_humidifier) {channel="miio:basic:humidifier:usedhours"}
+Number motorspeed "Motor Speed" (G_humidifier) {channel="miio:basic:humidifier:motorspeed"}
+Number temperature "Temperature" (G_humidifier) {channel="miio:basic:humidifier:temperature"}
+Switch childlock "Child Lock" (G_humidifier) {channel="miio:basic:humidifier:childlock"}
+```
+
+### Mi Air Purifier v1 (zhimi.airpurifier.v1 ) item file lines
+
+
+note. autogenerated example. Replace the id (airpurifier) in the channel with your own
+```
+Group G_airpurifier "Mi Air Purifier v1" <status>
+Switch power "Power" (G_airpurifier) {channel="miio:basic:airpurifier:power"}
+String mode "Mode" (G_airpurifier) {channel="miio:basic:airpurifier:mode"}
+Number humidity "Humidity" (G_airpurifier) {channel="miio:basic:airpurifier:humidity"}
+Number aqi "Air Quality Index" (G_airpurifier) {channel="miio:basic:airpurifier:aqi"}
+Number averageaqi "Average Air Quality Index" (G_airpurifier) {channel="miio:basic:airpurifier:averageaqi"}
+Switch led "Led Status" (G_airpurifier) {channel="miio:basic:airpurifier:led"}
+Switch buzzer "Buzzer Status" (G_airpurifier) {channel="miio:basic:airpurifier:buzzer"}
+Number filtermaxlife "Filter Max Life" (G_airpurifier) {channel="miio:basic:airpurifier:filtermaxlife"}
+Number filterhours "Filter Hours used" (G_airpurifier) {channel="miio:basic:airpurifier:filterhours"}
+Number usedhours "Run Time" (G_airpurifier) {channel="miio:basic:airpurifier:usedhours"}
+Number motorspeed "Motor Speed" (G_airpurifier) {channel="miio:basic:airpurifier:motorspeed"}
+Number filterlife "Filter  Life" (G_airpurifier) {channel="miio:basic:airpurifier:filterlife"}
+Number favoritelevel "Favorite Level" (G_airpurifier) {channel="miio:basic:airpurifier:favoritelevel"}
+Number temperature "Temperature" (G_airpurifier) {channel="miio:basic:airpurifier:temperature"}
+Number purifyvolume "Purivied Volume" (G_airpurifier) {channel="miio:basic:airpurifier:purifyvolume"}
+Switch childlock "Child Lock" (G_airpurifier) {channel="miio:basic:airpurifier:childlock"}
+```
+
+### Mi Air Purifier v2 (zhimi.airpurifier.v2 ) item file lines
+
+
+note. autogenerated example. Replace the id (airpurifier) in the channel with your own
+```
+Group G_airpurifier "Mi Air Purifier v2" <status>
+Switch power "Power" (G_airpurifier) {channel="miio:basic:airpurifier:power"}
+String mode "Mode" (G_airpurifier) {channel="miio:basic:airpurifier:mode"}
+Number humidity "Humidity" (G_airpurifier) {channel="miio:basic:airpurifier:humidity"}
+Number aqi "Air Quality Index" (G_airpurifier) {channel="miio:basic:airpurifier:aqi"}
+Number averageaqi "Average Air Quality Index" (G_airpurifier) {channel="miio:basic:airpurifier:averageaqi"}
+Switch led "Led Status" (G_airpurifier) {channel="miio:basic:airpurifier:led"}
+Switch buzzer "Buzzer Status" (G_airpurifier) {channel="miio:basic:airpurifier:buzzer"}
+Number filtermaxlife "Filter Max Life" (G_airpurifier) {channel="miio:basic:airpurifier:filtermaxlife"}
+Number filterhours "Filter Hours used" (G_airpurifier) {channel="miio:basic:airpurifier:filterhours"}
+Number usedhours "Run Time" (G_airpurifier) {channel="miio:basic:airpurifier:usedhours"}
+Number motorspeed "Motor Speed" (G_airpurifier) {channel="miio:basic:airpurifier:motorspeed"}
+Number filterlife "Filter  Life" (G_airpurifier) {channel="miio:basic:airpurifier:filterlife"}
+Number favoritelevel "Favorite Level" (G_airpurifier) {channel="miio:basic:airpurifier:favoritelevel"}
+Number temperature "Temperature" (G_airpurifier) {channel="miio:basic:airpurifier:temperature"}
+Number purifyvolume "Purivied Volume" (G_airpurifier) {channel="miio:basic:airpurifier:purifyvolume"}
+Switch childlock "Child Lock" (G_airpurifier) {channel="miio:basic:airpurifier:childlock"}
+```
+
+### Mi Air Purifier v3 (zhimi.airpurifier.v3 ) item file lines
+
+
+note. autogenerated example. Replace the id (airpurifier) in the channel with your own
+```
+Group G_airpurifier "Mi Air Purifier v3" <status>
+Switch power "Power" (G_airpurifier) {channel="miio:basic:airpurifier:power"}
+String mode "Mode" (G_airpurifier) {channel="miio:basic:airpurifier:mode"}
+Number humidity "Humidity" (G_airpurifier) {channel="miio:basic:airpurifier:humidity"}
+Number aqi "Air Quality Index" (G_airpurifier) {channel="miio:basic:airpurifier:aqi"}
+Number averageaqi "Average Air Quality Index" (G_airpurifier) {channel="miio:basic:airpurifier:averageaqi"}
+Switch led "Led Status" (G_airpurifier) {channel="miio:basic:airpurifier:led"}
+Switch buzzer "Buzzer Status" (G_airpurifier) {channel="miio:basic:airpurifier:buzzer"}
+Number filtermaxlife "Filter Max Life" (G_airpurifier) {channel="miio:basic:airpurifier:filtermaxlife"}
+Number filterhours "Filter Hours used" (G_airpurifier) {channel="miio:basic:airpurifier:filterhours"}
+Number usedhours "Run Time" (G_airpurifier) {channel="miio:basic:airpurifier:usedhours"}
+Number motorspeed "Motor Speed" (G_airpurifier) {channel="miio:basic:airpurifier:motorspeed"}
+Number filterlife "Filter  Life" (G_airpurifier) {channel="miio:basic:airpurifier:filterlife"}
+Number favoritelevel "Favorite Level" (G_airpurifier) {channel="miio:basic:airpurifier:favoritelevel"}
+Number temperature "Temperature" (G_airpurifier) {channel="miio:basic:airpurifier:temperature"}
+Number purifyvolume "Purivied Volume" (G_airpurifier) {channel="miio:basic:airpurifier:purifyvolume"}
+Switch childlock "Child Lock" (G_airpurifier) {channel="miio:basic:airpurifier:childlock"}
+```
+
+### Mi Air Purifier Pro v6 (zhimi.airpurifier.v6 ) item file lines
+
+
+note. autogenerated example. Replace the id (airpurifier) in the channel with your own
+```
+Group G_airpurifier "Mi Air Purifier Pro v6" <status>
+Switch power "Power" (G_airpurifier) {channel="miio:basic:airpurifier:power"}
+String mode "Mode" (G_airpurifier) {channel="miio:basic:airpurifier:mode"}
+Number humidity "Humidity" (G_airpurifier) {channel="miio:basic:airpurifier:humidity"}
+Number aqi "Air Quality Index" (G_airpurifier) {channel="miio:basic:airpurifier:aqi"}
+Number averageaqi "Average Air Quality Index" (G_airpurifier) {channel="miio:basic:airpurifier:averageaqi"}
+Switch led "Led Status" (G_airpurifier) {channel="miio:basic:airpurifier:led"}
+Number bright "Led Brightness" (G_airpurifier) {channel="miio:basic:airpurifier:bright"}
+Number filtermaxlife "Filter Max Life" (G_airpurifier) {channel="miio:basic:airpurifier:filtermaxlife"}
+Number filterhours "Filter Hours used" (G_airpurifier) {channel="miio:basic:airpurifier:filterhours"}
+Number usedhours "Run Time" (G_airpurifier) {channel="miio:basic:airpurifier:usedhours"}
+Number motorspeed "Motor Speed" (G_airpurifier) {channel="miio:basic:airpurifier:motorspeed"}
+Number filterlife "Filter  Life" (G_airpurifier) {channel="miio:basic:airpurifier:filterlife"}
+Number favoritelevel "Favorite Level" (G_airpurifier) {channel="miio:basic:airpurifier:favoritelevel"}
+Number temperature "Temperature" (G_airpurifier) {channel="miio:basic:airpurifier:temperature"}
+Number purifyvolume "Purivied Volume" (G_airpurifier) {channel="miio:basic:airpurifier:purifyvolume"}
+Switch childlock "Child Lock" (G_airpurifier) {channel="miio:basic:airpurifier:childlock"}
+```
+
+### Mi Air Purifier 2 (mini) (zhimi.airpurifier.m1 ) item file lines
+
+
+note. autogenerated example. Replace the id (airpurifier) in the channel with your own
+```
+Group G_airpurifier "Mi Air Purifier 2 (mini)" <status>
+Switch power "Power" (G_airpurifier) {channel="miio:basic:airpurifier:power"}
+String mode "Mode" (G_airpurifier) {channel="miio:basic:airpurifier:mode"}
+Number humidity "Humidity" (G_airpurifier) {channel="miio:basic:airpurifier:humidity"}
+Number aqi "Air Quality Index" (G_airpurifier) {channel="miio:basic:airpurifier:aqi"}
+Number averageaqi "Average Air Quality Index" (G_airpurifier) {channel="miio:basic:airpurifier:averageaqi"}
+Switch led "Led Status" (G_airpurifier) {channel="miio:basic:airpurifier:led"}
+Switch buzzer "Buzzer Status" (G_airpurifier) {channel="miio:basic:airpurifier:buzzer"}
+Number filtermaxlife "Filter Max Life" (G_airpurifier) {channel="miio:basic:airpurifier:filtermaxlife"}
+Number filterhours "Filter Hours used" (G_airpurifier) {channel="miio:basic:airpurifier:filterhours"}
+Number usedhours "Run Time" (G_airpurifier) {channel="miio:basic:airpurifier:usedhours"}
+Number motorspeed "Motor Speed" (G_airpurifier) {channel="miio:basic:airpurifier:motorspeed"}
+Number filterlife "Filter  Life" (G_airpurifier) {channel="miio:basic:airpurifier:filterlife"}
+Number favoritelevel "Favorite Level" (G_airpurifier) {channel="miio:basic:airpurifier:favoritelevel"}
+Number temperature "Temperature" (G_airpurifier) {channel="miio:basic:airpurifier:temperature"}
+Number purifyvolume "Purivied Volume" (G_airpurifier) {channel="miio:basic:airpurifier:purifyvolume"}
+Switch childlock "Child Lock" (G_airpurifier) {channel="miio:basic:airpurifier:childlock"}
+```
+
+### Mi Air Purifier (mini) (zhimi.airpurifier.m2 ) item file lines
+
+
+note. autogenerated example. Replace the id (airpurifier) in the channel with your own
+```
+Group G_airpurifier "Mi Air Purifier (mini)" <status>
+Switch power "Power" (G_airpurifier) {channel="miio:basic:airpurifier:power"}
+String mode "Mode" (G_airpurifier) {channel="miio:basic:airpurifier:mode"}
+Number humidity "Humidity" (G_airpurifier) {channel="miio:basic:airpurifier:humidity"}
+Number aqi "Air Quality Index" (G_airpurifier) {channel="miio:basic:airpurifier:aqi"}
+Number averageaqi "Average Air Quality Index" (G_airpurifier) {channel="miio:basic:airpurifier:averageaqi"}
+Switch led "Led Status" (G_airpurifier) {channel="miio:basic:airpurifier:led"}
+Switch buzzer "Buzzer Status" (G_airpurifier) {channel="miio:basic:airpurifier:buzzer"}
+Number filtermaxlife "Filter Max Life" (G_airpurifier) {channel="miio:basic:airpurifier:filtermaxlife"}
+Number filterhours "Filter Hours used" (G_airpurifier) {channel="miio:basic:airpurifier:filterhours"}
+Number usedhours "Run Time" (G_airpurifier) {channel="miio:basic:airpurifier:usedhours"}
+Number motorspeed "Motor Speed" (G_airpurifier) {channel="miio:basic:airpurifier:motorspeed"}
+Number filterlife "Filter  Life" (G_airpurifier) {channel="miio:basic:airpurifier:filterlife"}
+Number favoritelevel "Favorite Level" (G_airpurifier) {channel="miio:basic:airpurifier:favoritelevel"}
+Number temperature "Temperature" (G_airpurifier) {channel="miio:basic:airpurifier:temperature"}
+Number purifyvolume "Purivied Volume" (G_airpurifier) {channel="miio:basic:airpurifier:purifyvolume"}
+Switch childlock "Child Lock" (G_airpurifier) {channel="miio:basic:airpurifier:childlock"}
+```
+
+### Mi Air Purifier MS2 (zhimi.airpurifier.ma2 ) item file lines
+
+
+note. autogenerated example. Replace the id (airpurifier) in the channel with your own
+```
+Group G_airpurifier "Mi Air Purifier MS2" <status>
+Switch power "Power" (G_airpurifier) {channel="miio:basic:airpurifier:power"}
+String mode "Mode" (G_airpurifier) {channel="miio:basic:airpurifier:mode"}
+Number humidity "Humidity" (G_airpurifier) {channel="miio:basic:airpurifier:humidity"}
+Number aqi "Air Quality Index" (G_airpurifier) {channel="miio:basic:airpurifier:aqi"}
+Number averageaqi "Average Air Quality Index" (G_airpurifier) {channel="miio:basic:airpurifier:averageaqi"}
+Switch led "Led Status" (G_airpurifier) {channel="miio:basic:airpurifier:led"}
+Number bright "Led Brightness" (G_airpurifier) {channel="miio:basic:airpurifier:bright"}
+Number filtermaxlife "Filter Max Life" (G_airpurifier) {channel="miio:basic:airpurifier:filtermaxlife"}
+Number filterhours "Filter Hours used" (G_airpurifier) {channel="miio:basic:airpurifier:filterhours"}
+Number usedhours "Run Time" (G_airpurifier) {channel="miio:basic:airpurifier:usedhours"}
+Number motorspeed "Motor Speed" (G_airpurifier) {channel="miio:basic:airpurifier:motorspeed"}
+Number filterlife "Filter  Life" (G_airpurifier) {channel="miio:basic:airpurifier:filterlife"}
+Number favoritelevel "Favorite Level" (G_airpurifier) {channel="miio:basic:airpurifier:favoritelevel"}
+Number temperature "Temperature" (G_airpurifier) {channel="miio:basic:airpurifier:temperature"}
+Number purifyvolume "Purivied Volume" (G_airpurifier) {channel="miio:basic:airpurifier:purifyvolume"}
+Switch childlock "Child Lock" (G_airpurifier) {channel="miio:basic:airpurifier:childlock"}
+```
+
+### Mi Smart Fan (zhimi.fan.v1 ) item file lines
+
+
+note. autogenerated example. Replace the id (fan) in the channel with your own
+```
+Group G_fan "Mi Smart Fan" <status>
+Switch power "Power" (G_fan) {channel="miio:basic:fan:power"}
+Switch angleEnable "Rotation" (G_fan) {channel="miio:basic:fan:angleEnable"}
+Number usedhours "Run Time" (G_fan) {channel="miio:basic:fan:usedhours"}
+Number angle "Angle " (G_fan) {channel="miio:basic:fan:angle"}
+Number poweroffTime "Timer " (G_fan) {channel="miio:basic:fan:poweroffTime"}
+Switch buzzer "Buzzer " (G_fan) {channel="miio:basic:fan:buzzer"}
+Number led_b "Led " (G_fan) {channel="miio:basic:fan:led_b"}
+Switch child_lock "Child Lock " (G_fan) {channel="miio:basic:fan:child_lock"}
+Number speedLevel "Speed Level" (G_fan) {channel="miio:basic:fan:speedLevel"}
+Number speed "Speed" (G_fan) {channel="miio:basic:fan:speed"}
+Number naturalLevel "Natural Level" (G_fan) {channel="miio:basic:fan:naturalLevel"}
+Number temp_dec "Temperature" (G_fan) {channel="miio:basic:fan:temp_dec"}
+Number humidity "Humidity" (G_fan) {channel="miio:basic:fan:humidity"}
+String acPower "AC Power" (G_fan) {channel="miio:basic:fan:acPower"}
+String mode "Battery Charge" (G_fan) {channel="miio:basic:fan:mode"}
+Number battery "Battery" (G_fan) {channel="miio:basic:fan:battery"}
+String move "Move Direction " (G_fan) {channel="miio:basic:fan:move"}
+```
+
+### Mi Smart Fan (zhimi.fan.v2 ) item file lines
+
+
+note. autogenerated example. Replace the id (fan) in the channel with your own
+```
+Group G_fan "Mi Smart Fan" <status>
+Switch power "Power" (G_fan) {channel="miio:basic:fan:power"}
+Switch angleEnable "Rotation" (G_fan) {channel="miio:basic:fan:angleEnable"}
+Number usedhours "Run Time" (G_fan) {channel="miio:basic:fan:usedhours"}
+Number angle "Angle " (G_fan) {channel="miio:basic:fan:angle"}
+Number poweroffTime "Timer " (G_fan) {channel="miio:basic:fan:poweroffTime"}
+Switch buzzer "Buzzer " (G_fan) {channel="miio:basic:fan:buzzer"}
+Number led_b "Led " (G_fan) {channel="miio:basic:fan:led_b"}
+Switch child_lock "Child Lock " (G_fan) {channel="miio:basic:fan:child_lock"}
+Number speedLevel "Speed Level" (G_fan) {channel="miio:basic:fan:speedLevel"}
+Number speed "Speed" (G_fan) {channel="miio:basic:fan:speed"}
+Number naturalLevel "Natural Level" (G_fan) {channel="miio:basic:fan:naturalLevel"}
+Number temp_dec "Temperature" (G_fan) {channel="miio:basic:fan:temp_dec"}
+Number humidity "Humidity" (G_fan) {channel="miio:basic:fan:humidity"}
+String acPower "AC Power" (G_fan) {channel="miio:basic:fan:acPower"}
+String mode "Battery Charge" (G_fan) {channel="miio:basic:fan:mode"}
+Number battery "Battery" (G_fan) {channel="miio:basic:fan:battery"}
+String move "Move Direction " (G_fan) {channel="miio:basic:fan:move"}
+```
+
+### Mi Smart Pedestal Fan (zhimi.fan.v3 ) item file lines
+
+
+note. autogenerated example. Replace the id (fan) in the channel with your own
+```
+Group G_fan "Mi Smart Pedestal Fan" <status>
+Switch power "Power" (G_fan) {channel="miio:basic:fan:power"}
+Switch angleEnable "Rotation" (G_fan) {channel="miio:basic:fan:angleEnable"}
+Number usedhours "Run Time" (G_fan) {channel="miio:basic:fan:usedhours"}
+Number angle "Angle " (G_fan) {channel="miio:basic:fan:angle"}
+Number poweroffTime "Timer " (G_fan) {channel="miio:basic:fan:poweroffTime"}
+Switch buzzer "Buzzer " (G_fan) {channel="miio:basic:fan:buzzer"}
+Number led_b "Led " (G_fan) {channel="miio:basic:fan:led_b"}
+Switch child_lock "Child Lock " (G_fan) {channel="miio:basic:fan:child_lock"}
+Number speedLevel "Speed Level" (G_fan) {channel="miio:basic:fan:speedLevel"}
+Number speed "Speed" (G_fan) {channel="miio:basic:fan:speed"}
+Number naturalLevel "Natural Level" (G_fan) {channel="miio:basic:fan:naturalLevel"}
+Number temp_dec "Temperature" (G_fan) {channel="miio:basic:fan:temp_dec"}
+Number humidity "Humidity" (G_fan) {channel="miio:basic:fan:humidity"}
+String acPower "AC Power" (G_fan) {channel="miio:basic:fan:acPower"}
+String mode "Battery Charge" (G_fan) {channel="miio:basic:fan:mode"}
+Number battery "Battery" (G_fan) {channel="miio:basic:fan:battery"}
+String move "Move Direction " (G_fan) {channel="miio:basic:fan:move"}
+```
+
+### Xiaomi Mi Smart Pedestal Fan (zhimi.fan.sa1 ) item file lines
+
+
+note. autogenerated example. Replace the id (fan) in the channel with your own
+```
+Group G_fan "Xiaomi Mi Smart Pedestal Fan" <status>
+Switch power "Power" (G_fan) {channel="miio:basic:fan:power"}
+Switch angleEnable "Rotation" (G_fan) {channel="miio:basic:fan:angleEnable"}
+Number usedhours "Run Time" (G_fan) {channel="miio:basic:fan:usedhours"}
+Number angle "Angle " (G_fan) {channel="miio:basic:fan:angle"}
+Number poweroffTime "Timer " (G_fan) {channel="miio:basic:fan:poweroffTime"}
+Switch buzzer "Buzzer " (G_fan) {channel="miio:basic:fan:buzzer"}
+Number led_b "Led " (G_fan) {channel="miio:basic:fan:led_b"}
+Switch child_lock "Child Lock " (G_fan) {channel="miio:basic:fan:child_lock"}
+Number speedLevel "Speed Level" (G_fan) {channel="miio:basic:fan:speedLevel"}
+Number speed "Speed" (G_fan) {channel="miio:basic:fan:speed"}
+Number naturalLevel "Natural Level" (G_fan) {channel="miio:basic:fan:naturalLevel"}
+Switch acPower "AC Power" (G_fan) {channel="miio:basic:fan:acPower"}
+String move "Move Direction " (G_fan) {channel="miio:basic:fan:move"}
+```
+
+### Xiaomi Mi Smart Pedestal Fan (zhimi.fan.za1 ) item file lines
+
+
+note. autogenerated example. Replace the id (fan) in the channel with your own
+```
+Group G_fan "Xiaomi Mi Smart Pedestal Fan" <status>
+Switch power "Power" (G_fan) {channel="miio:basic:fan:power"}
+Switch angleEnable "Rotation" (G_fan) {channel="miio:basic:fan:angleEnable"}
+Number usedhours "Run Time" (G_fan) {channel="miio:basic:fan:usedhours"}
+Number angle "Angle " (G_fan) {channel="miio:basic:fan:angle"}
+Number poweroffTime "Timer " (G_fan) {channel="miio:basic:fan:poweroffTime"}
+Switch buzzer "Buzzer " (G_fan) {channel="miio:basic:fan:buzzer"}
+Number led_b "Led " (G_fan) {channel="miio:basic:fan:led_b"}
+Switch child_lock "Child Lock " (G_fan) {channel="miio:basic:fan:child_lock"}
+Number speedLevel "Speed Level" (G_fan) {channel="miio:basic:fan:speedLevel"}
+Number speed "Speed" (G_fan) {channel="miio:basic:fan:speed"}
+Number naturalLevel "Natural Level" (G_fan) {channel="miio:basic:fan:naturalLevel"}
+Switch acPower "AC Power" (G_fan) {channel="miio:basic:fan:acPower"}
+String move "Move Direction " (G_fan) {channel="miio:basic:fan:move"}
+```
+
+### Mi Humdifier (zhimi.humidifier.v1 ) item file lines
+
+
+note. autogenerated example. Replace the id (humidifier) in the channel with your own
+```
+Group G_humidifier "Mi Humdifier" <status>
+Switch power "Power" (G_humidifier) {channel="miio:basic:humidifier:power"}
+String mode "Mode" (G_humidifier) {channel="miio:basic:humidifier:mode"}
+Number humidity "Humidity" (G_humidifier) {channel="miio:basic:humidifier:humidity"}
+Number setHumidity "Humidity Set" (G_humidifier) {channel="miio:basic:humidifier:setHumidity"}
+Number aqi "Air Quality Index" (G_humidifier) {channel="miio:basic:humidifier:aqi"}
+Number translevel "Trans_level" (G_humidifier) {channel="miio:basic:humidifier:translevel"}
+Number bright "Led Brightness" (G_humidifier) {channel="miio:basic:humidifier:bright"}
+Switch buzzer "Buzzer Status" (G_humidifier) {channel="miio:basic:humidifier:buzzer"}
+Number depth "Depth" (G_humidifier) {channel="miio:basic:humidifier:depth"}
+Switch dry "Dry" (G_humidifier) {channel="miio:basic:humidifier:dry"}
+Number usedhours "Run Time" (G_humidifier) {channel="miio:basic:humidifier:usedhours"}
+Number motorspeed "Motor Speed" (G_humidifier) {channel="miio:basic:humidifier:motorspeed"}
+Number temperature "Temperature" (G_humidifier) {channel="miio:basic:humidifier:temperature"}
+Switch childlock "Child Lock" (G_humidifier) {channel="miio:basic:humidifier:childlock"}
+```
+
+### Xiaomi Philips Eyecare Smart Lamp 2 (philips.light.sread1 ) item file lines
+
+
+note. autogenerated example. Replace the id (light) in the channel with your own
+```
+Group G_light "Xiaomi Philips Eyecare Smart Lamp 2" <status>
+Switch power "Power" (G_light) {channel="miio:basic:light:power"}
+Number brightness "Brightness" (G_light) {channel="miio:basic:light:brightness"}
+Switch ambientPower "Ambient Power" (G_light) {channel="miio:basic:light:ambientPower"}
+Number ambientBrightness "Ambient Brightness" (G_light) {channel="miio:basic:light:ambientBrightness"}
+Number illumination "Ambient Illumination" (G_light) {channel="miio:basic:light:illumination"}
+Switch eyecare "Eyecare" (G_light) {channel="miio:basic:light:eyecare"}
+```
+
+### Xiaomi Philips LED Ceiling Lamp (philips.light.ceiling ) item file lines
+
+
+note. autogenerated example. Replace the id (light) in the channel with your own
+```
+Group G_light "Xiaomi Philips LED Ceiling Lamp" <status>
+Switch power "Power" (G_light) {channel="miio:basic:light:power"}
+Number brightness "Brightness" (G_light) {channel="miio:basic:light:brightness"}
+Number cct "Correlated Color Temperature" (G_light) {channel="miio:basic:light:cct"}
+Number scene "Scene" (G_light) {channel="miio:basic:light:scene"}
+Switch switchscene "Switch Scene" (G_light) {channel="miio:basic:light:switchscene"}
+Switch toggle "Toggle" (G_light) {channel="miio:basic:light:toggle"}
+```
+
+### Xiaomi Philips LED Ceiling Lamp (philips.light.zyceiling ) item file lines
+
+
+note. autogenerated example. Replace the id (light) in the channel with your own
+```
+Group G_light "Xiaomi Philips LED Ceiling Lamp" <status>
+Switch power "Power" (G_light) {channel="miio:basic:light:power"}
+Number brightness "Brightness" (G_light) {channel="miio:basic:light:brightness"}
+Number cct "Correlated Color Temperature" (G_light) {channel="miio:basic:light:cct"}
+Number scene "Scene" (G_light) {channel="miio:basic:light:scene"}
+Switch switchscene "Switch Scene" (G_light) {channel="miio:basic:light:switchscene"}
+Switch toggle "Toggle" (G_light) {channel="miio:basic:light:toggle"}
+```
+
+### Xiaomi Philips Bulb (philips.light.bulb ) item file lines
+
+
+note. autogenerated example. Replace the id (light) in the channel with your own
+```
+Group G_light "Xiaomi Philips Bulb" <status>
+Switch power "Power" (G_light) {channel="miio:basic:light:power"}
+Number brightness "Brightness" (G_light) {channel="miio:basic:light:brightness"}
+Number cct "Correlated Color Temperature" (G_light) {channel="miio:basic:light:cct"}
+Number scene "Scene" (G_light) {channel="miio:basic:light:scene"}
+Number dv "DV" (G_light) {channel="miio:basic:light:dv"}
+Switch switchscene "Switch Scene" (G_light) {channel="miio:basic:light:switchscene"}
+Switch delayoff "Delay Off" (G_light) {channel="miio:basic:light:delayoff"}
+Switch toggle "Toggle" (G_light) {channel="miio:basic:light:toggle"}
+```
+
+### Xiaomi Philips Downlight (philips.light.downlight ) item file lines
+
+
+note. autogenerated example. Replace the id (light) in the channel with your own
+```
+Group G_light "Xiaomi Philips Downlight" <status>
+Switch power "Power" (G_light) {channel="miio:basic:light:power"}
+Number brightness "Brightness" (G_light) {channel="miio:basic:light:brightness"}
+Number cct "Correlated Color Temperature" (G_light) {channel="miio:basic:light:cct"}
+Number scene "Scene" (G_light) {channel="miio:basic:light:scene"}
+Number dv "DV" (G_light) {channel="miio:basic:light:dv"}
+Switch switchscene "Switch Scene" (G_light) {channel="miio:basic:light:switchscene"}
+Switch delayoff "Delay Off" (G_light) {channel="miio:basic:light:delayoff"}
+Switch toggle "Toggle" (G_light) {channel="miio:basic:light:toggle"}
+```
+
+### Mi Power-plug (chuangmi.plug.m1 ) item file lines
+
+
+note. autogenerated example. Replace the id (plug) in the channel with your own
+```
+Group G_plug "Mi Power-plug" <status>
+Switch power "Power" (G_plug) {channel="miio:basic:plug:power"}
+Number temperature "Temperature" (G_plug) {channel="miio:basic:plug:temperature"}
+```
+
+### Mi Power-plug v1 (chuangmi.plug.v1 ) item file lines
+
+
+note. autogenerated example. Replace the id (plug) in the channel with your own
+```
+Group G_plug "Mi Power-plug v1" <status>
+Switch power "Power" (G_plug) {channel="miio:basic:plug:power"}
+OnOffType usb "USB" (G_plug) {channel="miio:basic:plug:usb"}
+```
+
+### Mi Power-plug v2 (chuangmi.plug.v2 ) item file lines
+
+
+note. autogenerated example. Replace the id (plug) in the channel with your own
+```
+Group G_plug "Mi Power-plug v2" <status>
+Switch power "Power" (G_plug) {channel="miio:basic:plug:power"}
+OnOffType usb "USB" (G_plug) {channel="miio:basic:plug:usb"}
+```
+
+### Mi Power-plug v3 (chuangmi.plug.v3 ) item file lines
+
+
+note. autogenerated example. Replace the id (plug) in the channel with your own
+```
+Group G_plug "Mi Power-plug v3" <status>
+Switch power "Power" (G_plug) {channel="miio:basic:plug:power"}
+OnOffType usb "USB" (G_plug) {channel="miio:basic:plug:usb"}
+Number temperature "Temperature" (G_plug) {channel="miio:basic:plug:temperature"}
+Switch led "Wifi led" (G_plug) {channel="miio:basic:plug:led"}
+```
+
+### Qing Mi Smart Power Strip v1 (qmi.powerstrip.v1 ) item file lines
+
+
+note. autogenerated example. Replace the id (powerstrip) in the channel with your own
+```
+Group G_powerstrip "Qing Mi Smart Power Strip v1" <status>
+Switch power "Power" (G_powerstrip) {channel="miio:basic:powerstrip:power"}
+Number powerUsage "Power Consumption" (G_powerstrip) {channel="miio:basic:powerstrip:powerUsage"}
+Switch led "wifi_led" (G_powerstrip) {channel="miio:basic:powerstrip:led"}
+Number power_price "power_price" (G_powerstrip) {channel="miio:basic:powerstrip:power_price"}
+Number current "Current" (G_powerstrip) {channel="miio:basic:powerstrip:current"}
+Number temperature "Temperature" (G_powerstrip) {channel="miio:basic:powerstrip:temperature"}
+```
+
+### Mi Power-strip v2 (zimi.powerstrip.v2 ) item file lines
+
+
+note. autogenerated example. Replace the id (powerstrip) in the channel with your own
+```
+Group G_powerstrip "Mi Power-strip v2" <status>
+Switch power "Power" (G_powerstrip) {channel="miio:basic:powerstrip:power"}
+Number powerUsage "Power Consumption" (G_powerstrip) {channel="miio:basic:powerstrip:powerUsage"}
+Switch led "wifi_led" (G_powerstrip) {channel="miio:basic:powerstrip:led"}
+Number power_price "power_price" (G_powerstrip) {channel="miio:basic:powerstrip:power_price"}
+Number current "Current" (G_powerstrip) {channel="miio:basic:powerstrip:current"}
+Number temperature "Temperature" (G_powerstrip) {channel="miio:basic:powerstrip:temperature"}
+```
+
+### Mi Water Purifier v2 (yunmi.waterpuri.v2 ) item file lines
+
+
+note. autogenerated example. Replace the id (waterpuri) in the channel with your own
+```
+Group G_waterpuri "Mi Water Purifier v2" <status>
+Switch power "Power" (G_waterpuri) {channel="miio:basic:waterpuri:power"}
+```
+
+### Yeelight Lamp (yeelink.light.bslamp1 ) item file lines
+
+
+note. autogenerated example. Replace the id (light) in the channel with your own
+```
+Group G_light "Yeelight Lamp" <status>
+Switch power "Power" (G_light) {channel="miio:basic:light:power"}
+Number brightness "Brightness" (G_light) {channel="miio:basic:light:brightness"}
+Number delayoff "delayoff" (G_light) {channel="miio:basic:light:delayoff"}
+Number colorTemperature "Color Temperature" (G_light) {channel="miio:basic:light:colorTemperature"}
+Number colorMode "colorMode" (G_light) {channel="miio:basic:light:colorMode"}
+String name "Name" (G_light) {channel="miio:basic:light:name"}
+```
+
+### Yeelight Color Bulb (yeelink.light.color1 ) item file lines
+
+
+note. autogenerated example. Replace the id (light) in the channel with your own
+```
+Group G_light "Yeelight Color Bulb" <status>
+Switch power "Power" (G_light) {channel="miio:basic:light:power"}
+Number brightness "Brightness" (G_light) {channel="miio:basic:light:brightness"}
+String delayoff "delayoff" (G_light) {channel="miio:basic:light:delayoff"}
+Number colorTemperature "Color Temperature" (G_light) {channel="miio:basic:light:colorTemperature"}
+String colorMode "colorMode" (G_light) {channel="miio:basic:light:colorMode"}
+Switch toggle "toggle" (G_light) {channel="miio:basic:light:toggle"}
+Color color "color" (G_light) {channel="miio:basic:light:color"}
+String name "Name" (G_light) {channel="miio:basic:light:name"}
+```
+
+### Yeelight Color Bulb YLDP06YL 10W (yeelink.light.color2 ) item file lines
+
+
+note. autogenerated example. Replace the id (light) in the channel with your own
+```
+Group G_light "Yeelight Color Bulb YLDP06YL 10W" <status>
+Switch power "Power" (G_light) {channel="miio:basic:light:power"}
+Number brightness "Brightness" (G_light) {channel="miio:basic:light:brightness"}
+String delayoff "delayoff" (G_light) {channel="miio:basic:light:delayoff"}
+Number colorTemperature "Color Temperature" (G_light) {channel="miio:basic:light:colorTemperature"}
+String colorMode "colorMode" (G_light) {channel="miio:basic:light:colorMode"}
+Switch toggle "toggle" (G_light) {channel="miio:basic:light:toggle"}
+Color color "color" (G_light) {channel="miio:basic:light:color"}
+String name "Name" (G_light) {channel="miio:basic:light:name"}
+```
+
+### Yeelight LED Ceiling Lamp (yeelink.light.ceiling1 ) item file lines
+
+
+note. autogenerated example. Replace the id (light) in the channel with your own
+```
+Group G_light "Yeelight LED Ceiling Lamp" <status>
+Switch power "Power" (G_light) {channel="miio:basic:light:power"}
+Number brightness "Brightness" (G_light) {channel="miio:basic:light:brightness"}
+Number delayoff "delayoff" (G_light) {channel="miio:basic:light:delayoff"}
+Number colorTemperature "Color Temperature" (G_light) {channel="miio:basic:light:colorTemperature"}
+Number colorMode "colorMode" (G_light) {channel="miio:basic:light:colorMode"}
+String name "Name" (G_light) {channel="miio:basic:light:name"}
+```
+
+### Yeelight LED Ceiling Lamp v2 (yeelink.light.ceiling2 ) item file lines
+
+
+note. autogenerated example. Replace the id (light) in the channel with your own
+```
+Group G_light "Yeelight LED Ceiling Lamp v2" <status>
+Switch power "Power" (G_light) {channel="miio:basic:light:power"}
+Number brightness "Brightness" (G_light) {channel="miio:basic:light:brightness"}
+Number delayoff "delayoff" (G_light) {channel="miio:basic:light:delayoff"}
+Number colorTemperature "Color Temperature" (G_light) {channel="miio:basic:light:colorTemperature"}
+Number colorMode "colorMode" (G_light) {channel="miio:basic:light:colorMode"}
+String name "Name" (G_light) {channel="miio:basic:light:name"}
+```
+
+### Yeelight LED Ceiling Lamp v3 (yeelink.light.ceiling3 ) item file lines
+
+
+note. autogenerated example. Replace the id (light) in the channel with your own
+```
+Group G_light "Yeelight LED Ceiling Lamp v3" <status>
+Switch power "Power" (G_light) {channel="miio:basic:light:power"}
+Number brightness "Brightness" (G_light) {channel="miio:basic:light:brightness"}
+Number delayoff "delayoff" (G_light) {channel="miio:basic:light:delayoff"}
+Number colorTemperature "Color Temperature" (G_light) {channel="miio:basic:light:colorTemperature"}
+Number colorMode "colorMode" (G_light) {channel="miio:basic:light:colorMode"}
+String name "Name" (G_light) {channel="miio:basic:light:name"}
+```
+
+### Yeelight LED Ceiling Lamp v4 (JIAOYUE 650 RGB) (yeelink.light.ceiling4 ) item file lines
+
+
+note. autogenerated example. Replace the id (light) in the channel with your own
+```
+Group G_light "Yeelight LED Ceiling Lamp v4 (JIAOYUE 650 RGB)" <status>
+Switch power "Power" (G_light) {channel="miio:basic:light:power"}
+Number brightness "Brightness" (G_light) {channel="miio:basic:light:brightness"}
+Number ambientBrightness "Ambient Brightness" (G_light) {channel="miio:basic:light:ambientBrightness"}
+Number delayoff "delayoff" (G_light) {channel="miio:basic:light:delayoff"}
+Number colorTemperature "Color Temperature " (G_light) {channel="miio:basic:light:colorTemperature"}
+Number colorMode "Color Mode" (G_light) {channel="miio:basic:light:colorMode"}
+String name "Name" (G_light) {channel="miio:basic:light:name"}
+Switch ambientPower "Ambient Power" (G_light) {channel="miio:basic:light:ambientPower"}
+Color ambientColor "Ambient Color" (G_light) {channel="miio:basic:light:ambientColor"}
+Number ambientColorTemperature "Ambient Color Temperature " (G_light) {channel="miio:basic:light:ambientColorTemperature"}
+String customScene "Set Scene" (G_light) {channel="miio:basic:light:customScene"}
+Number ambientColorMode "Ambient Color Mode" (G_light) {channel="miio:basic:light:ambientColorMode"}
+Number nightlightBrightness "Nightlight Brightness" (G_light) {channel="miio:basic:light:nightlightBrightness"}
+```
+
+### Yeelight (yeelink.light.lamp1 ) item file lines
+
+
+note. autogenerated example. Replace the id (light) in the channel with your own
+```
+Group G_light "Yeelight" <status>
+Switch power "Power" (G_light) {channel="miio:basic:light:power"}
+Number brightness "Brightness" (G_light) {channel="miio:basic:light:brightness"}
+Number delayoff "delayoff" (G_light) {channel="miio:basic:light:delayoff"}
+Number colorTemperature "Color Temperature" (G_light) {channel="miio:basic:light:colorTemperature"}
+Number colorMode "colorMode" (G_light) {channel="miio:basic:light:colorMode"}
+String name "Name" (G_light) {channel="miio:basic:light:name"}
+```
+
+### Yeelight White Bulb (yeelink.light.mono1 ) item file lines
+
+
+note. autogenerated example. Replace the id (light) in the channel with your own
+```
+Group G_light "Yeelight White Bulb" <status>
+Switch power "Power" (G_light) {channel="miio:basic:light:power"}
+Number brightness "Brightness" (G_light) {channel="miio:basic:light:brightness"}
+Number delayoff "delayoff" (G_light) {channel="miio:basic:light:delayoff"}
+Number colorTemperature "Color Temperature" (G_light) {channel="miio:basic:light:colorTemperature"}
+Number colorMode "colorMode" (G_light) {channel="miio:basic:light:colorMode"}
+String name "Name" (G_light) {channel="miio:basic:light:name"}
+```
+
+### Yeelight White Bulb v2 (yeelink.light.mono2 ) item file lines
+
+
+note. autogenerated example. Replace the id (light) in the channel with your own
+```
+Group G_light "Yeelight White Bulb v2" <status>
+Switch power "Power" (G_light) {channel="miio:basic:light:power"}
+Number brightness "Brightness" (G_light) {channel="miio:basic:light:brightness"}
+Number delayoff "delayoff" (G_light) {channel="miio:basic:light:delayoff"}
+Number colorTemperature "Color Temperature" (G_light) {channel="miio:basic:light:colorTemperature"}
+Number colorMode "colorMode" (G_light) {channel="miio:basic:light:colorMode"}
+String name "Name" (G_light) {channel="miio:basic:light:name"}
+```
+
+### Yeelight Strip (yeelink.light.strip1 ) item file lines
+
+
+note. autogenerated example. Replace the id (light) in the channel with your own
+```
+Group G_light "Yeelight Strip" <status>
+Switch power "Power" (G_light) {channel="miio:basic:light:power"}
+Number brightness "Brightness" (G_light) {channel="miio:basic:light:brightness"}
+Number delayoff "delayoff" (G_light) {channel="miio:basic:light:delayoff"}
+Number colorTemperature "Color Temperature" (G_light) {channel="miio:basic:light:colorTemperature"}
+Number colorMode "colorMode" (G_light) {channel="miio:basic:light:colorMode"}
+String name "Name" (G_light) {channel="miio:basic:light:name"}
 ```
 
