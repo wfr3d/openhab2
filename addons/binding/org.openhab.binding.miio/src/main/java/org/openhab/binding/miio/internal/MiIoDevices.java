@@ -52,7 +52,7 @@ public enum MiIoDevices {
     FAN_ZA1("zhimi.fan.za1", "Xiaomi Mi Smart Pedestal Fan", MiIoBindingConstants.THING_TYPE_BASIC),
     GATEWAY1("lumi.gateway.v1", "Mi Smart Home Gateway v1", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     GATEWAY2("lumi.gateway.v2", "Mi Smart Home Gateway v2", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
-    GATEWAY3("lumi.gateway.v3", "Mi Smart Home Gateway v3", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
+    GATEWAY3("lumi.gateway.v3", "Mi Smart Home Gateway v3", MiIoBindingConstants.THING_TYPE_GATEWAY),
     HUMIDIFIER("zhimi.humidifier.v1", "Mi Humdifier", MiIoBindingConstants.THING_TYPE_BASIC),
     LUMI_C11("lumi.ctrl_neutral1.v1", "Light Control (Wall Switch)", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),
     LUMI_C12("lumi.ctrl_neutral2.v1", "Light Control (Wall Switch)", MiIoBindingConstants.THING_TYPE_UNSUPPORTED),

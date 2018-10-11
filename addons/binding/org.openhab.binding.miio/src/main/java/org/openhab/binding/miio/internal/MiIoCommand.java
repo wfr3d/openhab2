@@ -25,6 +25,35 @@ public enum MiIoCommand {
     SET_POWER("set_power"),
     SET_BRIGHT("set_bright"),
 
+    // gateway commands
+    GET_DEVICE_PROPERTY("get_device_prop"),
+
+    GET_RGB("get_rgb"),
+    SET_RGB("set_rgb"),
+
+    GET_NIGHT_LIGHT_RGB("get_night_light_rgb"),
+    SET_NIGHT_LIGHT_RGB("set_night_light_rgb"),
+
+    GET_ARM_WAIT_TIME("get_arm_wait_time"),
+    SET_ARMING("set_arming"),
+
+
+    SET_ALARMING_VOLUME("set_alarming_volume"),
+    SET_DOORBELL_VOLUME("set_doorbell_volume"),
+    SET_GATEWAY_VOLUME("set_gateway_volume"),
+    SET_FM_VOLUME("set_fm_volume"),
+
+    GET_ALARMING_VOLUME("get_alarming_volume"),
+    GET_DOORBELL_VOLUME("get_doorbell_volume"),
+    GET_GATEWAY_VOLUME("get_gateway_volume"),
+
+    PLAY_SPECIFY_FM("play_specify_fm"),
+    PLAY_FM("play_fm"),
+    GET_PROPERTY_FM("get_prop_fm"),
+    GET_FM_CHANNELS("get_channels"),
+
+    START_ZIGBEE_JOIN("start_zigbee_join"),
+
     // vacuum commands
     START_VACUUM("app_start"),
     STOP_VACUUM("app_stop"),
@@ -69,7 +98,7 @@ public enum MiIoCommand {
     REMOTE_END("app_rc_end"),
     REMOTE_MOVE("app_rc_move"),
 
-    UNKNOWN("");
+    UNKNOWN(""), ;
 
     private final String command;
 
