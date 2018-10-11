@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="miio"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="gateway">
+		<label>Xiaomi Mi Gateway</label>
+
+		<channel-groups>
+			<channel-group id="network" typeId="network" />
+			<channel-group id="actions" typeId="miioactions" />
+            <channel-group id="led" typeId="led" />
+
+
+            <channel-group id="volume" typeId="volumes" />
+            <channel-group id="alarm" typeId="alarm" />
+
+		</channel-groups>
+
+		<properties>
+			<property name="vendor">Xiaomi</property>
+		</properties>
+
+		<config-description-ref uri="thing-type:miio:config" />
+	</thing-type>
+
+	<channel-group-type id="miioactions">
+		<label>Actions</label>
+		<channels>
+			<channel id="power" typeId="power" />
+			<channel id="commands" typeId="commands" />
+			<channel id="testcommands" typeId="testcommands" />
+		</channels>
+	</channel-group-type>
+
+
+    <channel-group-type id="led">
+        <label>Actions</label>
+        <channels>
+            <channel id="color" typeId="color" />
+            <channel id="brightness" typeId="brightness" />
+            <channel id="illumination" typeId="illumination" />
+            <channel id="nightLightColor" typeId="color" />
+            <channel id="nightLightBrightness" typeId="brightness" />
+        </channels>
+    </channel-group-type>
+
+    <channel-group-type id="volumes">
+        <label>Volumes</label>
+        <channels>
+            <channel id="alarming" typeId="volume" />
+            <channel id="gateway" typeId="volume" />
+            <channel id="doorbell" typeId="volume" />
+            <channel id="fm" typeId="volume" />
+        </channels>
+    </channel-group-type>
+
+    <channel-group-type id="alarm">
+        <label>Alarm</label>
+        <channels>
+            <channel id="volume" typeId="volume" />
+            <channel id="time_len" typeId="alert_time_length" />
+            <channel id="arm_wait_time" typeId="alert_arm_delay" />
+            <channel id="en_light" typeId="light_enabler" />
+            <channel id="default_music" typeId="alert_sound_type" />
+        </channels>
+    </channel-group-type>
+
+
+    <channel-group-type id="alarm">
+        <label>Volumes</label>
+        <channels>
+            <channel id="alarming" typeId="volume" />
+            <channel id="gateway" typeId="volume" />
+            <channel id="doorbell" typeId="volume" />
+            <channel id="fm" typeId="volume" />
+        </channels>
+    </channel-group-type>
+
+
+	<channel-type id="testcommands">
+		<item-type>Switch</item-type>
+		<label>(experimental)Execute Test Commands</label>
+		<description>(experimental)Execute Test Commands to support development for your device. (NB device can switch modes)</description>
+	</channel-type>
+
+
+    <channel-type id="brightness">
+        <item-type>Dimmer</item-type>
+        <label>Brightness</label>
+        <description>The brightness channel allows to control the brightness of a light. It is also possible to switch the
+            light on and off.</description>
+        <category>DimmableLight</category>
+        <tags>
+            <tag>Lighting</tag>
+        </tags>
+        <state max="100" min="0" step="1" pattern="%d %%" />
+    </channel-type>
+
+    <channel-type id="volume">
+        <item-type>Dimmer</item-type>
+        <label>Volume</label>
+        <category>DimmableVolume</category>
+        <tags>
+            <tag>Sound</tag>
+        </tags>
+        <state min="0" max="100" step="1" pattern="%d" />
+    </channel-type>
+
+    <channel-type id="light_enabler">
+        <item-type>Switch</item-type>
+        <label>Blink when alert fires</label>
+        <description>Turn on blinking when alert fires</description>
+    </channel-type>
+
+    <channel-type id="alert_sound_type">
+        <item-type>Number</item-type>
+        <label>Alert sound</label>
+        <description>??</description>
+        <state min="0" max="9" step="1" pattern="%d" />
+    </channel-type>
+
+
+    <channel-type id="alert_arm_delay">
+        <item-type>Number</item-type>
+        <label>Delay time for arming alert</label>
+        <description>??</description>
+        <state min="0" />
+    </channel-type>
+
+    <channel-type id="alert_time_length">
+        <item-type>Number</item-type>
+        <label>Determines the duration of the alarm</label>
+        <description>??</description>
+        <state min="0"  />
+    </channel-type>
+
+
+
+    <channel-type id="illumination">
+        <item-type>Number</item-type>
+        <label>Illumination</label>
+        <description>
+            This channel shows the brightness of the environment of the device.
+        </description>
+        <state readOnly="true" />
+    </channel-type>
+
+    <channel-type id="color">
+        <item-type>Color</item-type>
+        <label>Color</label>
+        <description>Control the color of light.</description>
+        <category>ColorLight</category>
+        <tags>
+            <tag>Lighting</tag>
+        </tags>
+    </channel-type>
+</thing:thing-descriptions>

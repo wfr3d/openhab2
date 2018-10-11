@@ -13,6 +13,7 @@ The following things are available:
 |--------|---------| 
 | miio:generic | Generic type for discovered devices. Once the token is available and the device model is determined, this Thing Type will automatically change to the appropriate Thing Type |
 | miio:vacuum | For Xiaomi Robot Vacuum products|
+| miio:gateway | For Xiaomi Gateway |
 | miio:basic | For several basic devices like yeelights, airpurifiers. Channels and commands are determined by database configuration |
 | miio:unsupported | For experimenting with other devices which use the Mi IO protocol)
 
@@ -52,7 +53,7 @@ The following things are available:
 | Xiaomi Mi Smart Pedestal Fan | miio:basic | zhimi.fan.za1 | Yes |  |
 | Mi Smart Home Gateway v1 | miio:unsupported | lumi.gateway.v1 | No |  |
 | Mi Smart Home Gateway v2 | miio:unsupported | lumi.gateway.v2 | No |  |
-| Mi Smart Home Gateway v3 | miio:unsupported | lumi.gateway.v3 | No |  |
+| Mi Smart Home Gateway v3 | miio:gateway | lumi.gateway.v3 | Development in progress | Only basic functions |
 | Mi Humdifier | miio:basic | zhimi.humidifier.v1 | Yes |  |
 | Light Control (Wall Switch) | miio:unsupported | lumi.ctrl_neutral1.v1 | No |  |
 | Light Control (Wall Switch) | miio:unsupported | lumi.ctrl_neutral2.v1 | No |  |
@@ -1527,3 +1528,39 @@ Number colorMode "colorMode" (G_light) {channel="miio:basic:light:colorMode"}
 String name "Name" (G_light) {channel="miio:basic:light:name"}
 ```
 
+### Xiaomi Gateway (lumi.gateway.v3) item file lines
+
+**xiaomi.things**:
+```
+Thing miio:gateway:<device id> "Xiaomi Gateway"  [ token="<your token>", host="<yout gateway ip>", refreshInterval=60, deviceId="<device id>", model="lumi.gateway.v3" ]
+```
+
+**xiaomi.items**:
+```
+Color   Xiaomi_Gateway_color                    "Base color"                    {channel="miio:gateway:<device id>:led#color"}
+Color   Xiaomi_Gateway_night_light_color        "Night light color"             {channel="miio:gateway:<device id>:led#nightLightColor"}
+Number  Xiaomi_Gateway_illumination             "Ilumination [ %d lx]"          {channel="miio:gateway:<device id>:led#illumination"}
+
+Dimmer  Xiaomi_Gateway_volume_alarming          "Alarm volume"                  {channel="miio:gateway:<device id>:volume#alarming"}
+Dimmer  Xiaomi_Gateway_volume_gateway           "Gateway volume"                {channel="miio:gateway:<device id>:volume#gateway"}
+Dimmer  Xiaomi_Gateway_volume_doorbell          "Doorbell volume"               {channel="miio:gateway:<device id>:volume#doorbell"}
+Dimmer  Xiaomi_Gateway_volume_fm                "Fm volume"                     {channel="miio:gateway:<device id>:volume#fm"}
+```
+
+**xiaomi.sitemap**:
+```
+sitemap xiaomi_test label="Xiaomi gateway testsite" {
+        Frame label="Leds" {
+                Colorpicker item=Xiaomi_Gateway_color 
+                Colorpicker item=Xiaomi_Gateway_night_light_color 
+
+                Text item=Xiaomi_Gateway_illumination
+        }
+        Frame label="Volumes" {
+                Slider item=Xiaomi_Gateway_volume_alarming   icon="soundvolume" 
+                Slider item=Xiaomi_Gateway_volume_gateway    icon="soundvolume" 
+                Slider item=Xiaomi_Gateway_volume_doorbell   icon="soundvolume"
+                Slider item=Xiaomi_Gateway_volume_fm         icon="soundvolume" 
+        }
+}
+```

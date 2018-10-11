@@ -8,11 +8,10 @@
  */
 package org.openhab.binding.miio;
 
-import java.util.Set;
-
+import com.google.common.collect.ImmutableSet;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 
-import com.google.common.collect.ImmutableSet;
+import java.util.Set;
 
 /**
  * The {@link MiIoBindingConstants} class defines common constants, which are
@@ -28,13 +27,14 @@ public final class MiIoBindingConstants {
     public static final ThingTypeUID THING_TYPE_MIIO = new ThingTypeUID(BINDING_ID, "generic");
     public static final ThingTypeUID THING_TYPE_BASIC = new ThingTypeUID(BINDING_ID, "basic");
     public static final ThingTypeUID THING_TYPE_VACUUM = new ThingTypeUID(BINDING_ID, "vacuum");
+    public static final ThingTypeUID THING_TYPE_GATEWAY = new ThingTypeUID(BINDING_ID, "gateway");
     public static final ThingTypeUID THING_TYPE_UNSUPPORTED = new ThingTypeUID(BINDING_ID, "unsupported");
 
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_MIIO,
-            THING_TYPE_BASIC, THING_TYPE_VACUUM, THING_TYPE_UNSUPPORTED);
+            THING_TYPE_BASIC, THING_TYPE_VACUUM, THING_TYPE_GATEWAY, THING_TYPE_UNSUPPORTED);
 
     public static final Set<ThingTypeUID> NONGENERIC_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_BASIC,
-            THING_TYPE_VACUUM, THING_TYPE_UNSUPPORTED);
+            THING_TYPE_VACUUM, THING_TYPE_GATEWAY, THING_TYPE_UNSUPPORTED);
 
     // List of all Channel IDs
     public static final String CHANNEL_BATTERY = "status#battery";
@@ -84,6 +84,25 @@ public final class MiIoBindingConstants {
     public static final String CHANNEL_HISTORY_ERROR = "cleaning#last_clean_error";
     public static final String CHANNEL_HISTORY_FINISH = "cleaning#ast_clean_finish";
     public static final String CHANNEL_HISTORY_RECORD = "cleaning#last_clean_record";
+
+
+    public static final String CHANNEL_GATEWAY_LED_COLOR = "led#color";
+    public static final String CHANNEL_GATEWAY_LED_BRIGHTNESS = "led#brightness";
+    public static final String CHANNEL_GATEWAY_NIGHT_LIGHT_LED_COLOR = "led#nightLightColor";
+    public static final String CHANNEL_GATEWAY_NIGHT_LIGHT_LED_BRIGHTNESS = "led#nightLightBrightness";
+    public static final String CHANNEL_GATEWAY_ILLUMINATION = "led#illumination";
+    public static final String CHANNEL_GATEWAY_TEST_ACTION = "actions#testcommands";
+
+    public static final String CHANNEL_GATEWAY_VOLUME_ALARMING = "volume#alarming";
+    public static final String CHANNEL_GATEWAY_VOLUME_GATEWAY = "volume#gateway";
+    public static final String CHANNEL_GATEWAY_VOLUME_DOORBELL = "volume#doorbell";
+    public static final String CHANNEL_GATEWAY_VOLUME_FM = "volume#fm";
+
+    public static final String CHANNEL_GATEWAY_ALARM_VOLUME = "alarm#volume";
+    public static final String CHANNEL_GATEWAY_ALARM_TIME_LEN = "alarm#time_len";
+    public static final String CHANNEL_GATEWAY_ALARM_ARM_WAIT_TIME = "alarm#arm_wait_time";
+    public static final String CHANNEL_GATEWAY_ALARM_EN_LIGHT = "alarm#en_light";
+    public static final String CHANNEL_GATEWAY_ALARM_DEFAULT_MUSIC = "alarm#default_music";
 
     public static final String PROPERTY_HOST_IP = "host";
     public static final String PROPERTY_DID = "deviceId";
